@@ -1,0 +1,10 @@
+package br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor;
+
+import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("RESPONSIBLE_FOR_LEGAL_PERSON")
+public class ResponsibleForLegalPersonQualificationSubclass extends PersonQualificationSuperclassEntity{
+}
