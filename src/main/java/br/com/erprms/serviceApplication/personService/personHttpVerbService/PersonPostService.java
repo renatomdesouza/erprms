@@ -26,7 +26,7 @@ public class PersonPostService <T extends PersonListingDto> {
 	}
 
 	@Transactional     
-	@SuppressWarnings("hiding")
+	@SuppressWarnings({ "hiding", "null" })
 	public <T> DtoRecord_ServicePerson<? extends PersonListingDto> registerService(
 				T personDto,	 
 				UriComponentsBuilder uriComponentsBuilder) {

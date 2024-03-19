@@ -22,9 +22,8 @@ public class ManagerEntityTypeMaps {
 	
 	public void dtoClassToManagerRegistry_To_ManagerEmployeePersonQualificationSubclass(ModelMapper modelMapper) {   
 		modelMapper.createTypeMap(DtoClassToRegistryOfManager.class, ManagerEmployeePersonQualificationSubclass.class)
-			.addMapping(DtoClassToRegistryOfManager::getSalary, ManagerEmployeePersonQualificationSubclass::setSalary )
+			.addMapping(DtoClassToRegistryOfManager::getMonthlySalary, ManagerEmployeePersonQualificationSubclass::setMonthlySalary )
 			.addMapping(DtoClassToRegistryOfManager::getSector, ManagerEmployeePersonQualificationSubclass::setSector)
 			.addMapping(DtoClassToRegistryOfManager::getObservation, ManagerEmployeePersonQualificationSubclass::setObservation);
 	}
-
 }

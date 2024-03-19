@@ -8,13 +8,13 @@ import lombok.Getter;
 @Getter
 public class DtoClassToRegistryOfManager {
 	private Long person_Id;
-	private BigDecimal salary;
+	private BigDecimal monthlySalary;
 	private SectorEnum sector;
 	private String observation;
 	
 	public DtoClassToRegistryOfManager(DtoRecordToRegistryOfManager manager) {
 		this.person_Id = manager.person_Id();
-		this.salary = manager.salary();
+		this.monthlySalary = manager.monthlySalary();
 		this.sector = manager.sector();
 		this.observation = manager.observation();
 	}

@@ -7,6 +7,8 @@ import br.com.erprms.domainModel.personDomain.personQualification.personQualific
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +21,11 @@ import lombok.Setter;
 @Setter
 @Getter
 public class PartTimeEmployeePersonQualificationInheritor 
-	extends PersonQualificationSuperclassEntity 
-	implements EmployeePersonQualificatorInterface {
+					extends PersonQualificationSuperclassEntity 
+					implements EmployeePersonQualificatorInterface {
+	
+	@Enumerated(EnumType.STRING) 
+	private SectorEnum sector;
 	
 	private BigDecimal hourlyRate;
-	private SectorEnum sector;
 }

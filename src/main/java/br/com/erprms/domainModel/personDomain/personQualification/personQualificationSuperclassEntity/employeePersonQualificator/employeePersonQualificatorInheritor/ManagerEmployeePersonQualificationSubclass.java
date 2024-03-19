@@ -22,8 +22,11 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ManagerEmployeePersonQualificationSubclass 
-				extends PersonQualificationSuperclassEntity 
-				implements FullTimeEmployeePersonQualificatorInterface, EmployeePersonQualificatorInterface {
-	@Enumerated(EnumType.STRING) private SectorEnum sector;
-	private BigDecimal salary;
+					extends PersonQualificationSuperclassEntity 
+					implements FullTimeEmployeePersonQualificatorInterface, EmployeePersonQualificatorInterface {
+	
+	@Enumerated(EnumType.STRING) 
+	private SectorEnum sector;
+	
+	private BigDecimal MonthlySalary;
 }

@@ -2,6 +2,7 @@ package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,7 +27,7 @@ public class PersonDeleteService <T extends PersonListingDto> {
 
 	@Transactional
 	public DtoRecord_ServicePerson<? extends PersonListingDto> excludeService(
-			Long id, 
+			@NonNull Long id, 
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
 		

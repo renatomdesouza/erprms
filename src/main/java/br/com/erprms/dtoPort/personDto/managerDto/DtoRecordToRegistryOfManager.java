@@ -6,7 +6,7 @@ import br.com.erprms.domainModel.personDomain.personQualification.personQualific
 
 public record DtoRecordToRegistryOfManager(
 		Long person_Id,
-		BigDecimal salary,
+		BigDecimal monthlySalary,
 		SectorEnum sector,
 		String observation
 		) {}

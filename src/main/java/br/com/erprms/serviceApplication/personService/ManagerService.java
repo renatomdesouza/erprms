@@ -33,6 +33,7 @@ public class ManagerService {
 	}
 	
 	@Transactional
+	@SuppressWarnings("null")
 	public DtoRecordToOutputManagerOfRegistry_With_Uri managerServiceRegistry(
 				DtoRecordToRegistryOfManager managerRecord,
 				UriComponentsBuilder uriComponentsBuilder) 

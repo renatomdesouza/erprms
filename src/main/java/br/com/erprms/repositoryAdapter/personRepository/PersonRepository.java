@@ -9,6 +9,7 @@ import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusP
 
 
 public interface PersonRepository extends JpaRepository<PersonEntity, Long>{
+	@SuppressWarnings("null")
 	Page<PersonEntity> findAll(Pageable personPageable);
 	
 	Page<PersonEntity> findByIsNaturalPersonTrue(Pageable personPageable);

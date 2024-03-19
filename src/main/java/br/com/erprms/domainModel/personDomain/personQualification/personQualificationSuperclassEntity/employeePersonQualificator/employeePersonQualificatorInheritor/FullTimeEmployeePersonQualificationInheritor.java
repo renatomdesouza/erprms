@@ -8,6 +8,8 @@ import br.com.erprms.domainModel.personDomain.personQualification.personQualific
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +22,11 @@ import lombok.Setter;
 @Setter
 @Getter
 public class FullTimeEmployeePersonQualificationInheritor 
-	extends PersonQualificationSuperclassEntity 
-	implements FullTimeEmployeePersonQualificatorInterface, EmployeePersonQualificatorInterface {
-	
-	private BigDecimal salary;
+					extends PersonQualificationSuperclassEntity 
+					implements FullTimeEmployeePersonQualificatorInterface, EmployeePersonQualificatorInterface {
+
+	@Enumerated(EnumType.STRING) 
 	private SectorEnum sector;
+	
+	private BigDecimal monthlySalary;
 }

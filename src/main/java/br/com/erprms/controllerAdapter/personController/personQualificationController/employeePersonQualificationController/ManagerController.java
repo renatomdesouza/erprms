@@ -42,6 +42,7 @@ public class ManagerController {
 	ModelMapper mapper;
 	
 	@PostMapping
+	@SuppressWarnings("null")
 	public ResponseEntity<DtoClassToOutputManagerOfRegistry> register(
 			@RequestBody DtoRecordToRegistryOfManager managerRecord,
 			UriComponentsBuilder uriComponentsBuilder) 
@@ -61,9 +62,6 @@ public class ManagerController {
 		return ResponseEntity
 				.ok(managerService.managerServiceListing(qualificationPageable));
 	}
-	
-	
-	
 }
 
 	

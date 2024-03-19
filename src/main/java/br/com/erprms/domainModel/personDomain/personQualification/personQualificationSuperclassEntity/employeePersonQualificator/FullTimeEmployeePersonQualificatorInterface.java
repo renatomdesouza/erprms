@@ -3,6 +3,6 @@ package br.com.erprms.domainModel.personDomain.personQualification.personQualifi
 import java.math.BigDecimal;
 
 public interface FullTimeEmployeePersonQualificatorInterface {
-	BigDecimal getSalary();
-	void setSalary(BigDecimal bigDecimal);
+	BigDecimal getMonthlySalary();
+	void setMonthlySalary(BigDecimal bigDecimal);
 }

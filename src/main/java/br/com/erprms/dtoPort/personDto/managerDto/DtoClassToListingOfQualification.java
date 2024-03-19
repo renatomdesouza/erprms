@@ -28,7 +28,7 @@ public class DtoClassToListingOfQualification {
 		this.personId = personQualification.getPerson().getId();
 		this.personName = personQualification.getPerson().getFullNameOrEntityName();
 		this.personCpfOrCnpj = personQualification.getPerson().getCpfOrCnpj();
-		this.salary = personQualification.getSalary();
+		this.salary = personQualification.getMonthlySalary();
 		this.sector = personQualification.getSector();
 		this.observation = personQualification.getObservation();
 		this.professionalRegistry = personQualification.getProfessionalRegistry();

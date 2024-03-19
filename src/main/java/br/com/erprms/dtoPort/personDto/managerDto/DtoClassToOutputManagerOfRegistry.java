@@ -20,7 +20,7 @@ public class DtoClassToOutputManagerOfRegistry {
 		this.specified_qualification = "MANAGER";
 		this.name = person.getFullNameOrEntityName();
 		this.cpfOrCnpj = person.getCpfOrCnpj();
-		this.salary = manager.getSalary();
+		this.salary = manager.getMonthlySalary();
 		this.sector = manager.getSector();
 		this.observation = manager.getObservation();
 	}
