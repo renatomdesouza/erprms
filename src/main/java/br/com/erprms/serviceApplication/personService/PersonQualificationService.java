@@ -21,12 +21,12 @@ import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class ManagerService {
+public class PersonQualificationService {
 	private ModelMapper mapper;
 	private PersonRepository personRepository;
 	private ManagerRepository managerRepository;
 	
-	public ManagerService(ModelMapper mapper, PersonRepository personRepository, ManagerRepository managerRepository) {
+	public PersonQualificationService(ModelMapper mapper, PersonRepository personRepository, ManagerRepository managerRepository) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.managerRepository = managerRepository;
@@ -35,6 +35,7 @@ public class ManagerService {
 	@Transactional
 	@SuppressWarnings("null")
 	public DtoRecordToOutputManagerOfRegistry_With_Uri managerServiceRegistry(
+				String qualification,
 				DtoRecordToRegistryOfManager managerRecord,
 				UriComponentsBuilder uriComponentsBuilder) 
 				throws ResponseStatusException {
@@ -67,7 +68,9 @@ public class ManagerService {
 	}
 	
 	@Transactional   
-	public Page<DtoClassToListingOfQualification> managerServiceListing(Pageable qualificationPageable) {  
+	public Page<DtoClassToListingOfQualification> managerServiceListing(
+			String qualification,
+			Pageable qualificationPageable) {  
 		return managerRepository
 				.findEmployeePersonQualificationSubclassByFinalDateIsNull(qualificationPageable)
 				.map(DtoClassToListingOfQualification::new);

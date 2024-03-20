@@ -1,5 +1,7 @@
 package br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.employeePersonQualificatorInheritor;
 
+import static br.com.erprms.domainModel.personDomain.personQualification.SpecifiedQualification.MANAGER;
+
 import java.math.BigDecimal;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue("MANAGER")
+@DiscriminatorValue(MANAGER)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

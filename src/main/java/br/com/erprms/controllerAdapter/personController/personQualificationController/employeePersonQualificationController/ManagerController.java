@@ -1,5 +1,7 @@
 package br.com.erprms.controllerAdapter.personController.personQualificationController.employeePersonQualificationController;
 
+import static br.com.erprms.domainModel.personDomain.personQualification.SpecifiedQualification.MANAGER;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,16 +21,16 @@ import br.com.erprms.dtoPort.personDto.managerDto.DtoClassToOutputManagerOfRegis
 import br.com.erprms.dtoPort.personDto.managerDto.DtoRecordToRegistryOfManager;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
-import br.com.erprms.serviceApplication.personService.ManagerService;
+import br.com.erprms.serviceApplication.personService.PersonQualificationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController("managerControllerBean")
 @RequestMapping("manager")
 @SecurityRequirement(name = "bearer-key")
 public class ManagerController {
-	private final ManagerService managerService; 
+	private final PersonQualificationService managerService; 
 	
-	public ManagerController(ManagerService managerService) {
+	public ManagerController(PersonQualificationService managerService) {
 		this.managerService = managerService;
 	}
 	
@@ -48,7 +50,7 @@ public class ManagerController {
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
 		var dtoRecordToOutputManagerOfRegistry_With_Uri = 
-				managerService.managerServiceRegistry(managerRecord, uriComponentsBuilder);
+				managerService.managerServiceRegistry(MANAGER, managerRecord, uriComponentsBuilder);
 
 		return ResponseEntity
 				.created(dtoRecordToOutputManagerOfRegistry_With_Uri.uri())
@@ -60,7 +62,7 @@ public class ManagerController {
 				@PageableDefault(size = 10, sort = {"sector"}) 
 				Pageable qualificationPageable) {
 		return ResponseEntity
-				.ok(managerService.managerServiceListing(qualificationPageable));
+				.ok(managerService.managerServiceListing(MANAGER, qualificationPageable));
 	}
 }
 
