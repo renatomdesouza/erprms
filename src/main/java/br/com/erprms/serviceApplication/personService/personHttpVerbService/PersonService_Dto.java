@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
-import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClassToLegalPersonOfListing;
-import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClassToNaturalPersonOfListing;
+import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfListing;
+import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfListing;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfUpdate;
 
 public class PersonService_Dto <T extends PersonListingDto> {
@@ -21,10 +21,10 @@ public class PersonService_Dto <T extends PersonListingDto> {
 		T personListingDto = null; 
 		
 		if(person.getIsNaturalPerson())  
-			personListingDto = (T) mapper.map(person, DtoClassToNaturalPersonOfListing.class); 
+			personListingDto = (T) mapper.map(person, DtoClass_NaturalPersonOfListing.class); 
 
 		if(!person.getIsNaturalPerson())
-			personListingDto = (T) mapper.map(person, DtoClassToLegalPersonOfListing.class);
+			personListingDto = (T) mapper.map(person, DtoClass_LegalPersonOfListing.class);
 		
 		return personListingDto;
 	}

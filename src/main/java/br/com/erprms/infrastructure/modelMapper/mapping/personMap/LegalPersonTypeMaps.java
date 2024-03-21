@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClassToLegalPersonOfListing;
+import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfListing;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfUpdate;
 
@@ -44,22 +44,22 @@ public class LegalPersonTypeMaps {
 	}
 	
 	public void personEntity_To_dtoClassToLegalPersonOfListing_TypeMap(ModelMapper mapper) {
-		mapper.createTypeMap(PersonEntity.class, DtoClassToLegalPersonOfListing.class)
-			.addMapping(PersonEntity::getId, DtoClassToLegalPersonOfListing::setId)
-			.addMapping(PersonEntity::getFullNameOrEntityName, DtoClassToLegalPersonOfListing::setFullNameOrEntityName)
-			.addMapping(PersonEntity::getNickname, DtoClassToLegalPersonOfListing::setNickname)
-			.addMapping(PersonEntity::getStatusPersonEnum, DtoClassToLegalPersonOfListing::setStatusPersonEnum)
-			.addMapping(PersonEntity::getCpfOrCnpj, DtoClassToLegalPersonOfListing::setCpfOrCnpj)
-			.addMapping(PersonEntity::getInscricEstad, DtoClassToLegalPersonOfListing::setInscricEstad)
-			.addMapping(PersonEntity::getInscricMunicip, DtoClassToLegalPersonOfListing::setInscricMunicip)
-			.addMapping(PersonEntity::getEmail, DtoClassToLegalPersonOfListing::setEmail)
-			.addMapping(PersonEntity::getSite, DtoClassToLegalPersonOfListing::setSite)
-			.addMapping(PersonEntity::getStreet, DtoClassToLegalPersonOfListing::setStreet)
-			.addMapping(PersonEntity::getNumber, DtoClassToLegalPersonOfListing::setNumber)
-			.addMapping(PersonEntity::getNeighborhood, DtoClassToLegalPersonOfListing::setNeighborhood)
-			.addMapping(PersonEntity::getComplement, DtoClassToLegalPersonOfListing::setComplement)
-			.addMapping(PersonEntity::getPostalCode, DtoClassToLegalPersonOfListing::setPostalCode)
-			.addMapping(PersonEntity::getCityAndStateOrProvince, DtoClassToLegalPersonOfListing::setCityAndStateOrProvince);
+		mapper.createTypeMap(PersonEntity.class, DtoClass_LegalPersonOfListing.class)
+			.addMapping(PersonEntity::getId, DtoClass_LegalPersonOfListing::setId)
+			.addMapping(PersonEntity::getFullNameOrEntityName, DtoClass_LegalPersonOfListing::setFullNameOrEntityName)
+			.addMapping(PersonEntity::getNickname, DtoClass_LegalPersonOfListing::setNickname)
+			.addMapping(PersonEntity::getStatusPersonEnum, DtoClass_LegalPersonOfListing::setStatusPersonEnum)
+			.addMapping(PersonEntity::getCpfOrCnpj, DtoClass_LegalPersonOfListing::setCpfOrCnpj)
+			.addMapping(PersonEntity::getInscricEstad, DtoClass_LegalPersonOfListing::setInscricEstad)
+			.addMapping(PersonEntity::getInscricMunicip, DtoClass_LegalPersonOfListing::setInscricMunicip)
+			.addMapping(PersonEntity::getEmail, DtoClass_LegalPersonOfListing::setEmail)
+			.addMapping(PersonEntity::getSite, DtoClass_LegalPersonOfListing::setSite)
+			.addMapping(PersonEntity::getStreet, DtoClass_LegalPersonOfListing::setStreet)
+			.addMapping(PersonEntity::getNumber, DtoClass_LegalPersonOfListing::setNumber)
+			.addMapping(PersonEntity::getNeighborhood, DtoClass_LegalPersonOfListing::setNeighborhood)
+			.addMapping(PersonEntity::getComplement, DtoClass_LegalPersonOfListing::setComplement)
+			.addMapping(PersonEntity::getPostalCode, DtoClass_LegalPersonOfListing::setPostalCode)
+			.addMapping(PersonEntity::getCityAndStateOrProvince, DtoClass_LegalPersonOfListing::setCityAndStateOrProvince);
 	}
 
 	public void dtoClassToLegalPersonOfUpdate_To_PersonEntity_TypeMap(ModelMapper mapper) {

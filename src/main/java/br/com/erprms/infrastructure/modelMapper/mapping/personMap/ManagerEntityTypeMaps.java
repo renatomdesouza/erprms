@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.employeePersonQualificatorInheritor.ManagerEmployeePersonQualificationSubclass;
-import br.com.erprms.dtoPort.personDto.managerDto.DtoClassToRegistryOfManager;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerEmployeePersonQualificationSubclass;
+import br.com.erprms.dtoPort.personDto.managerDto.DtoClass_RegistryOfManager;
 
 @Configuration
 public class ManagerEntityTypeMaps {
@@ -21,9 +21,9 @@ public class ManagerEntityTypeMaps {
 	}
 	
 	public void dtoClassToManagerRegistry_To_ManagerEmployeePersonQualificationSubclass(ModelMapper modelMapper) {   
-		modelMapper.createTypeMap(DtoClassToRegistryOfManager.class, ManagerEmployeePersonQualificationSubclass.class)
-			.addMapping(DtoClassToRegistryOfManager::getMonthlySalary, ManagerEmployeePersonQualificationSubclass::setMonthlySalary )
-			.addMapping(DtoClassToRegistryOfManager::getSector, ManagerEmployeePersonQualificationSubclass::setSector)
-			.addMapping(DtoClassToRegistryOfManager::getObservation, ManagerEmployeePersonQualificationSubclass::setObservation);
+		modelMapper.createTypeMap(DtoClass_RegistryOfManager.class, ManagerEmployeePersonQualificationSubclass.class)
+			.addMapping(DtoClass_RegistryOfManager::getMonthlySalary, ManagerEmployeePersonQualificationSubclass::setMonthlySalary )
+			.addMapping(DtoClass_RegistryOfManager::getSector, ManagerEmployeePersonQualificationSubclass::setSector)
+			.addMapping(DtoClass_RegistryOfManager::getObservation, ManagerEmployeePersonQualificationSubclass::setObservation);
 	}
 }
