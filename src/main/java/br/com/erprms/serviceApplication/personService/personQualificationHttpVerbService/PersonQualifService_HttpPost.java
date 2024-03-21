@@ -1,5 +1,8 @@
 package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
 
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
+
 import java.time.LocalDate;
 
 import org.modelmapper.ModelMapper;
@@ -8,11 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerEmployeePersonQualificationSubclass;
-import br.com.erprms.dtoPort.personDto.managerDto.DtoClass_OutputManagerOfRegistry;
-import br.com.erprms.dtoPort.personDto.managerDto.DtoClass_RegistryOfManager;
-import br.com.erprms.dtoPort.personDto.managerDto.DtoRecord_OutputManagerOfRegistry_With_Uri;
-import br.com.erprms.dtoPort.personDto.managerDto.DtoRecord_RegistryOfManager;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerEmployeePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistryOutput;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
@@ -31,36 +35,52 @@ public class PersonQualifService_HttpPost {
 	
 	@Transactional
 	@SuppressWarnings("null")
-	public DtoRecord_OutputManagerOfRegistry_With_Uri registerService(
+	public DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri registerService(
 				String qualification,
-				DtoRecord_RegistryOfManager managerRecord,
+				DtoRecord_FullTimeEmployeeRegistry fullTimeEmployeeRecord,
 				UriComponentsBuilder uriComponentsBuilder) 
 				throws ResponseStatusException {
-		if (!personRepository.existsById(managerRecord.person_Id()))
+		if (!personRepository.existsById(fullTimeEmployeeRecord.person_Id()))
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 
 					"There is no \"Person\" registered with this \"Id\"");
 		
-		var managerClassDto = new DtoClass_RegistryOfManager(managerRecord);
-		var managerEmployee = mapper.map(managerClassDto, ManagerEmployeePersonQualificationSubclass.class);
-		var person = personRepository.getReferenceById(managerClassDto.getPerson_Id());
-		
-		managerEmployee.setPerson(person);
-		if (managerRepository.existsEmployeePersonQualificationSubclassByFinalDateIsNullAndPerson(person))
+		if ((qualification != MANAGER) || (qualification != FULL_TIME_EMPLOYEE))
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 
-					"An active \"Manager\" registry already exists for this Person");
+					"Not a full-time employee or manager");
 		
-		managerEmployee.setInitialDate(LocalDate.now());
-		managerRepository.save(managerEmployee);
+		var fullTimeEmployeeDto = new DtoClass_FullTimeEmployeeRegistry(fullTimeEmployeeRecord);
+
+		var person = personRepository.getReferenceById(fullTimeEmployeeDto.getPerson_Id());
+		
+		ManagerEmployeePersonQualification managerEmployee = null;
+		if (qualification == MANAGER) {
+			managerEmployee = mapper.map(fullTimeEmployeeDto, ManagerEmployeePersonQualification.class);
+
+			if (managerRepository.existsEmployeePersonQualificationByFinalDateIsNullAndPerson(person))
+				throw new ResponseStatusException(
+						HttpStatus.INSUFFICIENT_STORAGE, 
+						"An active \"Manager\" registry already exists for this Person");
+
+			managerEmployee.setPerson(person);
+			managerEmployee.setInitialDate(LocalDate.now());
+			managerRepository.save(managerEmployee);
+		}
+		
+		
+		FullTimeEmployeePersonQualification fullTimeEmpĺoyee = null;
+		if (qualification == FULL_TIME_EMPLOYEE) {
+			fullTimeEmpĺoyee = mapper.map(fullTimeEmployeeDto, FullTimeEmployeePersonQualification.class);
+		}
 		
 		var uri = uriComponentsBuilder
 					.path("/manager/{id}")
 					.buildAndExpand(managerEmployee.getId())
 					.toUri();
 		
-		return new DtoRecord_OutputManagerOfRegistry_With_Uri(
-					new DtoClass_OutputManagerOfRegistry(person, managerEmployee),
+		return new DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri(
+					new DtoClass_FullTimeEmployeeRegistryOutput(person, managerEmployee),
 					uri);
 	}
 }
