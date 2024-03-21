@@ -19,26 +19,27 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfUpdate;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonDeleteService;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonGetService;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonPostService;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonPutService;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpDelete;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpGet;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPost;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPut;
+import static br.com.erprms.serviceApplication.personService.IsNaturalPersonConstant.IS_NATURAL_PERSON;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController("legalPersonControllerBean")
 @RequestMapping("legalPerson")
 @SecurityRequirement(name = "bearer-key")
 public class LegalPersonController {
-	private final PersonPostService<? extends PersonListingDto> personPost;
-	private final PersonGetService<? extends PersonListingDto> personGet;
-	private final PersonPutService<? extends PersonListingDto> personPut;
-	private final PersonDeleteService<? extends PersonListingDto> personDelete;
+	private final PersonService_HttpPost<? extends PersonListingDto> personPost;
+	private final PersonService_HttpGet<? extends PersonListingDto> personGet;
+	private final PersonService_HttpPut<? extends PersonListingDto> personPut;
+	private final PersonService_HttpDelete<? extends PersonListingDto> personDelete;
 	
 	public LegalPersonController(
-			PersonPostService<? extends PersonListingDto> personPost, 
-			PersonGetService<? extends PersonListingDto> personGet,
-			PersonPutService<? extends PersonListingDto> personPut,
-			PersonDeleteService<? extends PersonListingDto> personDelete) {
+			PersonService_HttpPost<? extends PersonListingDto> personPost, 
+			PersonService_HttpGet<? extends PersonListingDto> personGet,
+			PersonService_HttpPut<? extends PersonListingDto> personPut,
+			PersonService_HttpDelete<? extends PersonListingDto> personDelete) {
 		this.personPost = personPost;
 		this.personGet = personGet;
 		this.personPut = personPut;
@@ -64,12 +65,10 @@ public class LegalPersonController {
 			@PageableDefault(size = 10, sort = "fullNameOrEntityName") Pageable naturalPersonPageable,
 			UriComponentsBuilder uriComponentsBuilder){
 		
-		final Boolean isNaturalPerson = true;
-		
-		var dtoRecordOfServicePerson_Page = personGet.personListingService(
+		var dtoRecordOfServicePerson_Page = personGet.listingService(
 												naturalPersonPageable, 
 												uriComponentsBuilder, 
-												!isNaturalPerson);
+												!IS_NATURAL_PERSON);
 		
 		return ResponseEntity
 				.created(dtoRecordOfServicePerson_Page.uri())

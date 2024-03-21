@@ -1,6 +1,6 @@
 package br.com.erprms.controllerAdapter.personController.personQualificationController.employeePersonQualificationController;
 
-import static br.com.erprms.domainModel.personDomain.personQualification.SpecifiedQualification.MANAGER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +16,27 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.dtoPort.personDto.managerDto.DtoClassToListingOfQualification;
-import br.com.erprms.dtoPort.personDto.managerDto.DtoClassToOutputManagerOfRegistry;
-import br.com.erprms.dtoPort.personDto.managerDto.DtoRecordToRegistryOfManager;
+import br.com.erprms.dtoPort.personDto.managerDto.DtoClass_ListingOfQualification;
+import br.com.erprms.dtoPort.personDto.managerDto.DtoClass_OutputManagerOfRegistry;
+import br.com.erprms.dtoPort.personDto.managerDto.DtoRecord_RegistryOfManager;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
-import br.com.erprms.serviceApplication.personService.PersonQualificationService;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualifService_HttpGet;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualifService_HttpPost;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController("managerControllerBean")
 @RequestMapping("manager")
 @SecurityRequirement(name = "bearer-key")
 public class ManagerController {
-	private final PersonQualificationService managerService; 
+	private final PersonQualifService_HttpPost personQualifPost;
+	private final PersonQualifService_HttpGet personQualifGet;
 	
-	public ManagerController(PersonQualificationService managerService) {
-		this.managerService = managerService;
+	public ManagerController (
+			PersonQualifService_HttpPost personQualifPost,
+			PersonQualifService_HttpGet personQualifGet ) {
+		this.personQualifPost = personQualifPost;
+		this.personQualifGet = personQualifGet;
 	}
 	
 	@Autowired
@@ -45,12 +50,12 @@ public class ManagerController {
 	
 	@PostMapping
 	@SuppressWarnings("null")
-	public ResponseEntity<DtoClassToOutputManagerOfRegistry> register(
-			@RequestBody DtoRecordToRegistryOfManager managerRecord,
+	public ResponseEntity<DtoClass_OutputManagerOfRegistry> register(
+			@RequestBody DtoRecord_RegistryOfManager managerRecord,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
 		var dtoRecordToOutputManagerOfRegistry_With_Uri = 
-				managerService.managerServiceRegistry(MANAGER, managerRecord, uriComponentsBuilder);
+				personQualifPost.registerService(MANAGER, managerRecord, uriComponentsBuilder);
 
 		return ResponseEntity
 				.created(dtoRecordToOutputManagerOfRegistry_With_Uri.uri())
@@ -58,11 +63,11 @@ public class ManagerController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<DtoClassToListingOfQualification>> listing(
+	public ResponseEntity<Page<DtoClass_ListingOfQualification>> listing(
 				@PageableDefault(size = 10, sort = {"sector"}) 
 				Pageable qualificationPageable) {
 		return ResponseEntity
-				.ok(managerService.managerServiceListing(MANAGER, qualificationPageable));
+				.ok(personQualifGet.listingService(MANAGER, qualificationPageable));
 	}
 }
 

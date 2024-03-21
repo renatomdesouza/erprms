@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
-import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClassToNaturalPersonOfListing;
+import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfListing;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfUpdate;
 
@@ -50,22 +50,22 @@ public class NaturalPersonTypeMaps {
 	}
 	
 	public void personEntity_To_DtoClassToNaturalPersonOfListing_TypeMap(ModelMapper mapper) {   
-		mapper.createTypeMap(PersonEntity.class, DtoClassToNaturalPersonOfListing.class)
-			.addMapping(PersonEntity::getId, DtoClassToNaturalPersonOfListing::setId)
-			.addMapping(PersonEntity::getFullNameOrEntityName, DtoClassToNaturalPersonOfListing::setFullNameOrEntityName)
-			.addMapping(PersonEntity::getNickname, DtoClassToNaturalPersonOfListing::setNickname)
-			.addMapping(PersonEntity::getStatusPersonEnum, DtoClassToNaturalPersonOfListing::setStatusPersonEnum)
-			.addMapping(PersonEntity::getCpfOrCnpj, DtoClassToNaturalPersonOfListing::setCpfOrCnpj)
-			.addMapping(PersonEntity::getEmail, DtoClassToNaturalPersonOfListing::setEmail)
-			.addMapping(PersonEntity::getSite, DtoClassToNaturalPersonOfListing::setSite)
-			.addMapping(PersonEntity::getDateBorn, DtoClassToNaturalPersonOfListing::setDateBorn)
-			.addMapping(PersonEntity::getMaritalStatus, DtoClassToNaturalPersonOfListing::setMaritalStatus)
-			.addMapping(PersonEntity::getCityBorn, DtoClassToNaturalPersonOfListing::setCityBorn)
-			.addMapping(PersonEntity::getCountryBorn, DtoClassToNaturalPersonOfListing::setCountryBorn)
-			.addMapping(PersonEntity::getSex, DtoClassToNaturalPersonOfListing::setSex)
-			.addMapping(PersonEntity::getStreet, DtoClassToNaturalPersonOfListing::setStreet)
-			.addMapping(PersonEntity::getNumber, DtoClassToNaturalPersonOfListing::setNumber)
-			.addMapping(PersonEntity::getNeighborhood, DtoClassToNaturalPersonOfListing::setNeighborhood)
+		mapper.createTypeMap(PersonEntity.class, DtoClass_NaturalPersonOfListing.class)
+			.addMapping(PersonEntity::getId, DtoClass_NaturalPersonOfListing::setId)
+			.addMapping(PersonEntity::getFullNameOrEntityName, DtoClass_NaturalPersonOfListing::setFullNameOrEntityName)
+			.addMapping(PersonEntity::getNickname, DtoClass_NaturalPersonOfListing::setNickname)
+			.addMapping(PersonEntity::getStatusPersonEnum, DtoClass_NaturalPersonOfListing::setStatusPersonEnum)
+			.addMapping(PersonEntity::getCpfOrCnpj, DtoClass_NaturalPersonOfListing::setCpfOrCnpj)
+			.addMapping(PersonEntity::getEmail, DtoClass_NaturalPersonOfListing::setEmail)
+			.addMapping(PersonEntity::getSite, DtoClass_NaturalPersonOfListing::setSite)
+			.addMapping(PersonEntity::getDateBorn, DtoClass_NaturalPersonOfListing::setDateBorn)
+			.addMapping(PersonEntity::getMaritalStatus, DtoClass_NaturalPersonOfListing::setMaritalStatus)
+			.addMapping(PersonEntity::getCityBorn, DtoClass_NaturalPersonOfListing::setCityBorn)
+			.addMapping(PersonEntity::getCountryBorn, DtoClass_NaturalPersonOfListing::setCountryBorn)
+			.addMapping(PersonEntity::getSex, DtoClass_NaturalPersonOfListing::setSex)
+			.addMapping(PersonEntity::getStreet, DtoClass_NaturalPersonOfListing::setStreet)
+			.addMapping(PersonEntity::getNumber, DtoClass_NaturalPersonOfListing::setNumber)
+			.addMapping(PersonEntity::getNeighborhood, DtoClass_NaturalPersonOfListing::setNeighborhood)
 			// alternative use with Lambda Expression
 			.<String>addMapping((ori) -> ori.getComplement(), (dest, v) -> dest.setComplement(v))
 			.<String>addMapping((ori) -> ori.getPostalCode(), (dest, v) -> dest.setPostalCode(v))
