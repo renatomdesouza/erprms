@@ -1,6 +1,6 @@
 package br.com.erprms.controllerAdapter.personController.personQualificationController.employeePersonQualificationController;
 
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,14 +21,14 @@ import br.com.erprms.serviceApplication.personService.personQualificationHttpVer
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualifService_HttpPost;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
-@RestController("managerControllerBean")
-@RequestMapping("manager")
+@RestController
+@RequestMapping("partyTimeEmployee")
 @SecurityRequirement(name = "bearer-key")
-public class ManagerController {
+public class PartyTimeEmployeeController {
 	private final PersonQualifService_HttpPost personQualifPost;
 	private final PersonQualifService_HttpGet personQualifGet;
 	
-	public ManagerController (
+	public PartyTimeEmployeeController (
 			PersonQualifService_HttpPost personQualifPost,
 			PersonQualifService_HttpGet personQualifGet ) {
 		this.personQualifPost = personQualifPost;
@@ -41,12 +41,12 @@ public class ManagerController {
 			@RequestBody DtoRecord_FullTimeEmployeeRegistry managerRecord,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
-				personQualifPost.registerService(MANAGER, managerRecord, uriComponentsBuilder);
+		var dtoRecordToOutputManagerOfRegistry_With_Uri = 
+				personQualifPost.registerService(PART_TIME_EMPLOYEE, managerRecord, uriComponentsBuilder);
 
 		return ResponseEntity
-				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
-				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputManagerOfRegistry());
+				.created(dtoRecordToOutputManagerOfRegistry_With_Uri.uri())
+				.body(dtoRecordToOutputManagerOfRegistry_With_Uri.dtoClassToOutputManagerOfRegistry());
 	}
 	
 	@GetMapping
@@ -54,8 +54,6 @@ public class ManagerController {
 				@PageableDefault(size = 10, sort = {"sector"}) 
 				Pageable qualificationPageable) {
 		return ResponseEntity
-				.ok(personQualifGet.listingService(MANAGER, qualificationPageable));
+				.ok(personQualifGet.listingService(PART_TIME_EMPLOYEE, qualificationPageable));
 	}
 }
-
-	
