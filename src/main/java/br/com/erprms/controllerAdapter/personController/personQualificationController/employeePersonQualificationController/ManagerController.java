@@ -6,7 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,23 +19,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeListing;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistryOutput;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerEmployeeRegistryOutput;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualifService_HttpGet;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualifService_HttpPost;
+import br.com.erprms.serviceApplication.personService.personQualificationService.ManagerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController("managerControllerBean")
 @RequestMapping("manager")
 @SecurityRequirement(name = "bearer-key")
 public class ManagerController {
-	private final PersonQualifService_HttpPost personQualifPost;
-	private final PersonQualifService_HttpGet personQualifGet;
+	private final ManagerService managerService;
 	
-	public ManagerController (
-			PersonQualifService_HttpPost personQualifPost,
-			PersonQualifService_HttpGet personQualifGet ) {
-		this.personQualifPost = personQualifPost;
-		this.personQualifGet = personQualifGet;
+	public ManagerController (ManagerService managerService) {
+		this.managerService = managerService;
 	}
 	
 	@PostMapping
@@ -42,11 +41,11 @@ public class ManagerController {
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
-				personQualifPost.registerService(MANAGER, managerRecord, uriComponentsBuilder);
+				managerService.registerService(managerRecord, uriComponentsBuilder);
 
 		return ResponseEntity
 				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
-				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputManagerOfRegistry());
+				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputFullTimeEmployeeOfRegistry());
 	}
 	
 	@GetMapping
@@ -54,8 +53,15 @@ public class ManagerController {
 				@PageableDefault(size = 10, sort = {"sector"}) 
 				Pageable qualificationPageable) {
 		return ResponseEntity
-				.ok(personQualifGet.listingService(MANAGER, qualificationPageable));
+				.ok(managerService.listingService(qualificationPageable));
 	}
+
+	@DeleteMapping("/{id}")
+	public void exclude( @NonNull @PathVariable Long id) {
+		managerService.exclude(id, MANAGER);
+	}
+	
+	
 }
 
 	

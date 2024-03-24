@@ -22,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class ManagerEmployeePersonQualification 
+public class ManagerPersonQualification 
 					extends PersonQualificationSuperclassEntity 
 					implements FullTimeEmployeePersonQualificatorInterface, EmployeePersonQualificatorInterface {
 	

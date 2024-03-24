@@ -1,20 +1,23 @@
-package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
+package br.com.erprms.serviceApplication.personService.personQualificationService;
 
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 
 import java.time.LocalDate;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerEmployeePersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistryOutput;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeListing;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerEmployeeRegistryOutput;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
@@ -22,12 +25,12 @@ import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class PersonQualifService_HttpPost {
+public class ManagerService2 {
 	private ModelMapper mapper;
 	private PersonRepository personRepository;
 	private ManagerRepository managerRepository;
 	
-	public PersonQualifService_HttpPost(ModelMapper mapper, PersonRepository personRepository, ManagerRepository managerRepository) {
+	public ManagerService2(ModelMapper mapper, PersonRepository personRepository, ManagerRepository managerRepository) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.managerRepository = managerRepository;
@@ -54,11 +57,11 @@ public class PersonQualifService_HttpPost {
 
 		var person = personRepository.getReferenceById(fullTimeEmployeeDto.getPerson_Id());
 		
-		ManagerEmployeePersonQualification managerEmployee = null;
+		ManagerPersonQualification managerEmployee = null;
 		if (qualification == MANAGER) {
-			managerEmployee = mapper.map(fullTimeEmployeeDto, ManagerEmployeePersonQualification.class);
+			managerEmployee = mapper.map(fullTimeEmployeeDto, ManagerPersonQualification.class);
 
-			if (managerRepository.existsEmployeePersonQualificationByFinalDateIsNullAndPerson(person))
+			if (managerRepository.existsManagerEmployeePersonQualificationByFinalDateIsNullAndPerson(person))
 				throw new ResponseStatusException(
 						HttpStatus.INSUFFICIENT_STORAGE, 
 						"An active \"Manager\" registry already exists for this Person");
@@ -79,8 +82,18 @@ public class PersonQualifService_HttpPost {
 					.buildAndExpand(managerEmployee.getId())
 					.toUri();
 		
-		return new DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri(
-					new DtoClass_FullTimeEmployeeRegistryOutput(person, managerEmployee),
-					uri);
+//		return new DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri(
+//					new DtoClass_ManagerEmployeeRegistryOutput(person, managerEmployee),
+//					uri);
+		return null;
+	}
+	
+	@Transactional   
+	public Page<DtoClass_FullTimeEmployeeListing> listingService(
+			String qualification,
+			Pageable qualificationPageable) {  
+		return managerRepository
+				.findEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
+				.map(DtoClass_FullTimeEmployeeListing::new);
 	}
 }
