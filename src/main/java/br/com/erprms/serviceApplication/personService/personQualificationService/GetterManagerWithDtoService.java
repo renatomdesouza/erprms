@@ -1,4 +1,4 @@
-package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
+package br.com.erprms.serviceApplication.personService.personQualificationService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

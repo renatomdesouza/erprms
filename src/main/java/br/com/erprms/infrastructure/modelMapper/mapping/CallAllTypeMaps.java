@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.erprms.infrastructure.modelMapper.mapping.personMap.AccountantEntityTypeMaps;
+import br.com.erprms.infrastructure.modelMapper.mapping.personMap.FullTimeEmployeeEntityTypeMaps;
 import br.com.erprms.infrastructure.modelMapper.mapping.personMap.LegalPersonTypeMaps;
 import br.com.erprms.infrastructure.modelMapper.mapping.personMap.ManagerEntityTypeMaps;
 import br.com.erprms.infrastructure.modelMapper.mapping.personMap.NaturalPersonTypeMaps;
@@ -24,6 +25,8 @@ public class CallAllTypeMaps {
 		new AccountantEntityTypeMaps(mapper);
 		new ManagerEntityTypeMaps(mapper);
 		new NaturalPersonTypeMaps(mapper);
+		new FullTimeEmployeeEntityTypeMaps(mapper);
+		
 	}
 	
 }

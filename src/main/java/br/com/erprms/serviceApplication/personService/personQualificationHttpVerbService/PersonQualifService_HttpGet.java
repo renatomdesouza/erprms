@@ -17,9 +17,7 @@ public class PersonQualifService_HttpGet {
 	}
 	
 	@Transactional   
-	public Page<DtoClass_FullTimeEmployeeListing> listingService(
-			String qualification,
-			Pageable qualificationPageable) {  
+	public Page<DtoClass_FullTimeEmployeeListing> listingService(Pageable qualificationPageable) {  
 		return managerRepository
 				.findEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
 				.map(DtoClass_FullTimeEmployeeListing::new);

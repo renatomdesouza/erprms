@@ -3,12 +3,12 @@ package br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeD
 import java.math.BigDecimal;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
 import lombok.Getter;
 
 @Getter
-public class DtoClass_FullTimeEmployeeRegistryOutput {
+public class DtoClass_ManagerEmployeeRegistryOutput {
 	private String specified_qualification;
 	private String name;
 	private String cpfOrCnpj;
@@ -16,12 +16,12 @@ public class DtoClass_FullTimeEmployeeRegistryOutput {
 	private SectorEnum sector;
 	private String observation;
 
-	public DtoClass_FullTimeEmployeeRegistryOutput(PersonEntity person, FullTimeEmployeePersonQualification employee) {
+	public DtoClass_ManagerEmployeeRegistryOutput(PersonEntity person, ManagerPersonQualification manager) {
 		this.specified_qualification = "MANAGER";
 		this.name = person.getFullNameOrEntityName();
 		this.cpfOrCnpj = person.getCpfOrCnpj();
-		this.salary = employee.getMonthlySalary();
-		this.sector = employee.getSector();
-		this.observation = employee.getObservation();
+		this.salary = manager.getMonthlySalary();
+		this.sector = manager.getSector();
+		this.observation = manager.getObservation();
 	}
 }

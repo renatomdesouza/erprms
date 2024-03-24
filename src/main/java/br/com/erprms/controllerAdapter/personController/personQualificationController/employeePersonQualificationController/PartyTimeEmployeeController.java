@@ -15,38 +15,37 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistryOutput;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerEmployeeRegistryOutput;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualifService_HttpGet;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualifService_HttpPost;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("partyTimeEmployee")
 @SecurityRequirement(name = "bearer-key")
 public class PartyTimeEmployeeController {
-	private final PersonQualifService_HttpPost personQualifPost;
+//	private final PersonQualifService_HttpPost personQualifPost;
 	private final PersonQualifService_HttpGet personQualifGet;
 	
 	public PartyTimeEmployeeController (
-			PersonQualifService_HttpPost personQualifPost,
+//			PersonQualifService_HttpPost personQualifPost,
 			PersonQualifService_HttpGet personQualifGet ) {
-		this.personQualifPost = personQualifPost;
+//		this.personQualifPost = personQualifPost;
 		this.personQualifGet = personQualifGet;
 	}
 	
 	@PostMapping
 	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_FullTimeEmployeeRegistryOutput> register(
+	public /*ResponseEntity<DtoClass_FullTimeEmployeeRegistryOutput>*/ void register(
 			@RequestBody DtoRecord_FullTimeEmployeeRegistry managerRecord,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-		var dtoRecordToOutputManagerOfRegistry_With_Uri = 
-				personQualifPost.registerService(PART_TIME_EMPLOYEE, managerRecord, uriComponentsBuilder);
+//		var dtoRecordToOutputManagerOfRegistry_With_Uri = 
+//				personQualifPost.registerService(managerRecord, uriComponentsBuilder);
 
-		return ResponseEntity
-				.created(dtoRecordToOutputManagerOfRegistry_With_Uri.uri())
-				.body(dtoRecordToOutputManagerOfRegistry_With_Uri.dtoClassToOutputManagerOfRegistry());
+//		return ResponseEntity
+//				.created(dtoRecordToOutputManagerOfRegistry_With_Uri.uri())
+//				.body(dtoRecordToOutputManagerOfRegistry_With_Uri.dtoClassToOutputManagerOfRegistry());
 	}
 	
 	@GetMapping
@@ -54,6 +53,6 @@ public class PartyTimeEmployeeController {
 				@PageableDefault(size = 10, sort = {"sector"}) 
 				Pageable qualificationPageable) {
 		return ResponseEntity
-				.ok(personQualifGet.listingService(PART_TIME_EMPLOYEE, qualificationPageable));
+				.ok(personQualifGet.listingService(qualificationPageable));
 	}
 }

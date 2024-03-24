@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerEmployeePersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistry;
 
 @Configuration
@@ -21,9 +21,9 @@ public class ManagerEntityTypeMaps {
 	}
 	
 	public void dtoClassToManagerRegistry_To_ManagerEmployeePersonQualificationSubclass(ModelMapper modelMapper) {   
-		modelMapper.createTypeMap(DtoClass_FullTimeEmployeeRegistry.class, ManagerEmployeePersonQualification.class)
-			.addMapping(DtoClass_FullTimeEmployeeRegistry::getMonthlySalary, ManagerEmployeePersonQualification::setMonthlySalary )
-			.addMapping(DtoClass_FullTimeEmployeeRegistry::getSector, ManagerEmployeePersonQualification::setSector)
-			.addMapping(DtoClass_FullTimeEmployeeRegistry::getObservation, ManagerEmployeePersonQualification::setObservation);
+		modelMapper.createTypeMap(DtoClass_FullTimeEmployeeRegistry.class, ManagerPersonQualification.class)
+			.addMapping(DtoClass_FullTimeEmployeeRegistry::getMonthlySalary, ManagerPersonQualification::setMonthlySalary )
+			.addMapping(DtoClass_FullTimeEmployeeRegistry::getSector, ManagerPersonQualification::setSector)
+			.addMapping(DtoClass_FullTimeEmployeeRegistry::getObservation, ManagerPersonQualification::setObservation);
 	}
 }

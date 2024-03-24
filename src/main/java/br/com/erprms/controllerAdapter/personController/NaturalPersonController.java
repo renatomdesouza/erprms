@@ -102,4 +102,8 @@ public class NaturalPersonController {
 				.created(dtoRecordToNaturalPerson.uri())
 				.body(dtoRecordToNaturalPerson.dtoOfPerson());
 	}
+	
+	
+	
+	
 }

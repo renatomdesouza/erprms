@@ -1,4 +1,4 @@
-package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
+package br.com.erprms.serviceApplication.personService.personQualificationService;
 
 import java.time.LocalDate;
 
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerEmployeePersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistryOutput;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerEmployeeRegistryOutput;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistry;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
@@ -45,11 +45,11 @@ public class PersonQualificationService {
 					"There is no \"Person\" registered with this \"Id\"");
 		
 		var managerClassDto = new DtoClass_FullTimeEmployeeRegistry(managerRecord);
-		var managerEmployee = mapper.map(managerClassDto, ManagerEmployeePersonQualification.class);
+		var managerEmployee = mapper.map(managerClassDto, ManagerPersonQualification.class);
 		var person = personRepository.getReferenceById(managerClassDto.getPerson_Id());
 		
 		managerEmployee.setPerson(person);
-		if (managerRepository.existsEmployeePersonQualificationByFinalDateIsNullAndPerson(person))
+		if (managerRepository.existsManagerEmployeePersonQualificationByFinalDateIsNullAndPerson(person))
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 
 					"An active \"Manager\" registry already exists for this Person");
@@ -62,9 +62,10 @@ public class PersonQualificationService {
 					.buildAndExpand(managerEmployee.getId())
 					.toUri();
 		
-		return new DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri(
-					new DtoClass_FullTimeEmployeeRegistryOutput(person, managerEmployee),
-					uri);
+//		return new DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri(
+//					new DtoClass_ManagerEmployeeRegistryOutput(person, managerEmployee),
+//					uri);
+		return null;
 	}
 	
 	@Transactional   
