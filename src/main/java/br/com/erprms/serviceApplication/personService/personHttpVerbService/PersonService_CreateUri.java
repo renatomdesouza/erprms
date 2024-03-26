@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
-public class PersonService_Uri {
+public class PersonService_CreateUri {
 	
 	public URI uriBuild(UriComponentsBuilder uriComponentsBuilder, Boolean isNaturalPerson) {
 		

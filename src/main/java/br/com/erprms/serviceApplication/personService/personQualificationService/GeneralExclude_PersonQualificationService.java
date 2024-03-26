@@ -22,7 +22,7 @@ public class GeneralExclude_PersonQualificationService {
 	public void generalExclude(Long person_Id, String specifiedQualification) {
 		
 		try {	
-			var personAsActiveManager = personQualificationRepository.personActiveQualification(person_Id, "MANAGER");
+			var personAsActiveManager = personQualificationRepository.personActiveQualification(person_Id, specifiedQualification);
 		
 			personAsActiveManager.setFinalDate(LocalDate.now());
 			

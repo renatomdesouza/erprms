@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeListing;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
 
 public interface PersonQualificationRepository extends JpaRepository<PersonQualificationSuperclassEntity, Long> {
 	
@@ -35,7 +35,7 @@ public interface PersonQualificationRepository extends JpaRepository<PersonQuali
 	
 	@Query(value = "SELECT * FROM person_qualification p WHERE p.final_date IS NULL",
 			nativeQuery = true)
-	Page<DtoClass_FullTimeEmployeeListing> findEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+	Page<DtoClass_ManagerAndFullTimeEmployeeToListing> findEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
 	
 	
 	
