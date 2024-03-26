@@ -9,8 +9,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DtoClass_FullTimeEmployeeToListing {
+public class DtoClass_ManagerAndFullTimeEmployeeToListing {
 	private Long id;
+	private String specifiedQualification;
 	private Long personId;
 	private String personName;
 	private String personCpfOrCnpj;

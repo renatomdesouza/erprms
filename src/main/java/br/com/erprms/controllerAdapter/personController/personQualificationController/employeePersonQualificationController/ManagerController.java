@@ -17,15 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistryOutput;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerEmployeeRegistryOutput;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistryOutput;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
 import br.com.erprms.serviceApplication.personService.personQualificationService.ManagerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController("managerControllerBean")
-@RequestMapping("manager")
+@RequestMapping(MANAGER)
 @SecurityRequirement(name = "bearer-key")
 public class ManagerController {
 	private final ManagerService managerService;
@@ -36,12 +35,12 @@ public class ManagerController {
 	
 	@PostMapping
 	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_FullTimeEmployeeRegistryOutput> register(
+	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> register(
 			@RequestBody DtoRecord_FullTimeEmployeeRegistry managerRecord,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
-				managerService.registerService(managerRecord, uriComponentsBuilder);
+				managerService.registerService(managerRecord, uriComponentsBuilder, MANAGER);
 
 		return ResponseEntity
 				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
@@ -49,19 +48,21 @@ public class ManagerController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<DtoClass_FullTimeEmployeeListing>> listing(
+	public ResponseEntity<Page<DtoClass_ManagerAndFullTimeEmployeeToListing>> listing(
 				@PageableDefault(size = 10, sort = {"sector"}) 
 				Pageable qualificationPageable) {
+		
+		Page<DtoClass_ManagerAndFullTimeEmployeeToListing> managerPageDto = 
+				managerService.listingService(qualificationPageable); 
+		
 		return ResponseEntity
-				.ok(managerService.listingService(qualificationPageable));
+				.ok(managerPageDto);
 	}
 
-	@DeleteMapping("/{id}")
-	public void exclude( @NonNull @PathVariable Long id) {
-		managerService.exclude(id, MANAGER);
+	@DeleteMapping("/{person_Id}")
+	public void exclude( @NonNull @PathVariable Long person_Id) {
+		managerService.exclude(person_Id, MANAGER);
 	}
-	
-	
 }
 
 	

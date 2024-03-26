@@ -2,18 +2,14 @@ package br.com.erprms.controllerAdapter.personController.personQualificationCont
 
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,47 +17,28 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeRegistryOutput;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_FullTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistryOutput;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
-import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
-import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
-import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualifService_HttpGet;
 import br.com.erprms.serviceApplication.personService.personQualificationService.FullTimeEmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.transaction.Transactional;
 
 
 @RestController
-@RequestMapping("fullTimeEmployee")
+@RequestMapping(FULL_TIME_EMPLOYEE)
 @SecurityRequirement(name = "bearer-key")
 public class FullTimeEmployeeController {
-	private final PersonQualifService_HttpGet personQualifGet;
 	private final FullTimeEmployeeService fullTimeEmployeeService;
 	
 	
 	public FullTimeEmployeeController(
-			FullTimeEmployeeService fullTimeEmployeeService,
-			ModelMapper mapper, 
-			PersonRepository personRepository, 
-			PersonQualificationRepository personQualificationRepository,
-			PersonQualifService_HttpGet personQualifGet) {
+			FullTimeEmployeeService fullTimeEmployeeService) {
 		this.fullTimeEmployeeService = fullTimeEmployeeService;
-		this.personQualifGet = personQualifGet;
 	}
-
-	@Autowired
-	private FullTimeEmployeeRepository fullTimeEmployeeRepository;
 
 	@PostMapping
 	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_FullTimeEmployeeRegistryOutput> register(
+	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> register(
 			@RequestBody DtoRecord_FullTimeEmployeeRegistry fullTimeEmployee,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
@@ -76,12 +53,19 @@ public class FullTimeEmployeeController {
 
 		
 	@GetMapping
-	public ResponseEntity<Page<DtoClass_FullTimeEmployeeToListing>> listing(
+	public ResponseEntity<Page<DtoClass_ManagerAndFullTimeEmployeeToListing>> listing(
 				@PageableDefault 
 				Pageable qualificationPageable) {
 		
-		return ResponseEntity
-				.ok(fullTimeEmployeeService.listingService(qualificationPageable));
+		Page<DtoClass_ManagerAndFullTimeEmployeeToListing> fullTimeEmployeePagesDto = 
+				fullTimeEmployeeService.listingService(qualificationPageable);
+		
+		return ResponseEntity.ok(fullTimeEmployeePagesDto);
+	}
+	
+	@DeleteMapping("/{person_Id}")
+	public void exclude( @NonNull @PathVariable Long person_Id) {
+		fullTimeEmployeeService.exclude(person_Id, FULL_TIME_EMPLOYEE);
 	}
 }
 

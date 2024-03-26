@@ -39,12 +39,12 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 		
 		personRepository.save(person);
 				
-		var uri = new PersonService_Uri().uriBuild(
+		var uri = new PersonService_CreateUri().uriBuild(
 							uriComponentsBuilder, 
 							person.getId(), 
 							person.getIsNaturalPerson());
 
-		var personListingDto =  new PersonService_Dto<>(mapper)
+		var personListingDto =  new PersonService_CreateDto<>(mapper)
 										.selectNaturalOrLegalPersonToListing_Dto(person); 
 		
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);

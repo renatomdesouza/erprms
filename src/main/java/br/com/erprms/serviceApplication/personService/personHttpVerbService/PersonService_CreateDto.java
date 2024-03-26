@@ -8,10 +8,10 @@ import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfList
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfListing;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfUpdate;
 
-public class PersonService_Dto <T extends PersonListingDto> {
+public class PersonService_CreateDto <T extends PersonListingDto> {
 	private ModelMapper mapper;
 	
-	public PersonService_Dto(ModelMapper mapper) { 
+	public PersonService_CreateDto(ModelMapper mapper) { 
 		this.mapper = mapper;
 	}
 
