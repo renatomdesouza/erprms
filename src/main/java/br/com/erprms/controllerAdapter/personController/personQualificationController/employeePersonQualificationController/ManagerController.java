@@ -48,20 +48,35 @@ public class ManagerController {
 	}
 	
 	@GetMapping
+	@SuppressWarnings("null")
 	public ResponseEntity<Page<DtoClass_ManagerAndFullTimeEmployeeToListing>> listing(
-				@PageableDefault(size = 10, sort = {"sector"}) 
-				Pageable qualificationPageable) {
+				@PageableDefault(size = 10, sort = {"sector"}) Pageable qualificationPageable,
+				UriComponentsBuilder uriComponentsBuilder) {
 		
-		Page<DtoClass_ManagerAndFullTimeEmployeeToListing> managerPageDto = 
-				managerService.listingService(qualificationPageable); 
-		
+		var dtoRecord_FullTimeEmployeeOutputPage_With_Uri =	
+				managerService.listingService(	qualificationPageable,
+												uriComponentsBuilder,
+												MANAGER);
+
 		return ResponseEntity
-				.ok(managerPageDto);
+				.created(dtoRecord_FullTimeEmployeeOutputPage_With_Uri.uri())
+				.body(dtoRecord_FullTimeEmployeeOutputPage_With_Uri.pageableDto());
+		
 	}
 
 	@DeleteMapping("/{person_Id}")
-	public void exclude( @NonNull @PathVariable Long person_Id) {
-		managerService.exclude(person_Id, MANAGER);
+	@SuppressWarnings("null")
+	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> exclude( 
+			@NonNull @PathVariable Long person_Id,
+			UriComponentsBuilder uriComponentsBuilder) {
+		
+		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri =
+				managerService.exclude(person_Id, MANAGER, uriComponentsBuilder);
+	
+		return ResponseEntity
+				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
+				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputFullTimeEmployeeOfRegistry());
+	
 	}
 }
 

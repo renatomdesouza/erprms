@@ -23,7 +23,6 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDt
 import br.com.erprms.serviceApplication.personService.personQualificationService.FullTimeEmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
-
 @RestController
 @RequestMapping(FULL_TIME_EMPLOYEE)
 @SecurityRequirement(name = "bearer-key")
@@ -52,69 +51,30 @@ public class FullTimeEmployeeController {
 	}
 
 		
+	@SuppressWarnings("null")
 	@GetMapping
 	public ResponseEntity<Page<DtoClass_ManagerAndFullTimeEmployeeToListing>> listing(
-				@PageableDefault 
-				Pageable qualificationPageable) {
+				@PageableDefault Pageable qualificationPageable,
+				UriComponentsBuilder uriComponentsBuilder) {
 		
-		Page<DtoClass_ManagerAndFullTimeEmployeeToListing> fullTimeEmployeePagesDto = 
-				fullTimeEmployeeService.listingService(qualificationPageable);
-		
-		return ResponseEntity.ok(fullTimeEmployeePagesDto);
+		var dtoRecord_FullTimeEmployeeOutputPage_With_Uri =	
+				fullTimeEmployeeService.listingService(	qualificationPageable,
+														uriComponentsBuilder,
+														FULL_TIME_EMPLOYEE);
+		return ResponseEntity
+				.created(dtoRecord_FullTimeEmployeeOutputPage_With_Uri.uri())
+				.body(dtoRecord_FullTimeEmployeeOutputPage_With_Uri.pageableDto());
 	}
 	
 	@DeleteMapping("/{person_Id}")
-	public void exclude( @NonNull @PathVariable Long person_Id) {
-		fullTimeEmployeeService.exclude(person_Id, FULL_TIME_EMPLOYEE);
+	@SuppressWarnings("null")
+	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> exclude( @NonNull @PathVariable Long person_Id, UriComponentsBuilder uriComponentsBuilder) {
+		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri =
+				fullTimeEmployeeService.exclude(person_Id, 
+												FULL_TIME_EMPLOYEE, 
+												uriComponentsBuilder);
+		return ResponseEntity
+				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
+				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputFullTimeEmployeeOfRegistry());
 	}
 }
-
-
-
-//@Transactional
-//@SuppressWarnings("null")
-//public DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri registerService(
-//			DtoRecord_FullTimeEmployeeRegistry fullTimeEmployeeRecord,   // DtoRecord_FullTimeEmployeeRegistry
-//			UriComponentsBuilder uriComponentsBuilder,
-//			String specifiedQualification) 
-//			throws ResponseStatusException {
-//
-//	registerServiceValidation(fullTimeEmployeeRecord.person_Id(), specifiedQualification);
-//	
-//	DtoClass_FullTimeEmployeeRegistry fullTimeEmployeeDto = 
-//			new DtoClass_FullTimeEmployeeRegistry( (DtoRecord_FullTimeEmployeeRegistry) fullTimeEmployeeRecord);
-//
-//	var fullTimeEmployee = mapper.map(fullTimeEmployeeDto, FullTimeEmployeePersonQualification.class);
-//
-//	var person = personRepository.getReferenceById(fullTimeEmployeeDto.getPerson_Id() );
-//	
-//	fullTimeEmployee.setPerson(person);
-//	
-//	fullTimeEmployee.setInitialDate(LocalDate.now());
-//	
-//	personQualificationRepository.save(fullTimeEmployee);
-//	
-//	var uri = uriComponentsBuilder
-//				.path("/manager/{id}")
-//				.buildAndExpand(person.getId())
-//				.toUri();
-//	
-//	return new DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri(
-//				new DtoClass_FullTimeEmployeeRegistryOutput(person, fullTimeEmployee),
-//				uri);
-//}
-
-//private void registerServiceValidation(@NonNull Long id_Person, String specifiedQualification) {
-//	
-//	if (!personRepository.existsById(id_Person))
-//		throw new ResponseStatusException(
-//				HttpStatus.INSUFFICIENT_STORAGE, 
-//				"There is no \"Person\" registered with this \"Id\"");
-//	
-//	Optional<PersonQualificationSuperclassEntity> fullTimeEmployeeOptional = Optional.ofNullable(
-//			personQualificationRepository.personActiveQualification(id_Person, specifiedQualification));
-//	if (!fullTimeEmployeeOptional.isEmpty())
-//		throw new ResponseStatusException(
-//				HttpStatus.INSUFFICIENT_STORAGE, 
-//				"There is no an active \"FullTimeEmployee\" registry for this Person");
-//}

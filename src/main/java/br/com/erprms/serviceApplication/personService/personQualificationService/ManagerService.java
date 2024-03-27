@@ -16,6 +16,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDt
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.EmployeeInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
@@ -24,12 +25,14 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class ManagerService {
-	private ModelMapper mapper;
-	private PersonRepository personRepository;
-	private ManagerRepository managerRepository;
-	private PersonQualificationRepository personQualificationRepository;
-	private GeneralExclude_PersonQualificationService genereralExclude;
+	private final ModelMapper mapper;
+	private final PersonRepository personRepository;
+	private final ManagerRepository managerRepository;
+	private final PersonQualificationRepository personQualificationRepository;
+	private final GeneralExclude_PersonQualificationService genereralExclude;
 	private final PersonQualification_ValidatorService validatorService;
+	private final PersonQualification_CreateUri createUri;
+	private final PersonQualification_CreateManagerAndEmployeeDto createDto;
 	
 	public ManagerService(
 			ModelMapper mapper, 
@@ -37,13 +40,17 @@ public class ManagerService {
 			ManagerRepository managerRepository,
 			PersonQualificationRepository personQualificationRepository,
 			GeneralExclude_PersonQualificationService genereralExclude,
-			PersonQualification_ValidatorService validatorService) {
+			PersonQualification_ValidatorService validatorService,
+			PersonQualification_CreateUri createUri,
+			PersonQualification_CreateManagerAndEmployeeDto createDto) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.managerRepository = managerRepository;
 		this.personQualificationRepository = personQualificationRepository;
 		this.genereralExclude = genereralExclude;
 		this.validatorService = validatorService;
+		this.createUri = createUri;
+		this.createDto = createDto;
 	}
 
 	@Transactional
@@ -66,34 +73,41 @@ public class ManagerService {
 		managerEntity.setInitialDate(LocalDate.now());
 		personQualificationRepository.save(managerEntity);
 		
-		var uri = uriComponentsBuilder
-					.path("/" + specifiedQualification + "/{id}")
-					.buildAndExpand(person.getId())
-					.toUri();
+		var uri = createUri.uriCreator(	uriComponentsBuilder, 
+										specifiedQualification, 
+										person.getId());
 		
+		var dtoClass_ManagerAndFullTimeEmployeeRegistryOutput = 
+				createDto.createManagerAndEmployeeDto(	person, 
+														fullTimeManagerClassDto, 
+														specifiedQualification);
+
 		return new DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri(
-				new DtoClass_ManagerAndFullTimeEmployeeRegistryOutput(
-						person, 
-						fullTimeManagerClassDto, 
-						specifiedQualification),
-				uri);
-//		return new DtoRecord_FullTimeEmployeeOutputRegistry_With_Uri(
-//					new DtoClass_ManagerEmployeeRegistryOutput(personEntity, managerEntity),
-//					uri);
-//		return null;
+						dtoClass_ManagerAndFullTimeEmployeeRegistryOutput,
+						uri);
 	}
 	
 	@Transactional   
-	public Page<DtoClass_ManagerAndFullTimeEmployeeToListing> listingService(Pageable qualificationPageable) {  
-		return managerRepository
+	public DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri listingService(
+						Pageable qualificationPageable,
+						UriComponentsBuilder uriComponentsBuilder,
+						String specifiedQualification) {  
+		var managerPageDto = managerRepository
 				.findManagerPersonQualificationByFinalDateIsNull(qualificationPageable)
 				.map(p -> mapper.map(p, DtoClass_ManagerAndFullTimeEmployeeToListing.class));
-//				.map(DtoClass_ManagerEmployeeListing::new);
+
+		var uri = createUri.uriCreator(uriComponentsBuilder, specifiedQualification);
+		
+		return new DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri(managerPageDto, uri);
+	
 	}
 
 	@Transactional
-	public void exclude(Long person_Id, String specifiedQualification) {
-		genereralExclude.generalExclude(person_Id, specifiedQualification);
+	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri exclude(
+				Long person_Id, 
+				String specifiedQualification,
+				UriComponentsBuilder uriComponentsBuilder) {
+		return genereralExclude.generalExclude(person_Id, specifiedQualification, uriComponentsBuilder);
 	}
 	
 }

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
 import lombok.Getter;
-////////////////////////////////////////////
+
 @Getter
 public class DtoClass_ManagerAndFullTimeEmployeeRegistry implements EmployeeInterface{
 	private Long person_Id;
