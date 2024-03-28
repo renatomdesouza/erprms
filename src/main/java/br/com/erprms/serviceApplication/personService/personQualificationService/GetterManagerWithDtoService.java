@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class GetterManagerWithDtoService {
 	@Getter private String observation;
 	@Getter private LocalDate initialDate;
 	
-	public GetterManagerWithDtoService(DtoRecord_FullTimeEmployeeRegistry dtoRecordToManagerRegistry) {
+	public GetterManagerWithDtoService(DtoRecord_FullTimeAndManagerEmployeeRegistry dtoRecordToManagerRegistry) {
 		this(
 				dtoRecordToManagerRegistry.person_Id(),
 				dtoRecordToManagerRegistry.monthlySalary(),

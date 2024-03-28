@@ -3,7 +3,6 @@ package br.com.erprms.serviceApplication.personService.personQualificationServic
 import java.time.LocalDate;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,8 +29,8 @@ public class GeneralExclude_PersonQualificationService {
 	@Transactional
 	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri generalExclude(
 					Long person_Id, 
-					String specifiedQualification, 
-					UriComponentsBuilder uriComponentsBuilder) {
+					UriComponentsBuilder uriComponentsBuilder, 
+					String specifiedQualification) {
 		
 		try {	
 			var managerToDelete = personQualificationRepository.personActiveQualification(person_Id, specifiedQualification); 
@@ -53,8 +52,6 @@ public class GeneralExclude_PersonQualificationService {
 			return new DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri(
 										dtoClass_ManagerAndFullTimeEmployeeRegistryOutput,
 										uri);
-			
-		
 		} catch (NullPointerException ex) { 
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 

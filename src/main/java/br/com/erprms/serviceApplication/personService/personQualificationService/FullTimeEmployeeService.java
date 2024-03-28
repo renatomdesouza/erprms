@@ -15,7 +15,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDt
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistryOutput;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri;
 import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
@@ -24,8 +24,8 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class FullTimeEmployeeService {
-	private ModelMapper mapper;
-	private PersonRepository personRepository;
+	private final ModelMapper mapper;
+	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	private final FullTimeEmployeeRepository fullTimeEmployeeRepository;
 	private final GeneralExclude_PersonQualificationService genereralExclude;
@@ -55,7 +55,7 @@ public class FullTimeEmployeeService {
 	@Transactional
 	@SuppressWarnings("null")
 	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri registerService(
-				DtoRecord_FullTimeEmployeeRegistry fullTimeEmployeeRecord,
+				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecord,
 				UriComponentsBuilder uriComponentsBuilder,
 				String specifiedQualification) 
 				throws ResponseStatusException {
@@ -91,9 +91,9 @@ public class FullTimeEmployeeService {
 	
 	@Transactional   
 	public DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri listingService(
-						Pageable qualificationPageable,
-						UriComponentsBuilder uriComponentsBuilder,
-						String specifiedQualification) {
+				Pageable qualificationPageable,
+				UriComponentsBuilder uriComponentsBuilder,
+				String specifiedQualification) {
 		
 		var fullTimeEmployeePageDto = fullTimeEmployeeRepository
 											.findEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
@@ -101,18 +101,51 @@ public class FullTimeEmployeeService {
 		
 		var uri = createUri.uriCreator(uriComponentsBuilder, specifiedQualification);
 		
-		
 		return new DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri(
 				fullTimeEmployeePageDto,
 				uri);
 	}
 
 	@Transactional
+	@SuppressWarnings("null")
+	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri update(
+				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
+				UriComponentsBuilder uriComponentsBuilder,
+				String specifiedQualification) {
+		
+		var fullTimeManagerClassDto = new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeEmployeeRecordDto);
+		
+		var person = personRepository.getReferenceById(fullTimeManagerClassDto.getPerson_Id());
+
+		var employee = fullTimeEmployeeRepository.findFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(person);
+		
+		mapper.map(fullTimeManagerClassDto, employee);
+		
+		fullTimeEmployeeRepository.save(employee);
+		
+		var uri = createUri.uriCreator(	uriComponentsBuilder, 
+				specifiedQualification, 
+				person.getId());
+		
+		var dtoClass_ManagerAndFullTimeEmployeeRegistryOutput = 
+				createDto.createManagerAndEmployeeDto(	person, 
+														fullTimeManagerClassDto, 
+														specifiedQualification);
+
+		return new DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri(
+						dtoClass_ManagerAndFullTimeEmployeeRegistryOutput,
+						uri);
+	}
+	
+	@Transactional
 	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri exclude(
 				Long person_Id, 
-				String specifiedQualification, 
-				UriComponentsBuilder uriComponentsBuilder) {
-		return genereralExclude.generalExclude(person_Id, specifiedQualification, uriComponentsBuilder);
+				UriComponentsBuilder uriComponentsBuilder, 
+				String specifiedQualification) {
+		
+		return genereralExclude.generalExclude(	person_Id, 
+												uriComponentsBuilder, 
+												specifiedQualification);
 	}	
 }
 
