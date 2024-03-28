@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
@@ -18,7 +18,7 @@ public class PartyTimeEmployeeController {
 	@PostMapping
 	@SuppressWarnings("null")
 	public /*ResponseEntity<DtoClass_FullTimeEmployeeRegistryOutput>*/ void register(
-			@RequestBody DtoRecord_FullTimeEmployeeRegistry managerRecord,
+			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry managerRecord,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
 //		var dtoRecordToOutputManagerOfRegistry_With_Uri = 

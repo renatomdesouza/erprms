@@ -1,6 +1,7 @@
 package br.com.erprms.controllerAdapter.personController.personQualificationController.employeePersonQualificationController;
 
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistryOutput;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
 import br.com.erprms.serviceApplication.personService.personQualificationService.FullTimeEmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -38,12 +40,14 @@ public class FullTimeEmployeeController {
 	@PostMapping
 	@SuppressWarnings("null")
 	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> register(
-			@RequestBody DtoRecord_FullTimeEmployeeRegistry fullTimeEmployee,
+			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
 		
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
-				fullTimeEmployeeService.registerService(fullTimeEmployee, uriComponentsBuilder, FULL_TIME_EMPLOYEE);
+				fullTimeEmployeeService.registerService(	fullTimeEmployeeRecordDto, 
+															uriComponentsBuilder, 
+															FULL_TIME_EMPLOYEE);
 
 		return ResponseEntity
 				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
@@ -66,13 +70,29 @@ public class FullTimeEmployeeController {
 				.body(dtoRecord_FullTimeEmployeeOutputPage_With_Uri.pageableDto());
 	}
 	
+	@PutMapping
+	@SuppressWarnings("null")
+	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> update(
+			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
+			UriComponentsBuilder uriComponentsBuilder){
+
+		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
+				fullTimeEmployeeService.update(	fullTimeEmployeeRecordDto, 
+												uriComponentsBuilder, 
+												MANAGER);
+
+		return ResponseEntity
+				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
+				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputFullTimeEmployeeOfRegistry());
+	}
+	
 	@DeleteMapping("/{person_Id}")
 	@SuppressWarnings("null")
 	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> exclude( @NonNull @PathVariable Long person_Id, UriComponentsBuilder uriComponentsBuilder) {
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri =
 				fullTimeEmployeeService.exclude(person_Id, 
-												FULL_TIME_EMPLOYEE, 
-												uriComponentsBuilder);
+												uriComponentsBuilder, 
+												FULL_TIME_EMPLOYEE);
 		return ResponseEntity
 				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
 				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputFullTimeEmployeeOfRegistry());
