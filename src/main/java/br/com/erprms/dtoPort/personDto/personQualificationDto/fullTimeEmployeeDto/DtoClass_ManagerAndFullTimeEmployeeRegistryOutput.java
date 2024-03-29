@@ -15,6 +15,10 @@ public class DtoClass_ManagerAndFullTimeEmployeeRegistryOutput {
 	private String name;
 	private String cpfOrCnpj;
 	private String observation;
+	private String professionalRegistry;
+	
+	private BigDecimal MonthlySalary;
+	private SectorEnum sector;
 
 	public DtoClass_ManagerAndFullTimeEmployeeRegistryOutput(
 			PersonEntity person, 
@@ -24,18 +28,16 @@ public class DtoClass_ManagerAndFullTimeEmployeeRegistryOutput {
 		this.name = person.getFullNameOrEntityName();
 		this.cpfOrCnpj = person.getCpfOrCnpj();
 		this.observation = employee.getObservation();
+		this.professionalRegistry = employee.getProfessionalRegistry();
+		this.MonthlySalary = employee.getMonthlySalary();
+		this.sector = employee.getSector();
 	}
 
-	public DtoClass_ManagerAndFullTimeEmployeeRegistryOutput(	PersonQualificationSuperclassEntity managerToDelete,
+	public DtoClass_ManagerAndFullTimeEmployeeRegistryOutput(	PersonQualificationSuperclassEntity managerOrEmployeeToDelete,
 																String specifiedQualification) {
 		this.specifiedQualification = specifiedQualification;
-		this.name = managerToDelete.getPerson().getFullNameOrEntityName();
-		this.cpfOrCnpj = managerToDelete.getPerson().getCpfOrCnpj();
-		this.observation = managerToDelete.getObservation();
-		
-		
-		
-		
-		
+		this.name = managerOrEmployeeToDelete.getPerson().getFullNameOrEntityName();
+		this.cpfOrCnpj = managerOrEmployeeToDelete.getPerson().getCpfOrCnpj();
+		this.observation = managerOrEmployeeToDelete.getObservation();
 	}
 }

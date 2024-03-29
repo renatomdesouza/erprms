@@ -30,34 +30,11 @@ public interface PersonQualificationRepository extends JpaRepository<PersonQuali
 			""", nativeQuery = true)
 	PersonQualificationSuperclassEntity personActiveQualification(Long person_id, String specified_qualification);
 
+	
 	boolean existsFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
-
+	
 	
 	@Query(value = "SELECT * FROM person_qualification p WHERE p.final_date IS NULL",
 			nativeQuery = true)
 	Page<DtoClass_ManagerAndFullTimeEmployeeToListing> findEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
-	
-	
-	
-//	Page<DtoClass_FullTimeEmployeeListing> findEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
-
-	
-//	@Query(	value = """
-//			SELECT CASE WHEN EXISTS(	
-//				SELECT * 
-//					FROM person_qualification p 
-//						WHERE 
-//							p.person_id = :person_id 
-//							AND p.final_date IS NULL 
-//							AND specified_qualification = :specified_qualification 
-//				LIMIT 1) 
-//			THEN 'true' ELSE 'false' END
-//	""", nativeQuery = true)	
-//	boolean existsPersonQualificationSuperclassEntityByFinalDateIsNullAndSpecifiedQualificationAndPerson(
-//			String specifiedQualification,
-//			PersonEntity person
-//			);
-	
-	
-	
 }

@@ -3,7 +3,6 @@ package br.com.erprms.serviceApplication.personService.personQualificationServic
 import java.time.LocalDate;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -12,14 +11,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistryOutput;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
 import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
+import br.com.erprms.serviceApplication.personService.StatusPersonOfQualification;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -29,9 +28,10 @@ public class FullTimeEmployeeService {
 	private final PersonQualificationRepository personQualificationRepository;
 	private final FullTimeEmployeeRepository fullTimeEmployeeRepository;
 	private final GeneralExclude_PersonQualificationService genereralExclude;
-	private final PersonQualification_ValidatorService validatorService;
+	private final PersonQualification_ResponseStatusException exceptionService;
 	private final PersonQualification_CreateUri createUri;
 	private final PersonQualification_CreateManagerAndEmployeeDto createDto;
+	private final StatusPersonOfQualification statusPersonOfQualification;
 	
 	public FullTimeEmployeeService(
 			ModelMapper mapper, 
@@ -39,41 +39,41 @@ public class FullTimeEmployeeService {
 			PersonQualificationRepository personQualificationRepository,
 			FullTimeEmployeeRepository fullTimeEmployeeRepository,
 			GeneralExclude_PersonQualificationService genereralExclude,
-			PersonQualification_ValidatorService validatorService,
+			PersonQualification_ResponseStatusException exceptionService,
 			PersonQualification_CreateUri createUri,
-			PersonQualification_CreateManagerAndEmployeeDto createDto) {
+			PersonQualification_CreateManagerAndEmployeeDto createDto,
+			StatusPersonOfQualification statusPersonOfQualification) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
 		this.fullTimeEmployeeRepository = fullTimeEmployeeRepository;
 		this.genereralExclude = genereralExclude;
-		this.validatorService = validatorService;
+		this.exceptionService = exceptionService;
 		this.createUri = createUri;
 		this.createDto = createDto;
+		this.statusPersonOfQualification = statusPersonOfQualification;
 	}
 	
 	@Transactional
 	@SuppressWarnings("null")
 	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri registerService(
-				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecord,
+				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
 				UriComponentsBuilder uriComponentsBuilder,
-				String specifiedQualification) 
-				throws ResponseStatusException {
+				String specifiedQualification) throws ResponseStatusException {
 		
-		validatorService.registerServiceValidation(fullTimeEmployeeRecord.person_Id(), specifiedQualification);
+		exceptionService.exceptionRegisterServiceForManagerAndFullTimeEmployee(fullTimeEmployeeRecordDto.person_Id(), specifiedQualification);
 		
 		DtoClass_ManagerAndFullTimeEmployeeRegistry fullTimeEmployeeClassDto = 
-				new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeEmployeeRecord);
+				new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeEmployeeRecordDto);
 
 		var fullTimeEmployee = mapper.map(fullTimeEmployeeClassDto, FullTimeEmployeePersonQualification.class);
 
 		var person = personRepository.getReferenceById(fullTimeEmployeeClassDto.getPerson_Id() );
 		
 		fullTimeEmployee.setPerson(person);
-		
 		fullTimeEmployee.setInitialDate(LocalDate.now());
-		
 		personQualificationRepository.save(fullTimeEmployee);
+		statusPersonOfQualification.setStatusUser(person);
 		
 		var uri = createUri.uriCreator(	uriComponentsBuilder, 
 										specifiedQualification, 
@@ -111,7 +111,9 @@ public class FullTimeEmployeeService {
 	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri update(
 				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
 				UriComponentsBuilder uriComponentsBuilder,
-				String specifiedQualification) {
+				String specifiedQualification) throws ResponseStatusException {
+		
+		exceptionService.registerServiceExceptionToUpdateAndExclude(fullTimeEmployeeRecordDto.person_Id(), specifiedQualification);
 		
 		var fullTimeManagerClassDto = new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeEmployeeRecordDto);
 		
@@ -139,9 +141,11 @@ public class FullTimeEmployeeService {
 	
 	@Transactional
 	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri exclude(
-				Long person_Id, 
+				@NonNull Long person_Id, 
 				UriComponentsBuilder uriComponentsBuilder, 
-				String specifiedQualification) {
+				String specifiedQualification) throws ResponseStatusException {
+		
+		exceptionService.registerServiceExceptionToUpdateAndExclude(person_Id, specifiedQualification);
 		
 		return genereralExclude.generalExclude(	person_Id, 
 												uriComponentsBuilder, 

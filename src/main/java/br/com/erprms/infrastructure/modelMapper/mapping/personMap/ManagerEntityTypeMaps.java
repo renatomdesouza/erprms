@@ -29,7 +29,8 @@ public class ManagerEntityTypeMaps {
 		modelMapper.createTypeMap(DtoClass_ManagerAndFullTimeEmployeeRegistry.class, ManagerPersonQualification.class)
 			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getMonthlySalary, ManagerPersonQualification::setMonthlySalary )
 			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getSector, ManagerPersonQualification::setSector)
-			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getObservation, ManagerPersonQualification::setObservation);
+			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getObservation, ManagerPersonQualification::setObservation)
+			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getProfessionalRegistry, ManagerPersonQualification::setProfessionalRegistry);
 	}
 	
 	private void managerPersonQualification_To_DtoClass_FullTimeEmployeeToListing(ModelMapper modelMapper) {   

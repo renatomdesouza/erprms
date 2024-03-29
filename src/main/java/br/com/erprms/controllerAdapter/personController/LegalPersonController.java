@@ -25,6 +25,7 @@ import br.com.erprms.serviceApplication.personService.personHttpVerbService.Pers
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPut;
 import static br.com.erprms.serviceApplication.personService.IsNaturalPersonConstant.IS_NATURAL_PERSON;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 
 @RestController("legalPersonControllerBean")
 @RequestMapping("legalPerson")
@@ -47,6 +48,7 @@ public class LegalPersonController {
 	}
 	
 	@PostMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> register(
 			@RequestBody DtoRecord_LegalPersonOfRegistry legalPersonOfRecord, 
@@ -60,10 +62,11 @@ public class LegalPersonController {
 	}
 	
 	@GetMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<Page<? extends PersonListingDto>> legalPersonListing(
 			@PageableDefault(size = 10, sort = "fullNameOrEntityName") Pageable naturalPersonPageable,
-			UriComponentsBuilder uriComponentsBuilder){
+			UriComponentsBuilder uriComponentsBuilder) {
 		
 		var dtoRecordOfServicePerson_Page = personGet.listingService(
 												naturalPersonPageable, 
@@ -76,6 +79,7 @@ public class LegalPersonController {
 	}
 	
 	@PutMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> update(
 			@RequestBody DtoRecord_LegalPersonOfUpdate personUpdateRecordDto,
@@ -92,11 +96,11 @@ public class LegalPersonController {
 	}
 
 	@DeleteMapping("/{id}")
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> exclude(
 			@PathVariable @NonNull Long id,
-			UriComponentsBuilder uriComponentsBuilder) 
-			throws ResponseStatusException{
+			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException{
 		
 		var dtoRecordToLegalPerson = personDelete.excludeService(id, uriComponentsBuilder);
 		

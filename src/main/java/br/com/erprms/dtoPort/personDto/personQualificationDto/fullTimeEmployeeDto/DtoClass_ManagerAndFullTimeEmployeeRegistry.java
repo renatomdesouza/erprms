@@ -11,11 +11,14 @@ public class DtoClass_ManagerAndFullTimeEmployeeRegistry implements EmployeeInte
 	private BigDecimal monthlySalary;
 	private SectorEnum sector;
 	private String observation;
+	private String professionalRegistry;
+	
 	
 	public DtoClass_ManagerAndFullTimeEmployeeRegistry(DtoRecord_FullTimeAndManagerEmployeeRegistry manager) {
 		this.person_Id = manager.person_Id();
 		this.monthlySalary = manager.monthlySalary();
 		this.sector = manager.sector();
 		this.observation = manager.observation();
+		this.professionalRegistry = manager.professionalRegistry();
 	}
 }

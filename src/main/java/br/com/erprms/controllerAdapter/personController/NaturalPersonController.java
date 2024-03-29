@@ -24,6 +24,7 @@ import br.com.erprms.serviceApplication.personService.personHttpVerbService.Pers
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPut;
 import static br.com.erprms.serviceApplication.personService.IsNaturalPersonConstant.IS_NATURAL_PERSON;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 
 @RestController("naturalPersonControllerBean")
 @RequestMapping("naturalPerson")
@@ -46,6 +47,7 @@ public class NaturalPersonController {
 	}
 
 	@PostMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> register(
 			@RequestBody DtoRecord_NaturalPersonOfRegistry naturalPersonOfRecord, 
@@ -59,6 +61,7 @@ public class NaturalPersonController {
 	}
 	
 	@GetMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<Page<? extends PersonListingDto>> naturalPersonListing(
 			@PageableDefault(size = 10, sort = "fullNameOrEntityName") Pageable naturalPersonPageable,
@@ -74,6 +77,7 @@ public class NaturalPersonController {
 	}
 	
 	@PutMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> update(
 			@RequestBody DtoRecord_NaturalPersonOfUpdate personUpdateRecordDto,
@@ -90,6 +94,7 @@ public class NaturalPersonController {
 	}
 		
 	@DeleteMapping("/{id}")
+	@Transactional
 	@SuppressWarnings("null")
     public ResponseEntity<? extends PersonListingDto> exclude(
     		@PathVariable Long id, 

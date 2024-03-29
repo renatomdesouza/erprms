@@ -23,6 +23,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDt
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
 import br.com.erprms.serviceApplication.personService.personQualificationService.ManagerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 
 @RestController("managerControllerBean")
 @RequestMapping(MANAGER)
@@ -35,11 +36,11 @@ public class ManagerController {
 	}
 	
 	@PostMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> register(
 			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeManagerRecordDto,
-			UriComponentsBuilder uriComponentsBuilder) 
-			throws ResponseStatusException {
+			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
 				managerService.registerService(	fullTimeManagerRecordDto, 
@@ -52,6 +53,7 @@ public class ManagerController {
 	}
 	
 	@GetMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<Page<DtoClass_ManagerAndFullTimeEmployeeToListing>> listing(
 				@PageableDefault(size = 10, sort = {"sector"}) Pageable qualificationPageable,
@@ -67,10 +69,11 @@ public class ManagerController {
 	}
 	
 	@PutMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> update(
 			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeManagerRecordDto,
-			UriComponentsBuilder uriComponentsBuilder){
+			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
 				managerService.update(	fullTimeManagerRecordDto, 
@@ -83,10 +86,11 @@ public class ManagerController {
 	}
 	
 	@DeleteMapping("/{person_Id}")
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> exclude( 
 			@NonNull @PathVariable Long person_Id,
-			UriComponentsBuilder uriComponentsBuilder) {
+			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri =
 				managerService.exclude(	person_Id, 

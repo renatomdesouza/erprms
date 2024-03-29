@@ -1,7 +1,6 @@
 package br.com.erprms.controllerAdapter.personController.personQualificationController.employeePersonQualificationController;
 
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +23,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDt
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
 import br.com.erprms.serviceApplication.personService.personQualificationService.FullTimeEmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping(FULL_TIME_EMPLOYEE)
@@ -38,11 +38,11 @@ public class FullTimeEmployeeController {
 	}
 
 	@PostMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> register(
 			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
-			UriComponentsBuilder uriComponentsBuilder) 
-			throws ResponseStatusException {
+			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
 				fullTimeEmployeeService.registerService(	fullTimeEmployeeRecordDto, 
@@ -55,8 +55,9 @@ public class FullTimeEmployeeController {
 	}
 
 		
-	@SuppressWarnings("null")
 	@GetMapping
+	@Transactional
+	@SuppressWarnings("null")
 	public ResponseEntity<Page<DtoClass_ManagerAndFullTimeEmployeeToListing>> listing(
 				@PageableDefault Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
@@ -71,15 +72,16 @@ public class FullTimeEmployeeController {
 	}
 	
 	@PutMapping
+	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> update(
 			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
-			UriComponentsBuilder uriComponentsBuilder){
+			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
 				fullTimeEmployeeService.update(	fullTimeEmployeeRecordDto, 
 												uriComponentsBuilder, 
-												MANAGER);
+												FULL_TIME_EMPLOYEE);
 
 		return ResponseEntity
 				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
@@ -87,8 +89,12 @@ public class FullTimeEmployeeController {
 	}
 	
 	@DeleteMapping("/{person_Id}")
+	@Transactional
 	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> exclude( @NonNull @PathVariable Long person_Id, UriComponentsBuilder uriComponentsBuilder) {
+	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> exclude( 
+				@NonNull @PathVariable Long person_Id, 
+				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+		
 		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri =
 				fullTimeEmployeeService.exclude(person_Id, 
 												uriComponentsBuilder, 

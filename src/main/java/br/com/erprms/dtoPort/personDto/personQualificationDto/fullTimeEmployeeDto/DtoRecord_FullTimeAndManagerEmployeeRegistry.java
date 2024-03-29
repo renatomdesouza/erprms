@@ -8,5 +8,6 @@ public record DtoRecord_FullTimeAndManagerEmployeeRegistry(
 		Long person_Id,
 		BigDecimal monthlySalary,
 		SectorEnum sector,
-		String observation
+		String observation,
+		String professionalRegistry
 		) {}

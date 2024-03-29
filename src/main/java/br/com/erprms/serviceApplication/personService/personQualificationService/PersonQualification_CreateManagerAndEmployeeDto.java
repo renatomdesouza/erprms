@@ -21,9 +21,9 @@ public class PersonQualification_CreateManagerAndEmployeeDto {
 	
 	
 	public DtoClass_ManagerAndFullTimeEmployeeRegistryOutput createManagerAndEmployeeDto(
-					PersonQualificationSuperclassEntity managerToDelete,
+					PersonQualificationSuperclassEntity personQualificationToDelete,
 					String specifiedQualification) {
-		return new DtoClass_ManagerAndFullTimeEmployeeRegistryOutput(	managerToDelete, 
+		return new DtoClass_ManagerAndFullTimeEmployeeRegistryOutput(	personQualificationToDelete, 
 																		specifiedQualification);
 	}
 }

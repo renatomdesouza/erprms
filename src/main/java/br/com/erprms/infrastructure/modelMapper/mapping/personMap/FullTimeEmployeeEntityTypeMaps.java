@@ -28,7 +28,8 @@ public class FullTimeEmployeeEntityTypeMaps {
 		modelMapper.createTypeMap(DtoClass_ManagerAndFullTimeEmployeeRegistry.class, FullTimeEmployeePersonQualification.class)
 			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getMonthlySalary, FullTimeEmployeePersonQualification::setMonthlySalary )
 			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getSector, FullTimeEmployeePersonQualification::setSector)
-			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getObservation, FullTimeEmployeePersonQualification::setObservation);
+			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getObservation, FullTimeEmployeePersonQualification::setObservation)
+			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getProfessionalRegistry, FullTimeEmployeePersonQualification::setProfessionalRegistry);
 	}
 	
 	private void fullTimeEmployeePersonQualification_To_DtoClass_FullTimeEmployeeToListing(ModelMapper modelMapper) {   
