@@ -1,5 +1,7 @@
 package br.com.erprms.serviceApplication.personService.personQualificationService;
 
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
+
 import java.time.LocalDate;
 
 import org.modelmapper.ModelMapper;
@@ -10,11 +12,11 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
 import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
@@ -60,8 +62,8 @@ public class FullTimeEmployeeService {
 				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
 				UriComponentsBuilder uriComponentsBuilder,
 				String specifiedQualification) throws ResponseStatusException {
-		
-		exceptionService.exceptionRegisterServiceForManagerAndFullTimeEmployee(fullTimeEmployeeRecordDto.person_Id(), specifiedQualification);
+		exceptionService.exceptionForPersonWhoDoesNotExist(fullTimeEmployeeRecordDto.person_Id());
+		exceptionService.mismatchExceptionBetweenManagerAndEmployees(fullTimeEmployeeRecordDto.person_Id(), FULL_TIME_EMPLOYEE);
 		
 		DtoClass_ManagerAndFullTimeEmployeeRegistry fullTimeEmployeeClassDto = 
 				new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeEmployeeRecordDto);
@@ -112,8 +114,7 @@ public class FullTimeEmployeeService {
 				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeEmployeeRecordDto,
 				UriComponentsBuilder uriComponentsBuilder,
 				String specifiedQualification) throws ResponseStatusException {
-		
-		exceptionService.registerServiceExceptionToUpdateAndExclude(fullTimeEmployeeRecordDto.person_Id(), specifiedQualification);
+		exceptionService.exceptionForPersonWhoDoesNotExist(fullTimeEmployeeRecordDto.person_Id());
 		
 		var fullTimeManagerClassDto = new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeEmployeeRecordDto);
 		
@@ -144,8 +145,7 @@ public class FullTimeEmployeeService {
 				@NonNull Long person_Id, 
 				UriComponentsBuilder uriComponentsBuilder, 
 				String specifiedQualification) throws ResponseStatusException {
-		
-		exceptionService.registerServiceExceptionToUpdateAndExclude(person_Id, specifiedQualification);
+		exceptionService.exceptionForPersonWhoDoesNotExist(person_Id);
 		
 		return genereralExclude.generalExclude(	person_Id, 
 												uriComponentsBuilder, 

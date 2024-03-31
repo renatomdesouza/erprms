@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
@@ -61,8 +60,8 @@ public class ManagerService {
 				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeManagerRecordDto, //
 				UriComponentsBuilder uriComponentsBuilder,
 				String specifiedQualification) throws ResponseStatusException {
-		
-		exceptionService.exceptionRegisterServiceForManagerAndFullTimeEmployee(fullTimeManagerRecordDto.person_Id(), specifiedQualification);
+		exceptionService.exceptionForPersonWhoDoesNotExist(fullTimeManagerRecordDto.person_Id());
+		exceptionService.mismatchExceptionBetweenManagerAndEmployees(fullTimeManagerRecordDto.person_Id(), specifiedQualification);
 		
 		var fullTimeManagerClassDto = new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeManagerRecordDto);
 
@@ -112,7 +111,7 @@ public class ManagerService {
 			UriComponentsBuilder uriComponentsBuilder,
 			String specifiedQualification) throws ResponseStatusException {
 		
-		exceptionService.registerServiceExceptionToUpdateAndExclude(fullTimeManagerRecordDto.person_Id(), specifiedQualification);
+		exceptionService.exceptionForPersonWhoDoesNotExist(fullTimeManagerRecordDto.person_Id());
 		
 		var fullTimeManagerClassDto = new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeManagerRecordDto);
 		

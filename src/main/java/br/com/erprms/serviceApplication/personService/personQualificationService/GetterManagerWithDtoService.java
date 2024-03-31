@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 import lombok.Getter;

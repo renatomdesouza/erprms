@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.serviceApplication.personService.StatusPersonOfQualification;
@@ -44,13 +44,11 @@ public class GeneralExclude_PersonQualificationService {
 					UriComponentsBuilder uriComponentsBuilder, 
 					String specifiedQualification) {
 		
-		exceptionService.registerServiceExceptionToUpdateAndExclude(person_Id, specifiedQualification);
+		exceptionService.exceptionForPersonWhoDoesNotExist(person_Id);
 		
 		try {	
 			var personQualificationToDelete = personQualificationRepository.personActiveQualification(person_Id, specifiedQualification); 
 			
-			var dtoClass_ManagerAndFullTimeEmployeeRegistryOutput = 
-					createDto.createManagerAndEmployeeDto(personQualificationToDelete, specifiedQualification);
 			
 			var personAsActive = personQualificationRepository.personActiveQualification(person_Id, specifiedQualification);
 			personAsActive.setFinalDate(LocalDate.now());
@@ -64,6 +62,9 @@ public class GeneralExclude_PersonQualificationService {
 							uriComponentsBuilder, 
 							specifiedQualification, 
 							person_Id);
+
+			var dtoClass_ManagerAndFullTimeEmployeeRegistryOutput = 
+					createDto.createManagerAndEmployeeDto(personQualificationToDelete, specifiedQualification);
 
 			return new DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri(
 										dtoClass_ManagerAndFullTimeEmployeeRegistryOutput,

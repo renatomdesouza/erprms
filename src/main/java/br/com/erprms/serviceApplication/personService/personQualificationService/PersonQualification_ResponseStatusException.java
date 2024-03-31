@@ -1,7 +1,7 @@
 package br.com.erprms.serviceApplication.personService.personQualificationService;
 
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.*;
+//import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
 
 import java.util.Optional;
 
@@ -25,36 +25,35 @@ public class PersonQualification_ResponseStatusException {
 		this.personQualificationRepository = personQualificationRepository;
 	}
 	
-public void exceptionRegisterServiceForManagerAndFullTimeEmployee(@NonNull Long id_Person, String specifiedQualification) {
-		
-		if (!personRepository.existsById(id_Person))
-			throw new ResponseStatusException(
-					HttpStatus.INSUFFICIENT_STORAGE, 
-					"There is no \"Person\" registered with this \"Id\"");
-			
+	public void mismatchExceptionBetweenManagerAndEmployees(@NonNull Long id_Person, String specifiedQualification) {
 		var managerOptional = 
 				Optional.ofNullable(
 						personQualificationRepository.personActiveQualification(id_Person, MANAGER));
 		var employeeOptional = 
 				Optional.ofNullable(
 						personQualificationRepository.personActiveQualification(id_Person, FULL_TIME_EMPLOYEE));
+		var partTimeEmployeeOptional = 
+				Optional.ofNullable(
+						personQualificationRepository.personActiveQualification(id_Person, PART_TIME_EMPLOYEE));
 		
-		if(	(specifiedQualification.contains(MANAGER) && employeeOptional.isPresent() ) 
+		if(	
+			(specifiedQualification.contains(MANAGER) && 
+				(employeeOptional.isPresent() || partTimeEmployeeOptional.isPresent()) ) 
 			||
-			(specifiedQualification.contains(FULL_TIME_EMPLOYEE) && managerOptional.isPresent() ) ) 
-				throw new ResponseStatusException(
+			(specifiedQualification.contains(FULL_TIME_EMPLOYEE) && 
+				(managerOptional.isPresent() || partTimeEmployeeOptional.isPresent()) ) 
+			||
+			(specifiedQualification.contains(PART_TIME_EMPLOYEE) && 
+				(employeeOptional.isPresent() || managerOptional.isPresent()) )
+			)  {
+			throw new ResponseStatusException(
 						HttpStatus.INSUFFICIENT_STORAGE, 
-						"A person cannot be both a Manager and an ordinary Employee");
+						"A person can only be a manager, a regular Employee or a Part-Time employee");
+		}
 		
-		if(	(specifiedQualification.contains(MANAGER) && managerOptional.isPresent() ) 
-			||
-			(specifiedQualification.contains(FULL_TIME_EMPLOYEE) && employeeOptional.isPresent() ) ) 
-				throw new ResponseStatusException(
-						HttpStatus.INSUFFICIENT_STORAGE, 
-						"There is already an active qualification for this role");
 	}
 
-	public void registerServiceExceptionToUpdateAndExclude(@NonNull Long person_Id, String specifiedQualification) {
+	public void exceptionForPersonWhoDoesNotExist(@NonNull Long person_Id) {
 		if (!personRepository.existsById(person_Id))
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 
