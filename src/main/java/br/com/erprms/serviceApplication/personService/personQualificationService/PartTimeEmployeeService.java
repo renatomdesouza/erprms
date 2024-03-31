@@ -63,7 +63,7 @@ public class PartTimeEmployeeService {
 				DtoRecord_PartTimeEmployeeRegistry partTimeEmployeeRecordDto,
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		exceptionService.exceptionForPersonWhoDoesNotExist(partTimeEmployeeRecordDto.person_Id());
-		exceptionService.mismatchExceptionBetweenManagerAndEmployees(partTimeEmployeeRecordDto.person_Id(), PART_TIME_EMPLOYEE);
+		exceptionService.mismatchExceptionBetweenQualifications(partTimeEmployeeRecordDto.person_Id());
 		
 		DtoClass_PartTimeEmployeeRegistry partTimeEmployeeClassDto = 
 				new DtoClass_PartTimeEmployeeRegistry(partTimeEmployeeRecordDto);
@@ -140,12 +140,13 @@ public class PartTimeEmployeeService {
 			var person = personRepository.getReferenceById(person_Id);
 			statusPersonOfQualification.setSatusNotUser(person);
 			
-			var uri = createUri.uriCreator(	
-							uriComponentsBuilder, 
-							PART_TIME_EMPLOYEE, 
-							person_Id);
+			var uri = createUri.uriCreator(	uriComponentsBuilder, 
+											PART_TIME_EMPLOYEE, 
+											person_Id);
+			
 			var dtoClass_PartTimeEmployeeRegistryOutput = 
 					new DtoClass_PartTimeEmployeeRegistryOutput(personQualificationToDelete, PART_TIME_EMPLOYEE);
+			
 			return outPutResponseEntity(
 					new DtoRecord_PartTimeEmployeeOutputRegistry_With_Uri(
 										dtoClass_PartTimeEmployeeRegistryOutput,

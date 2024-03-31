@@ -1,5 +1,7 @@
 package br.com.erprms.repositoryAdapter.personRepository;
 
+import java.util.ArrayList;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,8 +31,25 @@ public interface PersonQualificationRepository extends JpaRepository<PersonQuali
 					LIMIT 1 
 			""", nativeQuery = true)
 	PersonQualificationSuperclassEntity personActiveQualification(Long person_id, String specified_qualification);
-
 	
+	@Query(	value = """
+			SELECT p.specified_qualification 
+				FROM person_qualification p 
+					WHERE 
+						p.person_id = :person_id 
+						AND p.final_date IS NULL 
+						AND (
+								p.specified_qualification = 'manager' 
+								OR 
+								p.specified_qualification = 'full-time-employee' 
+								OR 
+								p.specified_qualification = 'part-time-employee' 
+						)
+						LIMIT 1 
+			""", nativeQuery = true)
+	String activeIncompatibleQualification(Long person_id);
+	
+		
 	boolean existsFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
 	
 	

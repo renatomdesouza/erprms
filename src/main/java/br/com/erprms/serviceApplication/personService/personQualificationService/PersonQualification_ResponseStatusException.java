@@ -1,8 +1,5 @@
 package br.com.erprms.serviceApplication.personService.personQualificationService;
 
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.*;
-//import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
-
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -24,33 +21,18 @@ public class PersonQualification_ResponseStatusException {
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
 	}
-	
-	public void mismatchExceptionBetweenManagerAndEmployees(@NonNull Long id_Person, String specifiedQualification) {
-		var managerOptional = 
-				Optional.ofNullable(
-						personQualificationRepository.personActiveQualification(id_Person, MANAGER));
-		var employeeOptional = 
-				Optional.ofNullable(
-						personQualificationRepository.personActiveQualification(id_Person, FULL_TIME_EMPLOYEE));
-		var partTimeEmployeeOptional = 
-				Optional.ofNullable(
-						personQualificationRepository.personActiveQualification(id_Person, PART_TIME_EMPLOYEE));
+
+	public void mismatchExceptionBetweenQualifications(@NonNull Long id_Person) {
+		String qualification = personQualificationRepository.activeIncompatibleQualification(id_Person);
 		
-		if(	
-			(specifiedQualification.contains(MANAGER) && 
-				(employeeOptional.isPresent() || partTimeEmployeeOptional.isPresent()) ) 
-			||
-			(specifiedQualification.contains(FULL_TIME_EMPLOYEE) && 
-				(managerOptional.isPresent() || partTimeEmployeeOptional.isPresent()) ) 
-			||
-			(specifiedQualification.contains(PART_TIME_EMPLOYEE) && 
-				(employeeOptional.isPresent() || managerOptional.isPresent()) )
-			)  {
+		Optional<String> qualificationOptional = Optional.ofNullable(qualification);
+		
+		if(qualificationOptional.isPresent()) {
 			throw new ResponseStatusException(
-						HttpStatus.INSUFFICIENT_STORAGE, 
-						"A person can only be a manager, a regular Employee or a Part-Time employee");
+					HttpStatus.INSUFFICIENT_STORAGE, 
+						"A person can only be a manager, a regular Employee or a Part-Time employee. " 
+						+	"Active qualification: " + qualificationOptional.get());
 		}
-		
 	}
 
 	public void exceptionForPersonWhoDoesNotExist(@NonNull Long person_Id) {

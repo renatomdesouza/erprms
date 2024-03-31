@@ -61,7 +61,7 @@ public class ManagerService {
 				UriComponentsBuilder uriComponentsBuilder,
 				String specifiedQualification) throws ResponseStatusException {
 		exceptionService.exceptionForPersonWhoDoesNotExist(fullTimeManagerRecordDto.person_Id());
-		exceptionService.mismatchExceptionBetweenManagerAndEmployees(fullTimeManagerRecordDto.person_Id(), specifiedQualification);
+		exceptionService.mismatchExceptionBetweenQualifications(fullTimeManagerRecordDto.person_Id());
 		
 		var fullTimeManagerClassDto = new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeManagerRecordDto);
 
