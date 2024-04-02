@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoClass_PartTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoClass_PartTimeEmployeeRegistryOutput;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoRecord_PartTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoRecord_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClass_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassPage_PartTimeEmployee;
 import br.com.erprms.serviceApplication.personService.personQualificationService.PartTimeEmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
@@ -38,8 +38,8 @@ public class PartyTimeEmployeeController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<DtoClass_PartTimeEmployeeRegistryOutput> register(   
-			@RequestBody DtoRecord_PartTimeEmployeeRegistry partyTimeEmployeeRecordDto,
+	public ResponseEntity<OutputDtoClass_PartTimeEmployee> register(   
+			@RequestBody InputDtoRecord_PartTimeEmployee partyTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		return partyTimeEmployeeService.registerService(partyTimeEmployeeRecordDto, 
 														uriComponentsBuilder);
@@ -47,7 +47,7 @@ public class PartyTimeEmployeeController {
 		
 	@GetMapping
 	@Transactional
-	public ResponseEntity<Page<DtoClass_PartTimeEmployeeToListing>> listing(
+	public ResponseEntity<Page<?>> listing(
 				@PageableDefault Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
 		return partyTimeEmployeeService.listingService(	qualificationPageable,
@@ -56,8 +56,8 @@ public class PartyTimeEmployeeController {
 	
 	@PutMapping
 	@Transactional
-	public ResponseEntity<DtoClass_PartTimeEmployeeRegistryOutput> update(
-			@RequestBody DtoRecord_PartTimeEmployeeRegistry partyTimeEmployeeRecordDto,
+	public ResponseEntity<OutputDtoClass_PartTimeEmployee> update(
+			@RequestBody InputDtoRecord_PartTimeEmployee partyTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		return partyTimeEmployeeService.update(	partyTimeEmployeeRecordDto, 
 												uriComponentsBuilder);
@@ -65,7 +65,7 @@ public class PartyTimeEmployeeController {
 	
 	@DeleteMapping("/{person_Id}")
 	@Transactional
-	public ResponseEntity<DtoClass_PartTimeEmployeeRegistryOutput> exclude( 
+	public ResponseEntity<OutputDtoClass_PartTimeEmployee> exclude( 
 				@NonNull @PathVariable Long person_Id, 
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		return partyTimeEmployeeService.exclude(person_Id, 

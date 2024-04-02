@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.PartTimeEmployeePersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoClass_PartTimeEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoClass_PartTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoClass_PartTimeEmployeeRegistryOutput;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoRecord_PartTimeEmployeeOutputPage_With_Uri;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoRecord_PartTimeEmployeeOutputRegistry_With_Uri;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DtoRecord_PartTimeEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.ResponseEntityOutputDtoPage_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.ResponseEntityOutputDto_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoClass_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoRecord_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassPage_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClass_PartTimeEmployee;
 import br.com.erprms.repositoryAdapter.personRepository.PartTimeEmployeeRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
@@ -59,18 +59,18 @@ public class PartTimeEmployeeService {
 	
 	@Transactional
 	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_PartTimeEmployeeRegistryOutput> registerService(
-				DtoRecord_PartTimeEmployeeRegistry partTimeEmployeeRecordDto,
+	public ResponseEntity<OutputDtoClass_PartTimeEmployee> registerService(
+				InputDtoRecord_PartTimeEmployee inputDtoRecord_PartTimeEmployee,
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		exceptionService.exceptionForPersonWhoDoesNotExist(partTimeEmployeeRecordDto.person_Id());
-		exceptionService.mismatchExceptionBetweenQualifications(partTimeEmployeeRecordDto.person_Id());
+		exceptionService.exceptionForPersonWhoDoesNotExist(inputDtoRecord_PartTimeEmployee.person_Id());
+		exceptionService.mismatchExceptionBetweenQualifications(inputDtoRecord_PartTimeEmployee.person_Id());
 		
-		DtoClass_PartTimeEmployeeRegistry partTimeEmployeeClassDto = 
-				new DtoClass_PartTimeEmployeeRegistry(partTimeEmployeeRecordDto);
+		InputDtoClass_PartTimeEmployee inputDtoClass_PartTimeEmployee = 
+				new InputDtoClass_PartTimeEmployee(inputDtoRecord_PartTimeEmployee);
 
-		var partTimeEmployee = mapper.map(partTimeEmployeeClassDto, PartTimeEmployeePersonQualification.class);
+		var partTimeEmployee = mapper.map(inputDtoClass_PartTimeEmployee, PartTimeEmployeePersonQualification.class);
 
-		var person = personRepository.getReferenceById(partTimeEmployeeClassDto.getPerson_Id() );
+		var person = personRepository.getReferenceById(inputDtoClass_PartTimeEmployee.getPerson_Id() );
 		
 //////////////////////////////////////   =====> exportar para um método em comum		
 		partTimeEmployee.setPerson(person);
@@ -79,58 +79,89 @@ public class PartTimeEmployeeService {
 		statusPersonOfQualification.setStatusUser(person);
 /////////////////////////////////////////////////////////////////////////////////		
 		
-		var uri = createUri.uriCreator(	uriComponentsBuilder, 
+		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
 										PART_TIME_EMPLOYEE, 
 										person.getId());
-		return outPutResponseEntity(
-				outPutDtoCreatorOfService(PART_TIME_EMPLOYEE, partTimeEmployeeClassDto, person, uri));
+		
+		var outputDtoClass_PartTimeEmployee = 
+				new OutputDtoClass_PartTimeEmployee(person, 
+													inputDtoClass_PartTimeEmployee, 
+													PART_TIME_EMPLOYEE);
+		
+		var responseEntityOutputDto_PartTimeEmployee =
+				new ResponseEntityOutputDto_PartTimeEmployee(	outputDtoClass_PartTimeEmployee,
+																uri);
+		
+		return ResponseEntity
+				.created(responseEntityOutputDto_PartTimeEmployee.uri())
+				.body(responseEntityOutputDto_PartTimeEmployee.dtoToClass_PartyTimeEmployeeRegistryOutput());
 	}
 	
 	@Transactional   
-	public ResponseEntity<Page<DtoClass_PartTimeEmployeeToListing>> listingService(
+	@SuppressWarnings("null")
+	public ResponseEntity<Page<?>> listingService(
 				Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
-		var partTimeEmployeePageDto = partTimeEmployeeRepository
-											.findPartTimeEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
-											.map(p -> mapper.map(p, DtoClass_PartTimeEmployeeToListing.class));
-		var uri = createUri.uriCreator(uriComponentsBuilder, PART_TIME_EMPLOYEE);
+		Page<OutputDtoClassPage_PartTimeEmployee> outputDtoClassPage_PartTimeEmployeePage = 
+				partTimeEmployeeRepository
+					.findPartTimeEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
+					.map(p -> mapper.map(p, OutputDtoClassPage_PartTimeEmployee.class));
 		
-		return outPutResponseEntity(
-				new DtoRecord_PartTimeEmployeeOutputPage_With_Uri(
-						partTimeEmployeePageDto,
-						uri));
+		URI uri = createUri.uriCreator(uriComponentsBuilder, PART_TIME_EMPLOYEE);
+		
+		var responseEntityOutputDtoPage_PartTimeEmployee = new ResponseEntityOutputDtoPage_PartTimeEmployee(
+																	outputDtoClassPage_PartTimeEmployeePage,
+																	uri);
+		
+		return ResponseEntity
+				.created(responseEntityOutputDtoPage_PartTimeEmployee.uri())
+				.body(responseEntityOutputDtoPage_PartTimeEmployee.pageableDto());
 	}
 
 	@Transactional
 	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_PartTimeEmployeeRegistryOutput> update(
-				DtoRecord_PartTimeEmployeeRegistry partTimeEmployeeRecordDto,
+	public ResponseEntity<OutputDtoClass_PartTimeEmployee> update(
+				InputDtoRecord_PartTimeEmployee inputDtoRecord_PartTimeEmployee,
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		exceptionService.exceptionForPersonWhoDoesNotExist(partTimeEmployeeRecordDto.person_Id());
+		exceptionService.exceptionForPersonWhoDoesNotExist(inputDtoRecord_PartTimeEmployee.person_Id());
 		
-		var partTimeManagerClassDto = new DtoClass_PartTimeEmployeeRegistry(partTimeEmployeeRecordDto);
+		InputDtoClass_PartTimeEmployee inputDtoClass_PartTimeEmployee = new InputDtoClass_PartTimeEmployee(inputDtoRecord_PartTimeEmployee);
 		
-		var person = personRepository.getReferenceById(partTimeManagerClassDto.getPerson_Id());
+		var person = personRepository.getReferenceById(inputDtoClass_PartTimeEmployee.getPerson_Id());
 
 		var employee = partTimeEmployeeRepository.findPartTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(person);
 		
-		mapper.map(partTimeManagerClassDto, employee);
+		mapper.map(inputDtoClass_PartTimeEmployee, employee);
 		
 		partTimeEmployeeRepository.save(employee);
 		
-		var uri = createUri.uriCreator(	uriComponentsBuilder, 
+		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
 										PART_TIME_EMPLOYEE, 
 										person.getId());
-		return outPutResponseEntity(
-				outPutDtoCreatorOfService(PART_TIME_EMPLOYEE, partTimeManagerClassDto, person, uri));
+		
+		var outputDtoClass_PartTimeEmployee = 
+				new OutputDtoClass_PartTimeEmployee(person, 
+													inputDtoClass_PartTimeEmployee, 
+													PART_TIME_EMPLOYEE);
+		
+		var responseEntityOutputDto_PartTimeEmployee =
+				new ResponseEntityOutputDto_PartTimeEmployee(	outputDtoClass_PartTimeEmployee,
+																uri);
+		
+		return ResponseEntity
+				.created(responseEntityOutputDto_PartTimeEmployee.uri())
+				.body(responseEntityOutputDto_PartTimeEmployee.dtoToClass_PartyTimeEmployeeRegistryOutput());
+
 	}
 	
+	@SuppressWarnings("null")
 	@Transactional
-	public ResponseEntity<DtoClass_PartTimeEmployeeRegistryOutput> exclude(
+	public ResponseEntity<OutputDtoClass_PartTimeEmployee> exclude(
 				@NonNull Long person_Id, 
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		try {	
-			var personQualificationToDelete = personQualificationRepository.personActiveQualification(person_Id, PART_TIME_EMPLOYEE); 
+			PersonQualificationSuperclassEntity personQualificationToDelete = 
+					personQualificationRepository.personActiveQualification(person_Id, PART_TIME_EMPLOYEE); 
 			
 			var personAsActive = personQualificationRepository.personActiveQualification(person_Id, PART_TIME_EMPLOYEE);
 			personAsActive.setFinalDate(LocalDate.now());
@@ -143,48 +174,23 @@ public class PartTimeEmployeeService {
 			var uri = createUri.uriCreator(	uriComponentsBuilder, 
 											PART_TIME_EMPLOYEE, 
 											person_Id);
+
+			var outputDtoClass_PartTimeEmployee = 
+					new OutputDtoClass_PartTimeEmployee(personQualificationToDelete, 
+														PART_TIME_EMPLOYEE);
 			
-			var dtoClass_PartTimeEmployeeRegistryOutput = 
-					new DtoClass_PartTimeEmployeeRegistryOutput(personQualificationToDelete, PART_TIME_EMPLOYEE);
+			var responseEntityOutputDto_PartTimeEmployee =
+					new ResponseEntityOutputDto_PartTimeEmployee(	outputDtoClass_PartTimeEmployee,
+																	uri);
 			
-			return outPutResponseEntity(
-					new DtoRecord_PartTimeEmployeeOutputRegistry_With_Uri(
-										dtoClass_PartTimeEmployeeRegistryOutput,
-										uri));
+			return ResponseEntity
+					.created(responseEntityOutputDto_PartTimeEmployee.uri())
+					.body(responseEntityOutputDto_PartTimeEmployee.dtoToClass_PartyTimeEmployeeRegistryOutput());
+			
 		} catch (NullPointerException ex) { 
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 
 					"There is no such qualification to be deleted");
 		}
-	}
-
-	private DtoRecord_PartTimeEmployeeOutputRegistry_With_Uri outPutDtoCreatorOfService(
-				String specifiedQualification,
-				DtoClass_PartTimeEmployeeRegistry partTimeEmployeeClassDto, 
-				PersonEntity person, 
-				URI uri) {
-		var dtoClass_PartTimeEmployeeRegistryOutput = 
-				new DtoClass_PartTimeEmployeeRegistryOutput(person, 
-															partTimeEmployeeClassDto, 
-															specifiedQualification);
-		return new DtoRecord_PartTimeEmployeeOutputRegistry_With_Uri(
-				dtoClass_PartTimeEmployeeRegistryOutput,
-				uri);
-	}
-	
-	@SuppressWarnings("null")
-	private ResponseEntity<DtoClass_PartTimeEmployeeRegistryOutput> outPutResponseEntity(
-			DtoRecord_PartTimeEmployeeOutputRegistry_With_Uri dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri) {
-		return ResponseEntity
-				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
-				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoToClass_PartyTimeEmployeeRegistryOutput());
-	}
-	
-	@SuppressWarnings("null")
-	private ResponseEntity<Page<DtoClass_PartTimeEmployeeToListing>> outPutResponseEntity(
-			DtoRecord_PartTimeEmployeeOutputPage_With_Uri dtoRecord_PartTimeEmployeeOutputPage_With_Uri) {
-		return ResponseEntity
-				.created(dtoRecord_PartTimeEmployeeOutputPage_With_Uri.uri())
-				.body(dtoRecord_PartTimeEmployeeOutputPage_With_Uri.pageableDto());
 	}
 }

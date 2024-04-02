@@ -1,14 +1,17 @@
 package br.com.erprms.serviceApplication.personService.personQualificationService;
 
+import java.net.URI;
 import java.time.LocalDate;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.ResponseEntityOutputDto_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.serviceApplication.personService.StatusPersonOfQualification;
@@ -19,7 +22,6 @@ public class GeneralExclude_PersonQualificationService {
 	private final PersonQualificationRepository personQualificationRepository;
 	private final PersonRepository personRepository;
 	private final PersonQualification_CreateUri createUri;
-	private final PersonQualification_CreateManagerAndEmployeeDto createDto;
 	private final PersonQualification_ResponseStatusException exceptionService;
 	private final StatusPersonOfQualification statusPersonOfQualification;
 	
@@ -27,19 +29,18 @@ public class GeneralExclude_PersonQualificationService {
 			PersonQualificationRepository personQualificationRepository,
 			PersonRepository personRepository,
 			PersonQualification_CreateUri createUri,
-			PersonQualification_CreateManagerAndEmployeeDto createDto,
 			PersonQualification_ResponseStatusException exceptionService,
 			StatusPersonOfQualification statusPersonOfQualification) {
 		this.personQualificationRepository = personQualificationRepository;
 		this.personRepository = personRepository;
 		this.createUri = createUri;
-		this.createDto = createDto;
 		this.exceptionService = exceptionService;
 		this.statusPersonOfQualification = statusPersonOfQualification;
 	}
 
+	@SuppressWarnings("null")
 	@Transactional
-	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri generalExclude(
+	public ResponseEntity<OutputDtoClass_FullTimeEmployeeAndManager> generalExclude(
 					@NonNull Long person_Id, 
 					UriComponentsBuilder uriComponentsBuilder, 
 					String specifiedQualification) {
@@ -58,17 +59,22 @@ public class GeneralExclude_PersonQualificationService {
 			var person = personRepository.getReferenceById(person_Id);
 			statusPersonOfQualification.setSatusNotUser(person);
 			
-			var uri = createUri.uriCreator(	
-							uriComponentsBuilder, 
-							specifiedQualification, 
-							person_Id);
+			URI uri = createUri.uriCreator(	uriComponentsBuilder, 
+											specifiedQualification, 
+											person_Id);
 
 			var dtoClass_ManagerAndFullTimeEmployeeRegistryOutput = 
-					createDto.createManagerAndEmployeeDto(personQualificationToDelete, specifiedQualification);
-
-			return new DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri(
+					new OutputDtoClass_FullTimeEmployeeAndManager(	personQualificationToDelete, 
+																	specifiedQualification);
+			
+			var responseEntityOutputDto_FullTimeEmployeeAndManager =
+					new ResponseEntityOutputDto_FullTimeEmployeeAndManager(
 										dtoClass_ManagerAndFullTimeEmployeeRegistryOutput,
 										uri);
+			
+			return ResponseEntity
+					.created(responseEntityOutputDto_FullTimeEmployeeAndManager.uri())
+					.body(responseEntityOutputDto_FullTimeEmployeeAndManager.dtoClassToOutputFullTimeEmployeeOfRegistry());
 
 		} catch (NullPointerException ex) { 
 			throw new ResponseStatusException(

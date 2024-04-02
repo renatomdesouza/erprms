@@ -1,4 +1,4 @@
-package br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto;
+package br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -7,16 +7,16 @@ import br.com.erprms.domainModel.personDomain.personQualification.personQualific
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class DtoClass_PartTimeEmployeeToListing {
+@Setter
+public class OutputPageDtoClass_FullTimeEmployeeAndManager {
 	private Long id;
 	private String specifiedQualification;
 	private Long personId;
 	private String personName;
 	private String personCpfOrCnpj;
 	private SectorEnum sector;
-	private BigDecimal hourlyRate;
+	private BigDecimal salary;
 	private String observation;
 	private String professionalRegistry;
 	private LocalDate initialDate;

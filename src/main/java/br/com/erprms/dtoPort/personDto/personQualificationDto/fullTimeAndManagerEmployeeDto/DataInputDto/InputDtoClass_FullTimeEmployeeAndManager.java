@@ -1,19 +1,20 @@
-package br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto;
+package br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto;
 
 import java.math.BigDecimal;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.EmployeeInterface;
 import lombok.Getter;
 
 @Getter
-public class DtoClass_ManagerAndFullTimeEmployeeRegistry implements EmployeeInterface{
+public class InputDtoClass_FullTimeEmployeeAndManager implements EmployeeInterface{
 	private Long person_Id;
 	private BigDecimal monthlySalary;
 	private SectorEnum sector;
 	private String observation;
 	private String professionalRegistry;
 	
-	public DtoClass_ManagerAndFullTimeEmployeeRegistry(DtoRecord_FullTimeAndManagerEmployeeRegistry manager) {
+	public InputDtoClass_FullTimeEmployeeAndManager(InputDtoRecord_FullTimeEmployeeAndManager manager) {
 		this.person_Id = manager.person_Id();
 		this.monthlySalary = manager.monthlySalary();
 		this.sector = manager.sector();

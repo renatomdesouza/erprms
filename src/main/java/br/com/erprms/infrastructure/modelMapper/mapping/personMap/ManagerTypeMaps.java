@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputPageDtoClass_FullTimeEmployeeAndManager;
 
 @Configuration
 public class ManagerTypeMaps {
@@ -26,25 +26,25 @@ public class ManagerTypeMaps {
 	}
 	
 	private void dtoClassToManagerRegistry_To_ManagerEmployeePersonQualificationSubclass(ModelMapper modelMapper) {   
-		modelMapper.createTypeMap(DtoClass_ManagerAndFullTimeEmployeeRegistry.class, ManagerPersonQualification.class)
-			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getMonthlySalary, ManagerPersonQualification::setMonthlySalary )
-			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getSector, ManagerPersonQualification::setSector)
-			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getObservation, ManagerPersonQualification::setObservation)
-			.addMapping(DtoClass_ManagerAndFullTimeEmployeeRegistry::getProfessionalRegistry, ManagerPersonQualification::setProfessionalRegistry);
+		modelMapper.createTypeMap(InputDtoClass_FullTimeEmployeeAndManager.class, ManagerPersonQualification.class)
+			.addMapping(InputDtoClass_FullTimeEmployeeAndManager::getMonthlySalary, ManagerPersonQualification::setMonthlySalary )
+			.addMapping(InputDtoClass_FullTimeEmployeeAndManager::getSector, ManagerPersonQualification::setSector)
+			.addMapping(InputDtoClass_FullTimeEmployeeAndManager::getObservation, ManagerPersonQualification::setObservation)
+			.addMapping(InputDtoClass_FullTimeEmployeeAndManager::getProfessionalRegistry, ManagerPersonQualification::setProfessionalRegistry);
 	}
 	
 	private void managerPersonQualification_To_DtoClass_FullTimeEmployeeToListing(ModelMapper modelMapper) {   
-		modelMapper.createTypeMap(ManagerPersonQualification.class, DtoClass_ManagerAndFullTimeEmployeeToListing.class)
-			.addMapping((ori) -> ori.getId(), DtoClass_ManagerAndFullTimeEmployeeToListing::setId)
-			.addMapping((ori) -> ori.getPerson().getId(), DtoClass_ManagerAndFullTimeEmployeeToListing::setPersonId)
-			.addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), DtoClass_ManagerAndFullTimeEmployeeToListing::setPersonName)
-			.addMapping((ori) -> ori.getPerson().getCpfOrCnpj(), DtoClass_ManagerAndFullTimeEmployeeToListing::setPersonCpfOrCnpj)
-			.addMapping((ori) -> ori.getSector(), DtoClass_ManagerAndFullTimeEmployeeToListing::setSector)
-			.addMapping((ori) -> ori.getMonthlySalary(), DtoClass_ManagerAndFullTimeEmployeeToListing::setSalary)
-			.addMapping((ori) -> ori.getObservation(), DtoClass_ManagerAndFullTimeEmployeeToListing::setObservation)
-			.addMapping((ori) -> ori.getProfessionalRegistry(), DtoClass_ManagerAndFullTimeEmployeeToListing::setProfessionalRegistry)
-			.addMapping((ori) -> ori.getInitialDate(), DtoClass_ManagerAndFullTimeEmployeeToListing::setInitialDate)
-			.addMapping((ori) -> ori.getFinalDate(), DtoClass_ManagerAndFullTimeEmployeeToListing::setFinalDate)
+		modelMapper.createTypeMap(ManagerPersonQualification.class, OutputPageDtoClass_FullTimeEmployeeAndManager.class)
+			.addMapping((ori) -> ori.getId(), OutputPageDtoClass_FullTimeEmployeeAndManager::setId)
+			.addMapping((ori) -> ori.getPerson().getId(), OutputPageDtoClass_FullTimeEmployeeAndManager::setPersonId)
+			.addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), OutputPageDtoClass_FullTimeEmployeeAndManager::setPersonName)
+			.addMapping((ori) -> ori.getPerson().getCpfOrCnpj(), OutputPageDtoClass_FullTimeEmployeeAndManager::setPersonCpfOrCnpj)
+			.addMapping((ori) -> ori.getSector(), OutputPageDtoClass_FullTimeEmployeeAndManager::setSector)
+			.addMapping((ori) -> ori.getMonthlySalary(), OutputPageDtoClass_FullTimeEmployeeAndManager::setSalary)
+			.addMapping((ori) -> ori.getObservation(), OutputPageDtoClass_FullTimeEmployeeAndManager::setObservation)
+			.addMapping((ori) -> ori.getProfessionalRegistry(), OutputPageDtoClass_FullTimeEmployeeAndManager::setProfessionalRegistry)
+			.addMapping((ori) -> ori.getInitialDate(), OutputPageDtoClass_FullTimeEmployeeAndManager::setInitialDate)
+			.addMapping((ori) -> ori.getFinalDate(), OutputPageDtoClass_FullTimeEmployeeAndManager::setFinalDate)
 			.<String>addMapping(mappingByDefaultValueWithoutSourceClass -> (MANAGER), (dest, s) -> dest.setSpecifiedQualification(s));
 	}
 }

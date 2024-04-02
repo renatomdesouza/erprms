@@ -1,20 +1,26 @@
 package br.com.erprms.serviceApplication.personService.personQualificationService;
 
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
+
+import java.net.URI;
 import java.time.LocalDate;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.ResponseEntityOutputDtoPage_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.ResponseEntityOutputDto_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoRecord_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputPageDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
@@ -30,7 +36,6 @@ public class ManagerService {
 	private final GeneralExclude_PersonQualificationService genereralExclude;
 	private final PersonQualification_ResponseStatusException exceptionService;
 	private final PersonQualification_CreateUri createUri;
-	private final PersonQualification_CreateManagerAndEmployeeDto createDto;
 	private final StatusPersonOfQualification statusPersonOfQualification;
 	
 	public ManagerService(
@@ -41,7 +46,6 @@ public class ManagerService {
 			GeneralExclude_PersonQualificationService genereralExclude,
 			PersonQualification_ResponseStatusException exceptionService,
 			PersonQualification_CreateUri createUri,
-			PersonQualification_CreateManagerAndEmployeeDto createDto,
 			StatusPersonOfQualification statusPersonOfQualification) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
@@ -50,100 +54,110 @@ public class ManagerService {
 		this.genereralExclude = genereralExclude;
 		this.exceptionService = exceptionService;
 		this.createUri = createUri;
-		this.createDto = createDto;
 		this.statusPersonOfQualification = statusPersonOfQualification;
 	}
 
 	@Transactional
 	@SuppressWarnings("null")
-	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri registerService(
-				DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeManagerRecordDto, //
-				UriComponentsBuilder uriComponentsBuilder,
-				String specifiedQualification) throws ResponseStatusException {
-		exceptionService.exceptionForPersonWhoDoesNotExist(fullTimeManagerRecordDto.person_Id());
-		exceptionService.mismatchExceptionBetweenQualifications(fullTimeManagerRecordDto.person_Id());
+	public ResponseEntity<?> registerService(   
+				InputDtoRecord_FullTimeEmployeeAndManager inputDtoRecord_FullTimeEmployeeAndManager, 
+				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+		exceptionService.exceptionForPersonWhoDoesNotExist(inputDtoRecord_FullTimeEmployeeAndManager.person_Id());
+		exceptionService.mismatchExceptionBetweenQualifications(inputDtoRecord_FullTimeEmployeeAndManager.person_Id());
 		
-		var fullTimeManagerClassDto = new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeManagerRecordDto);
+		InputDtoClass_FullTimeEmployeeAndManager inputDtoClass_FullTimeEmployeeAndManager = 
+				new InputDtoClass_FullTimeEmployeeAndManager(inputDtoRecord_FullTimeEmployeeAndManager);
 
-		var person = personRepository.getReferenceById(fullTimeManagerClassDto.getPerson_Id());
+		var person = personRepository.getReferenceById(inputDtoClass_FullTimeEmployeeAndManager.getPerson_Id());
 		
-		var managerEntity = mapper.map(fullTimeManagerClassDto, ManagerPersonQualification.class);
+		var managerEntity = mapper.map(inputDtoClass_FullTimeEmployeeAndManager, ManagerPersonQualification.class);
 
 		managerEntity.setPerson(person);
 		managerEntity.setInitialDate(LocalDate.now());
 		personQualificationRepository.save(managerEntity);
 		statusPersonOfQualification.setStatusUser(person);
 		
-		var uri = createUri.uriCreator(	uriComponentsBuilder, 
-										specifiedQualification, 
+		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
+										MANAGER, 
 										person.getId());
-		
-		var dtoClass_ManagerAndFullTimeEmployeeRegistryOutput = 
-				createDto.createManagerAndEmployeeDto(	person, 
-														fullTimeManagerClassDto, 
-														specifiedQualification);
 
-		return new DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri(
-						dtoClass_ManagerAndFullTimeEmployeeRegistryOutput,
-						uri);
+		var outputDtoClass_PartTimeEmployee = 
+				new OutputDtoClass_FullTimeEmployeeAndManager(	person, 
+																inputDtoClass_FullTimeEmployeeAndManager, 
+																MANAGER);
+		
+		var responseEntityOutputDto_FullTimeEmployeeAndManager =
+				new ResponseEntityOutputDto_FullTimeEmployeeAndManager(	outputDtoClass_PartTimeEmployee,
+																uri);
+		
+		return ResponseEntity
+				.created(responseEntityOutputDto_FullTimeEmployeeAndManager.uri())
+				.body(responseEntityOutputDto_FullTimeEmployeeAndManager.dtoClassToOutputFullTimeEmployeeOfRegistry());
 	}
 	
+	@SuppressWarnings("null")
 	@Transactional   
-	public DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri listingService(
+	public ResponseEntity<Page<?>> listingService(
 						Pageable qualificationPageable,
-						UriComponentsBuilder uriComponentsBuilder,
-						String specifiedQualification) {  
-		
-		var managerPageDto = managerRepository
-				.findManagerPersonQualificationByFinalDateIsNull(qualificationPageable)
-				.map(p -> mapper.map(p, DtoClass_ManagerAndFullTimeEmployeeToListing.class));
+						UriComponentsBuilder uriComponentsBuilder) {  
+		Page<OutputPageDtoClass_FullTimeEmployeeAndManager> outputPageDtoClass_FullTimeEmployeeAndManagerPage = 
+				managerRepository
+					.findManagerPersonQualificationByFinalDateIsNull(qualificationPageable)
+					.map(p -> mapper.map(p, OutputPageDtoClass_FullTimeEmployeeAndManager.class));
 
-		var uri = createUri.uriCreator(uriComponentsBuilder, specifiedQualification);
+		URI uri = createUri.uriCreator(uriComponentsBuilder, MANAGER);
 		
-		return new DtoRecord_ManagerAndFullTimeEmployeeOutputPage_With_Uri(managerPageDto, uri);
-	
+		var responseEntityOutputDtoPage_FullTimeEmployeeAndManager =
+				new ResponseEntityOutputDtoPage_FullTimeEmployeeAndManager(
+						outputPageDtoClass_FullTimeEmployeeAndManagerPage, 
+						uri);
+		
+		return ResponseEntity
+				.created(responseEntityOutputDtoPage_FullTimeEmployeeAndManager.uri())
+				.body(responseEntityOutputDtoPage_FullTimeEmployeeAndManager.pageableDto());
 	}
 
 	@Transactional
 	@SuppressWarnings("null")
-	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri update(
-			DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeManagerRecordDto,
-			UriComponentsBuilder uriComponentsBuilder,
-			String specifiedQualification) throws ResponseStatusException {
+	public ResponseEntity<?> update(    
+			InputDtoRecord_FullTimeEmployeeAndManager employeeAndManagerRecordDtoInput,
+			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+		exceptionService.exceptionForPersonWhoDoesNotExist(employeeAndManagerRecordDtoInput.person_Id());
 		
-		exceptionService.exceptionForPersonWhoDoesNotExist(fullTimeManagerRecordDto.person_Id());
+		InputDtoClass_FullTimeEmployeeAndManager inputDtoClass_FullTimeEmployeeAndManager = 
+				new InputDtoClass_FullTimeEmployeeAndManager(employeeAndManagerRecordDtoInput);
 		
-		var fullTimeManagerClassDto = new DtoClass_ManagerAndFullTimeEmployeeRegistry(fullTimeManagerRecordDto);
-		
-		var person = personRepository.getReferenceById(fullTimeManagerClassDto.getPerson_Id());
+		var person = personRepository.getReferenceById(inputDtoClass_FullTimeEmployeeAndManager.getPerson_Id());
 
 		var manager = managerRepository.findManagerEmployeePersonQualificationByFinalDateIsNullAndPerson(person);
 		
-		mapper.map(fullTimeManagerClassDto, manager);
+		mapper.map(inputDtoClass_FullTimeEmployeeAndManager, manager);
 		
 		managerRepository.save(manager);
 		
-		var uri = createUri.uriCreator(	uriComponentsBuilder, 
-				specifiedQualification, 
-				person.getId());
+		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
+										MANAGER, 
+										person.getId());
 		
-		var dtoClass_ManagerAndFullTimeEmployeeRegistryOutput = 
-				createDto.createManagerAndEmployeeDto(	person, 
-														fullTimeManagerClassDto, 
-														specifiedQualification);
-
-		return new DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri(
-						dtoClass_ManagerAndFullTimeEmployeeRegistryOutput,
-						uri);
+		var outputDtoClass_PartTimeEmployee = 
+				new OutputDtoClass_FullTimeEmployeeAndManager(	person, 
+																inputDtoClass_FullTimeEmployeeAndManager, 
+																MANAGER);
+		
+		var responseEntityOutputDto_FullTimeEmployeeAndManager =
+				new ResponseEntityOutputDto_FullTimeEmployeeAndManager(	outputDtoClass_PartTimeEmployee,
+																uri);
+		
+		return ResponseEntity
+				.created(responseEntityOutputDto_FullTimeEmployeeAndManager.uri())
+				.body(responseEntityOutputDto_FullTimeEmployeeAndManager.dtoClassToOutputFullTimeEmployeeOfRegistry());
 	}
 	
 	@Transactional
-	public DtoRecord_ManagerAndFullTimeEmployeeOutputRegistry_With_Uri exclude(
+	public ResponseEntity<OutputDtoClass_FullTimeEmployeeAndManager> exclude(   
 				@NonNull Long person_Id, 
-				UriComponentsBuilder uriComponentsBuilder,
-				String specifiedQualification) throws ResponseStatusException {
-		
-		return genereralExclude.generalExclude(person_Id, uriComponentsBuilder, specifiedQualification);
+				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+		return genereralExclude.generalExclude(person_Id, uriComponentsBuilder, MANAGER);
 	}
 }
 

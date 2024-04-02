@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeRegistryOutput;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoClass_ManagerAndFullTimeEmployeeToListing;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DtoRecord_FullTimeAndManagerEmployeeRegistry;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoRecord_FullTimeEmployeeAndManager;
 import br.com.erprms.serviceApplication.personService.personQualificationService.ManagerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
@@ -37,69 +35,38 @@ public class ManagerController {
 	
 	@PostMapping
 	@Transactional
-	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> register(
-			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeManagerRecordDto,
+	public ResponseEntity<?> register(
+			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeManagerRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		
-		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
-				managerService.registerService(	fullTimeManagerRecordDto, 
-												uriComponentsBuilder, 
-												MANAGER);
-
-		return ResponseEntity
-				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
-				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputFullTimeEmployeeOfRegistry());
+		return managerService.registerService(	fullTimeManagerRecordDto, 
+												uriComponentsBuilder);
 	}
 	
 	@GetMapping
 	@Transactional
-	@SuppressWarnings("null")
-	public ResponseEntity<Page<DtoClass_ManagerAndFullTimeEmployeeToListing>> listing(
+	public ResponseEntity<Page<?>> listing(
 				@PageableDefault(size = 10, sort = {"sector"}) Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
-		
-		var dtoRecord_FullTimeEmployeeOutputPage_With_Uri =	
-				managerService.listingService(	qualificationPageable,
-												uriComponentsBuilder,
-												MANAGER);
-		return ResponseEntity
-				.created(dtoRecord_FullTimeEmployeeOutputPage_With_Uri.uri())
-				.body(dtoRecord_FullTimeEmployeeOutputPage_With_Uri.pageableDto());
+		return managerService.listingService(	qualificationPageable,
+												uriComponentsBuilder);
 	}
 	
 	@PutMapping
 	@Transactional
-	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> update(
-			@RequestBody DtoRecord_FullTimeAndManagerEmployeeRegistry fullTimeManagerRecordDto,
+	public ResponseEntity<?> update(
+			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeManagerRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-
-		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri = 
-				managerService.update(	fullTimeManagerRecordDto, 
-										uriComponentsBuilder, 
-										MANAGER);
-
-		return ResponseEntity
-				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
-				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputFullTimeEmployeeOfRegistry());
+		return	managerService.update(	fullTimeManagerRecordDto, 
+										uriComponentsBuilder);
 	}
 	
 	@DeleteMapping("/{person_Id}")
 	@Transactional
-	@SuppressWarnings("null")
-	public ResponseEntity<DtoClass_ManagerAndFullTimeEmployeeRegistryOutput> exclude( 
+	public ResponseEntity<?> exclude( 
 			@NonNull @PathVariable Long person_Id,
 			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		
-		var dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri =
-				managerService.exclude(	person_Id, 
-										uriComponentsBuilder, 
-										MANAGER);
-	
-		return ResponseEntity
-				.created(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.uri())
-				.body(dtoRecord_FullTimeEmployeeOutputRegistry_With_Uri.dtoClassToOutputFullTimeEmployeeOfRegistry());
+		return managerService.exclude(	person_Id, 
+										uriComponentsBuilder);
 	}
 }
 	

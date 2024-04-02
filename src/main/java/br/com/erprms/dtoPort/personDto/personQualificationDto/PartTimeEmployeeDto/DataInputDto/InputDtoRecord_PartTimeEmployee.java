@@ -1,13 +1,14 @@
-package br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto;
+package br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto;
 
 import java.math.BigDecimal;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
 
-public record DtoRecord_FullTimeAndManagerEmployeeRegistry(
+public record InputDtoRecord_PartTimeEmployee(
 		Long person_Id,
-		BigDecimal monthlySalary,
+		BigDecimal hourlyRate,
 		SectorEnum sector,
 		String observation,
-		String professionalRegistry
-		) {}
+		String professionalRegistry) {
+
+}
