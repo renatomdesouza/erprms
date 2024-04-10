@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.ResponseEntityOutputDto_FullTimeEmployeeAndManager;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.ResponseEntityOutputDtoExclude_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutPutExcludeDto_FullTimeEmployeeAndManager;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.serviceApplication.personService.StatusPersonOfQualification;
@@ -40,7 +40,7 @@ public class GeneralExclude_PersonQualificationService {
 
 	@SuppressWarnings("null")
 	@Transactional
-	public ResponseEntity<OutputDtoClass_FullTimeEmployeeAndManager> generalExclude(
+	public ResponseEntity<OutPutExcludeDto_FullTimeEmployeeAndManager> generalExclude(
 					@NonNull Long person_Id, 
 					UriComponentsBuilder uriComponentsBuilder, 
 					String specifiedQualification) {
@@ -49,7 +49,6 @@ public class GeneralExclude_PersonQualificationService {
 		
 		try {	
 			var personQualificationToDelete = personQualificationRepository.personActiveQualification(person_Id, specifiedQualification); 
-			
 			
 			var personAsActive = personQualificationRepository.personActiveQualification(person_Id, specifiedQualification);
 			personAsActive.setFinalDate(LocalDate.now());
@@ -63,18 +62,18 @@ public class GeneralExclude_PersonQualificationService {
 											specifiedQualification, 
 											person_Id);
 
-			var dtoClass_ManagerAndFullTimeEmployeeRegistryOutput = 
-					new OutputDtoClass_FullTimeEmployeeAndManager(	personQualificationToDelete, 
+			var outPutExcludeDto_FullTimeEmployeeAndManager = 
+					new OutPutExcludeDto_FullTimeEmployeeAndManager(	personQualificationToDelete, 
 																	specifiedQualification);
 			
 			var responseEntityOutputDto_FullTimeEmployeeAndManager =
-					new ResponseEntityOutputDto_FullTimeEmployeeAndManager(
-										dtoClass_ManagerAndFullTimeEmployeeRegistryOutput,
+					new ResponseEntityOutputDtoExclude_FullTimeEmployeeAndManager(
+										outPutExcludeDto_FullTimeEmployeeAndManager,
 										uri);
 			
 			return ResponseEntity
 					.created(responseEntityOutputDto_FullTimeEmployeeAndManager.uri())
-					.body(responseEntityOutputDto_FullTimeEmployeeAndManager.dtoClassToOutputFullTimeEmployeeOfRegistry());
+					.body(responseEntityOutputDto_FullTimeEmployeeAndManager.outPutExcludeDto_FullTimeEmployeeAndManager());
 
 		} catch (NullPointerException ex) { 
 			throw new ResponseStatusException(

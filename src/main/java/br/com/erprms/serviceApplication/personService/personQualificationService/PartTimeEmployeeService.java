@@ -1,7 +1,5 @@
 package br.com.erprms.serviceApplication.personService.personQualificationService;
 
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
-
 import java.net.URI;
 import java.time.LocalDate;
 
@@ -17,10 +15,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.PartTimeEmployeePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.ResponseEntityOutputDtoExclude_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.ResponseEntityOutputDtoPage_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.ResponseEntityOutputDto_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoClass_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoRecord_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassExclude_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassPage_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClass_PartTimeEmployee;
 import br.com.erprms.repositoryAdapter.personRepository.PartTimeEmployeeRepository;
@@ -61,7 +61,8 @@ public class PartTimeEmployeeService {
 	@SuppressWarnings("null")
 	public ResponseEntity<OutputDtoClass_PartTimeEmployee> registerService(
 				InputDtoRecord_PartTimeEmployee inputDtoRecord_PartTimeEmployee,
-				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+				UriComponentsBuilder uriComponentsBuilder,
+				String specifiedQualification) throws ResponseStatusException {
 		exceptionService.exceptionForPersonWhoDoesNotExist(inputDtoRecord_PartTimeEmployee.person_Id());
 		exceptionService.mismatchExceptionBetweenQualifications(inputDtoRecord_PartTimeEmployee.person_Id());
 		
@@ -80,13 +81,13 @@ public class PartTimeEmployeeService {
 /////////////////////////////////////////////////////////////////////////////////		
 		
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
-										PART_TIME_EMPLOYEE, 
+										specifiedQualification, 
 										person.getId());
 		
 		var outputDtoClass_PartTimeEmployee = 
 				new OutputDtoClass_PartTimeEmployee(person, 
 													inputDtoClass_PartTimeEmployee, 
-													PART_TIME_EMPLOYEE);
+													specifiedQualification);
 		
 		var responseEntityOutputDto_PartTimeEmployee =
 				new ResponseEntityOutputDto_PartTimeEmployee(	outputDtoClass_PartTimeEmployee,
@@ -101,13 +102,14 @@ public class PartTimeEmployeeService {
 	@SuppressWarnings("null")
 	public ResponseEntity<Page<?>> listingService(
 				Pageable qualificationPageable,
-				UriComponentsBuilder uriComponentsBuilder) {
+				UriComponentsBuilder uriComponentsBuilder,
+				String specifiedQualification) {
 		Page<OutputDtoClassPage_PartTimeEmployee> outputDtoClassPage_PartTimeEmployeePage = 
 				partTimeEmployeeRepository
 					.findPartTimeEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
 					.map(p -> mapper.map(p, OutputDtoClassPage_PartTimeEmployee.class));
 		
-		URI uri = createUri.uriCreator(uriComponentsBuilder, PART_TIME_EMPLOYEE);
+		URI uri = createUri.uriCreator(uriComponentsBuilder, specifiedQualification);
 		
 		var responseEntityOutputDtoPage_PartTimeEmployee = new ResponseEntityOutputDtoPage_PartTimeEmployee(
 																	outputDtoClassPage_PartTimeEmployeePage,
@@ -122,7 +124,8 @@ public class PartTimeEmployeeService {
 	@SuppressWarnings("null")
 	public ResponseEntity<OutputDtoClass_PartTimeEmployee> update(
 				InputDtoRecord_PartTimeEmployee inputDtoRecord_PartTimeEmployee,
-				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+				UriComponentsBuilder uriComponentsBuilder,
+				String specifiedQualification) throws ResponseStatusException {
 		exceptionService.exceptionForPersonWhoDoesNotExist(inputDtoRecord_PartTimeEmployee.person_Id());
 		
 		InputDtoClass_PartTimeEmployee inputDtoClass_PartTimeEmployee = new InputDtoClass_PartTimeEmployee(inputDtoRecord_PartTimeEmployee);
@@ -136,13 +139,13 @@ public class PartTimeEmployeeService {
 		partTimeEmployeeRepository.save(employee);
 		
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
-										PART_TIME_EMPLOYEE, 
+										specifiedQualification, 
 										person.getId());
 		
 		var outputDtoClass_PartTimeEmployee = 
 				new OutputDtoClass_PartTimeEmployee(person, 
 													inputDtoClass_PartTimeEmployee, 
-													PART_TIME_EMPLOYEE);
+													specifiedQualification);
 		
 		var responseEntityOutputDto_PartTimeEmployee =
 				new ResponseEntityOutputDto_PartTimeEmployee(	outputDtoClass_PartTimeEmployee,
@@ -151,19 +154,19 @@ public class PartTimeEmployeeService {
 		return ResponseEntity
 				.created(responseEntityOutputDto_PartTimeEmployee.uri())
 				.body(responseEntityOutputDto_PartTimeEmployee.dtoToClass_PartyTimeEmployeeRegistryOutput());
-
 	}
 	
 	@SuppressWarnings("null")
 	@Transactional
-	public ResponseEntity<OutputDtoClass_PartTimeEmployee> exclude(
+	public ResponseEntity<OutputDtoClassExclude_PartTimeEmployee> exclude(
 				@NonNull Long person_Id, 
-				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+				UriComponentsBuilder uriComponentsBuilder,
+				String specifiedQualification) throws ResponseStatusException {
 		try {	
 			PersonQualificationSuperclassEntity personQualificationToDelete = 
-					personQualificationRepository.personActiveQualification(person_Id, PART_TIME_EMPLOYEE); 
+					personQualificationRepository.personActiveQualification(person_Id, specifiedQualification); 
 			
-			var personAsActive = personQualificationRepository.personActiveQualification(person_Id, PART_TIME_EMPLOYEE);
+			var personAsActive = personQualificationRepository.personActiveQualification(person_Id, specifiedQualification);
 			personAsActive.setFinalDate(LocalDate.now());
 			personQualificationRepository.save(personAsActive);
 			
@@ -172,20 +175,20 @@ public class PartTimeEmployeeService {
 			statusPersonOfQualification.setSatusNotUser(person);
 			
 			var uri = createUri.uriCreator(	uriComponentsBuilder, 
-											PART_TIME_EMPLOYEE, 
+											specifiedQualification, 
 											person_Id);
 
-			var outputDtoClass_PartTimeEmployee = 
-					new OutputDtoClass_PartTimeEmployee(personQualificationToDelete, 
-														PART_TIME_EMPLOYEE);
+			var outputDtoClassExclude_PartTimeEmployee = 
+					new OutputDtoClassExclude_PartTimeEmployee(	personQualificationToDelete, 
+																specifiedQualification);
 			
-			var responseEntityOutputDto_PartTimeEmployee =
-					new ResponseEntityOutputDto_PartTimeEmployee(	outputDtoClass_PartTimeEmployee,
-																	uri);
+			var responseEntityOutputDtoExclude_PartTimeEmployee =
+					new ResponseEntityOutputDtoExclude_PartTimeEmployee(outputDtoClassExclude_PartTimeEmployee,
+																		uri);
 			
 			return ResponseEntity
-					.created(responseEntityOutputDto_PartTimeEmployee.uri())
-					.body(responseEntityOutputDto_PartTimeEmployee.dtoToClass_PartyTimeEmployeeRegistryOutput());
+					.created(responseEntityOutputDtoExclude_PartTimeEmployee.uri())
+					.body(responseEntityOutputDtoExclude_PartTimeEmployee.outputDtoClassExclude_PartTimeEmployee());
 			
 		} catch (NullPointerException ex) { 
 			throw new ResponseStatusException(

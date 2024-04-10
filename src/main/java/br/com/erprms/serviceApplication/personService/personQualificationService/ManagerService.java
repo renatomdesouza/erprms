@@ -1,7 +1,5 @@
 package br.com.erprms.serviceApplication.personService.personQualificationService;
 
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
-
 import java.net.URI;
 import java.time.LocalDate;
 
@@ -19,6 +17,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManager
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.ResponseEntityOutputDto_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoRecord_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutPutExcludeDto_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputPageDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
@@ -61,7 +60,8 @@ public class ManagerService {
 	@SuppressWarnings("null")
 	public ResponseEntity<?> registerService(   
 				InputDtoRecord_FullTimeEmployeeAndManager inputDtoRecord_FullTimeEmployeeAndManager, 
-				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+				UriComponentsBuilder uriComponentsBuilder,
+				String specifiedQualification) throws ResponseStatusException {
 		exceptionService.exceptionForPersonWhoDoesNotExist(inputDtoRecord_FullTimeEmployeeAndManager.person_Id());
 		exceptionService.mismatchExceptionBetweenQualifications(inputDtoRecord_FullTimeEmployeeAndManager.person_Id());
 		
@@ -78,13 +78,13 @@ public class ManagerService {
 		statusPersonOfQualification.setStatusUser(person);
 		
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
-										MANAGER, 
+										specifiedQualification, 
 										person.getId());
 
 		var outputDtoClass_PartTimeEmployee = 
 				new OutputDtoClass_FullTimeEmployeeAndManager(	person, 
 																inputDtoClass_FullTimeEmployeeAndManager, 
-																MANAGER);
+																specifiedQualification);
 		
 		var responseEntityOutputDto_FullTimeEmployeeAndManager =
 				new ResponseEntityOutputDto_FullTimeEmployeeAndManager(	outputDtoClass_PartTimeEmployee,
@@ -99,13 +99,14 @@ public class ManagerService {
 	@Transactional   
 	public ResponseEntity<Page<?>> listingService(
 						Pageable qualificationPageable,
-						UriComponentsBuilder uriComponentsBuilder) {  
+						UriComponentsBuilder uriComponentsBuilder,
+						String specifiedQualification) {  
 		Page<OutputPageDtoClass_FullTimeEmployeeAndManager> outputPageDtoClass_FullTimeEmployeeAndManagerPage = 
 				managerRepository
 					.findManagerPersonQualificationByFinalDateIsNull(qualificationPageable)
 					.map(p -> mapper.map(p, OutputPageDtoClass_FullTimeEmployeeAndManager.class));
 
-		URI uri = createUri.uriCreator(uriComponentsBuilder, MANAGER);
+		URI uri = createUri.uriCreator(uriComponentsBuilder, specifiedQualification);
 		
 		var responseEntityOutputDtoPage_FullTimeEmployeeAndManager =
 				new ResponseEntityOutputDtoPage_FullTimeEmployeeAndManager(
@@ -121,7 +122,8 @@ public class ManagerService {
 	@SuppressWarnings("null")
 	public ResponseEntity<?> update(    
 			InputDtoRecord_FullTimeEmployeeAndManager employeeAndManagerRecordDtoInput,
-			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+			UriComponentsBuilder uriComponentsBuilder,
+			String specifiedQualification) throws ResponseStatusException {
 		exceptionService.exceptionForPersonWhoDoesNotExist(employeeAndManagerRecordDtoInput.person_Id());
 		
 		InputDtoClass_FullTimeEmployeeAndManager inputDtoClass_FullTimeEmployeeAndManager = 
@@ -136,13 +138,13 @@ public class ManagerService {
 		managerRepository.save(manager);
 		
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
-										MANAGER, 
+										specifiedQualification, 
 										person.getId());
 		
 		var outputDtoClass_PartTimeEmployee = 
 				new OutputDtoClass_FullTimeEmployeeAndManager(	person, 
 																inputDtoClass_FullTimeEmployeeAndManager, 
-																MANAGER);
+																specifiedQualification);
 		
 		var responseEntityOutputDto_FullTimeEmployeeAndManager =
 				new ResponseEntityOutputDto_FullTimeEmployeeAndManager(	outputDtoClass_PartTimeEmployee,
@@ -154,10 +156,13 @@ public class ManagerService {
 	}
 	
 	@Transactional
-	public ResponseEntity<OutputDtoClass_FullTimeEmployeeAndManager> exclude(   
+	public ResponseEntity<OutPutExcludeDto_FullTimeEmployeeAndManager> exclude(   
 				@NonNull Long person_Id, 
-				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		return genereralExclude.generalExclude(person_Id, uriComponentsBuilder, MANAGER);
+				UriComponentsBuilder uriComponentsBuilder,
+				String specifiedQualification) throws ResponseStatusException {
+		return genereralExclude.generalExclude(	person_Id, 
+												uriComponentsBuilder, 
+												specifiedQualification);
 	}
 }
 

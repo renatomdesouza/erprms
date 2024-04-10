@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoClass_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoRecord_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClass_PartTimeEmployee;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassPage_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassExclude_PartTimeEmployee;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
 import br.com.erprms.serviceApplication.personService.personQualificationService.PartTimeEmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
@@ -30,19 +33,26 @@ import jakarta.transaction.Transactional;
 @SecurityRequirement(name = "bearer-key")
 public class PartyTimeEmployeeController {
 	private final PartTimeEmployeeService partyTimeEmployeeService;
+	private final PersonQualificationService_HttpPost personQualificationService_HttpPost;
 	
 	public PartyTimeEmployeeController(
-			PartTimeEmployeeService partyTimeEmployeeService) {
+			PartTimeEmployeeService partyTimeEmployeeService,
+			PersonQualificationService_HttpPost personQualificationService_HttpPost) {
 		this.partyTimeEmployeeService = partyTimeEmployeeService;
+		this.personQualificationService_HttpPost = personQualificationService_HttpPost;
 	}
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<OutputDtoClass_PartTimeEmployee> register(   
+	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> register(   
 			@RequestBody InputDtoRecord_PartTimeEmployee partyTimeEmployeeRecordDto,
-			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		return partyTimeEmployeeService.registerService(partyTimeEmployeeRecordDto, 
-														uriComponentsBuilder);
+			UriComponentsBuilder uriComponentsBuilder) 
+			throws ResponseStatusException {
+		
+		return personQualificationService_HttpPost.registerService(
+					new InputDtoClass_PartTimeEmployee(partyTimeEmployeeRecordDto), 
+					uriComponentsBuilder,
+					PART_TIME_EMPLOYEE);
 	}
 		
 	@GetMapping
@@ -51,7 +61,8 @@ public class PartyTimeEmployeeController {
 				@PageableDefault Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
 		return partyTimeEmployeeService.listingService(	qualificationPageable,
-														uriComponentsBuilder);
+														uriComponentsBuilder,
+														PART_TIME_EMPLOYEE);
 	}
 	
 	@PutMapping
@@ -60,15 +71,17 @@ public class PartyTimeEmployeeController {
 			@RequestBody InputDtoRecord_PartTimeEmployee partyTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		return partyTimeEmployeeService.update(	partyTimeEmployeeRecordDto, 
-												uriComponentsBuilder);
+												uriComponentsBuilder,
+												PART_TIME_EMPLOYEE);
 	}
 	
 	@DeleteMapping("/{person_Id}")
 	@Transactional
-	public ResponseEntity<OutputDtoClass_PartTimeEmployee> exclude( 
+	public ResponseEntity<OutputDtoClassExclude_PartTimeEmployee> exclude( 
 				@NonNull @PathVariable Long person_Id, 
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
 		return partyTimeEmployeeService.exclude(person_Id, 
-												uriComponentsBuilder);
+												uriComponentsBuilder,
+												PART_TIME_EMPLOYEE);
 	}
 }

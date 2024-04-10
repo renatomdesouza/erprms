@@ -3,10 +3,11 @@ package br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeD
 import java.math.BigDecimal;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.PersonQualificationInputDtoInterface;
 import lombok.Getter;
 
 @Getter
-public class InputDtoClass_PartTimeEmployee {
+public class InputDtoClass_PartTimeEmployee implements PersonQualificationInputDtoInterface{
 	private Long person_Id;
 	private BigDecimal hourlyRate;
 	private SectorEnum sector;

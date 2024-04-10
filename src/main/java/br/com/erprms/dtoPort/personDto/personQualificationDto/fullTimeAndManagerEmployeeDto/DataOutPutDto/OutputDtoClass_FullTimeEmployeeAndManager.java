@@ -5,15 +5,17 @@ import java.math.BigDecimal;
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.PersonQualificationInputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoClass_FullTimeEmployeeAndManager;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class OutputDtoClass_FullTimeEmployeeAndManager {
+public class OutputDtoClass_FullTimeEmployeeAndManager implements PersonQualificationOutputDtoInterface {
 	private String specifiedQualification;
-	private String name;
+	private String personName;
 	private String cpfOrCnpj;
 	private String observation;
 	private String professionalRegistry;
@@ -26,20 +28,11 @@ public class OutputDtoClass_FullTimeEmployeeAndManager {
 			InputDtoClass_FullTimeEmployeeAndManager employee, 
 			String specifiedQualification) {
 		this.specifiedQualification = specifiedQualification;
-		this.name = person.getFullNameOrEntityName();
+		this.personName = person.getFullNameOrEntityName();
 		this.cpfOrCnpj = person.getCpfOrCnpj();
 		this.observation = employee.getObservation();
 		this.professionalRegistry = employee.getProfessionalRegistry();
 		this.monthlySalary = employee.getMonthlySalary();
 		this.sector = employee.getSector();
-	}
-
-	public OutputDtoClass_FullTimeEmployeeAndManager(	
-			PersonQualificationSuperclassEntity managerOrEmployeeToDelete,
-			String specifiedQualification) {
-		this.specifiedQualification = specifiedQualification;
-		this.name = managerOrEmployeeToDelete.getPerson().getFullNameOrEntityName();
-		this.cpfOrCnpj = managerOrEmployeeToDelete.getPerson().getCpfOrCnpj();
-		this.observation = managerOrEmployeeToDelete.getObservation();
 	}
 }
