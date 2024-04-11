@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoRecord_FullTimeEmployeeAndManager;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
 import br.com.erprms.serviceApplication.personService.personQualificationService.ManagerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -32,12 +33,15 @@ import jakarta.transaction.Transactional;
 public class ManagerController {
 	private final ManagerService managerService;
 	private final PersonQualificationService_HttpPost personQualificationService_HttpPost;
+	private final PersonQualificationService_HttpGet personQualificationService_HttpGet;
 	
 	public ManagerController (
 			ManagerService managerService,
-			PersonQualificationService_HttpPost personQualificationService_HttpPost) {
+			PersonQualificationService_HttpPost personQualificationService_HttpPost,
+			PersonQualificationService_HttpGet personQualificationService_HttpGet) {
 		this.managerService = managerService;
 		this.personQualificationService_HttpPost = personQualificationService_HttpPost;
+		this.personQualificationService_HttpGet = personQualificationService_HttpGet;
 	}
 	
 	@PostMapping
@@ -55,12 +59,12 @@ public class ManagerController {
 	
 	@GetMapping
 	@Transactional
-	public ResponseEntity<Page<?>> listing(
+	public ResponseEntity<Page<? extends PersonQualificationOutputDtoInterface>> listing(
 				@PageableDefault(size = 10, sort = {"sector"}) Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
-		return managerService.listingService(	qualificationPageable,
-												uriComponentsBuilder,
-												MANAGER);
+		return personQualificationService_HttpGet.listingService(	qualificationPageable,
+																	uriComponentsBuilder,
+																	MANAGER);
 	}
 	
 	@PutMapping

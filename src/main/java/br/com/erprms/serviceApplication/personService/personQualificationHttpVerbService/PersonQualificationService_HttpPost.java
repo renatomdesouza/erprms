@@ -113,7 +113,7 @@ public class PersonQualificationService_HttpPost {
 									person, 
 									(InputDtoClass_PartTimeEmployee) personQualificationInputDto, 
 									specifiedQualification);
-				
+			
 			return null;
 	}
 }

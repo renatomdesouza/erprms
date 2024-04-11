@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OutputPageDtoClass_FullTimeEmployeeAndManager implements PersonQualificationOutputDtoInterface{
+public class OutputDtoClassPage_FullTimeEmployeeAndManager implements PersonQualificationOutputDtoInterface{
 	private Long id;
 	private String specifiedQualification;
 	private Long personId;

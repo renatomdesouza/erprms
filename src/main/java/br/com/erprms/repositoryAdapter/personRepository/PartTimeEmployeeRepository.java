@@ -12,4 +12,6 @@ public interface PartTimeEmployeeRepository extends JpaRepository<PartTimeEmploy
 	PartTimeEmployeePersonQualification findPartTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
 	
 	Page<PartTimeEmployeePersonQualification> findPartTimeEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+	
+//	Page<PartTimeEmployeePersonQualification> findPartTimeEmployeePersonQualificationByFinalDateIsNullAndSpecifiedQualification(Pageable qualificationPageable, String specifiedQualification);
 }

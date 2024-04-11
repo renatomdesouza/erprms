@@ -19,7 +19,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManager
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoRecord_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutPutExcludeDto_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClass_FullTimeEmployeeAndManager;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputPageDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClassPage_FullTimeEmployeeAndManager;
 import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
@@ -101,10 +101,10 @@ public class FullTimeEmployeeService {
 				Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder,
 				String specifiedQualification) {
-		Page<OutputPageDtoClass_FullTimeEmployeeAndManager> outputPageDtoClass_FullTimeEmployeeAndManagerPage = 
+		Page<OutputDtoClassPage_FullTimeEmployeeAndManager> outputPageDtoClass_FullTimeEmployeeAndManagerPage = 
 				fullTimeEmployeeRepository
 					.findEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
-					.map(p -> mapper.map(p, OutputPageDtoClass_FullTimeEmployeeAndManager.class));
+					.map(p -> mapper.map(p, OutputDtoClassPage_FullTimeEmployeeAndManager.class));
 		
 		var uri = createUri.uriCreator(uriComponentsBuilder, specifiedQualification);
 

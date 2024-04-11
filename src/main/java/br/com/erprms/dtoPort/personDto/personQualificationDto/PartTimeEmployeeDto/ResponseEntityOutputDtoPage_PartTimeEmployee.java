@@ -4,7 +4,9 @@ import java.net.URI;
 
 import org.springframework.data.domain.Page;
 
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
+
 public record ResponseEntityOutputDtoPage_PartTimeEmployee(
-		Page<?> pageableDto,
+		Page<? extends PersonQualificationOutputDtoInterface> pageableDto,
 		URI uri) {
 }

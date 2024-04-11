@@ -23,6 +23,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDt
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoRecord_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClass_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassExclude_PartTimeEmployee;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
 import br.com.erprms.serviceApplication.personService.personQualificationService.PartTimeEmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -34,12 +35,15 @@ import jakarta.transaction.Transactional;
 public class PartyTimeEmployeeController {
 	private final PartTimeEmployeeService partyTimeEmployeeService;
 	private final PersonQualificationService_HttpPost personQualificationService_HttpPost;
+	private final PersonQualificationService_HttpGet personQualificationService_HttpGet;
 	
 	public PartyTimeEmployeeController(
 			PartTimeEmployeeService partyTimeEmployeeService,
-			PersonQualificationService_HttpPost personQualificationService_HttpPost) {
+			PersonQualificationService_HttpPost personQualificationService_HttpPost,
+			PersonQualificationService_HttpGet personQualificationService_HttpGet) {
 		this.partyTimeEmployeeService = partyTimeEmployeeService;
 		this.personQualificationService_HttpPost = personQualificationService_HttpPost;
+		this.personQualificationService_HttpGet = personQualificationService_HttpGet;
 	}
 
 	@PostMapping
@@ -57,12 +61,12 @@ public class PartyTimeEmployeeController {
 		
 	@GetMapping
 	@Transactional
-	public ResponseEntity<Page<?>> listing(
+	public ResponseEntity<Page<? extends PersonQualificationOutputDtoInterface>> listing(
 				@PageableDefault Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
-		return partyTimeEmployeeService.listingService(	qualificationPageable,
-														uriComponentsBuilder,
-														PART_TIME_EMPLOYEE);
+		return personQualificationService_HttpGet.listingService(	qualificationPageable,
+																	uriComponentsBuilder,
+																	PART_TIME_EMPLOYEE);
 	}
 	
 	@PutMapping

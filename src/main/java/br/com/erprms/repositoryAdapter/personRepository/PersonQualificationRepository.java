@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputPageDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClassPage_FullTimeEmployeeAndManager;
 
 public interface PersonQualificationRepository extends JpaRepository<PersonQualificationSuperclassEntity, Long> {
 	
@@ -55,5 +55,15 @@ public interface PersonQualificationRepository extends JpaRepository<PersonQuali
 	
 	@Query(value = "SELECT * FROM person_qualification p WHERE p.final_date IS NULL",
 			nativeQuery = true)
-	Page<OutputPageDtoClass_FullTimeEmployeeAndManager> findEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+	Page<OutputDtoClassPage_FullTimeEmployeeAndManager> findEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+	
+	
+	@Query(value = """
+				SELECT * 
+					FROM person_qualification p 
+						WHERE 
+							p.final_date IS NULL
+							AND p.specified_qualification = :specified 
+			""", nativeQuery = true)
+	Page<OutputDtoClassPage_FullTimeEmployeeAndManager> findPersonQualificationPage(Pageable qualificationPageable, String specified);
 }
