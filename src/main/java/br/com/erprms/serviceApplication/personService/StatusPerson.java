@@ -10,24 +10,24 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class StatusPersonOfQualification {
+public class StatusPerson {
 	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	
-	public StatusPersonOfQualification (
+	public StatusPerson (
 			PersonRepository personRepository,
 			PersonQualificationRepository personQualificationRepository) {
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
 	}
 	
-	public void setStatusUser(PersonEntity person) {
+	public void setStatusOfUse(PersonEntity person) {
 		person.setStatusPersonEnum(StatusPersonalUseEnum.USED);
 		personRepository.save(person);
 	}
 	
-	public void setSatusNotUser(PersonEntity person) {
-		if(!personQualificationRepository.existsFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(person)) {
+	public void setSatusOfNonUse(PersonEntity person) {
+		if(!personQualificationRepository.existsPersonQualificationByFinalDateIsNullAndPerson(person)) {
 			person.setStatusPersonEnum(StatusPersonalUseEnum.NOT_USED);
 			personRepository.save(person);
 		}

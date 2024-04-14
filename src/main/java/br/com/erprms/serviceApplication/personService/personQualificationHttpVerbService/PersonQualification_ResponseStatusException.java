@@ -1,4 +1,4 @@
-package br.com.erprms.serviceApplication.personService.personQualificationService;
+package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
 
 import java.util.Optional;
 
@@ -7,6 +7,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.PartTimeEmployeePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.PersonQualificationInputDtoInterface;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 
@@ -41,4 +44,23 @@ public class PersonQualification_ResponseStatusException {
 					HttpStatus.INSUFFICIENT_STORAGE, 
 					"There is no \"Person\" registered with this \"Id\"");
 	}
+	
+	public void exceptionForUnqualifiedPerson(Optional<PersonQualificationSuperclassEntity> personQualificationOptional) {
+		if (personQualificationOptional.isEmpty()) 
+			throw new ResponseStatusException(	HttpStatus.INSUFFICIENT_STORAGE, 
+												"This person does not have this qualification in the database");
+	}
+	
+	public void exceptionForNullPersonalQualification(Optional<PersonQualificationSuperclassEntity> personQualificationOptional) {
+		if (personQualificationOptional.isEmpty()) 
+			throw new ResponseStatusException(	HttpStatus.INSUFFICIENT_STORAGE, 
+												"The personal qualification variable cannot be null");
+	}
+	
+	public void nonExistentQualification(Optional<PersonQualificationSuperclassEntity> personQualificationOptional) {
+		if (personQualificationOptional.isEmpty()) 
+			throw new ResponseStatusException(	HttpStatus.INSUFFICIENT_STORAGE, 
+												"There is no such qualification to be deleted");
+	}
+	
 }

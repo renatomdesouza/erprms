@@ -23,6 +23,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManager
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoRecord_FullTimeEmployeeAndManager;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPut;
 import br.com.erprms.serviceApplication.personService.personQualificationService.FullTimeEmployeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
@@ -34,24 +35,25 @@ public class FullTimeEmployeeController {
 	private final FullTimeEmployeeService fullTimeEmployeeService;
 	private final PersonQualificationService_HttpPost personQualificationService_HttpPost;
 	private final PersonQualificationService_HttpGet personQualificationService_HttpGet;
+	private final PersonQualificationService_HttpPut personQualificationService_HttpPut;
 	
 	public FullTimeEmployeeController(
 			FullTimeEmployeeService fullTimeEmployeeService,
 			PersonQualificationService_HttpPost personQualificationService_HttpPost,
-			PersonQualificationService_HttpGet personQualificationService_HttpGet) {
+			PersonQualificationService_HttpGet personQualificationService_HttpGet,
+			PersonQualificationService_HttpPut personQualificationService_HttpPut) {
 		this.fullTimeEmployeeService = fullTimeEmployeeService;
 		this.personQualificationService_HttpPost = personQualificationService_HttpPost;
 		this.personQualificationService_HttpGet = personQualificationService_HttpGet;
+		this.personQualificationService_HttpPut = personQualificationService_HttpPut;
 	}
 
-	@SuppressWarnings("unchecked")
 	@PostMapping
 	@Transactional
 	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> register(
 			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-		
 		return personQualificationService_HttpPost.registerService(	
 					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeEmployeeRecordDto), 
 					uriComponentsBuilder,
@@ -70,12 +72,14 @@ public class FullTimeEmployeeController {
 	
 	@PutMapping
 	@Transactional
-	public ResponseEntity<?> update(
+	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> update(
 			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeEmployeeRecordDto,
-			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		return fullTimeEmployeeService.update(	fullTimeEmployeeRecordDto, 
-												uriComponentsBuilder,
-												FULL_TIME_EMPLOYEE);
+			UriComponentsBuilder uriComponentsBuilder) 
+			throws ResponseStatusException {
+		return personQualificationService_HttpPut.update(	
+					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeEmployeeRecordDto), 
+					uriComponentsBuilder,
+					FULL_TIME_EMPLOYEE);
 	}
 	
 	@DeleteMapping("/{person_Id}")

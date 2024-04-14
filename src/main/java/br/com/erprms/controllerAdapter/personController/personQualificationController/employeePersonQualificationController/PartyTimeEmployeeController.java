@@ -21,11 +21,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoClass_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoRecord_PartTimeEmployee;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClass_PartTimeEmployee;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassExclude_PartTimeEmployee;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpDelete;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
-import br.com.erprms.serviceApplication.personService.personQualificationService.PartTimeEmployeeService;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPut;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 
@@ -33,17 +32,20 @@ import jakarta.transaction.Transactional;
 @RequestMapping(PART_TIME_EMPLOYEE)
 @SecurityRequirement(name = "bearer-key")
 public class PartyTimeEmployeeController {
-	private final PartTimeEmployeeService partyTimeEmployeeService;
 	private final PersonQualificationService_HttpPost personQualificationService_HttpPost;
 	private final PersonQualificationService_HttpGet personQualificationService_HttpGet;
+	private final PersonQualificationService_HttpPut personQualificationService_HttpPut;
+	private final PersonQualificationService_HttpDelete personQualificationService_HttpDelete;
 	
 	public PartyTimeEmployeeController(
-			PartTimeEmployeeService partyTimeEmployeeService,
 			PersonQualificationService_HttpPost personQualificationService_HttpPost,
-			PersonQualificationService_HttpGet personQualificationService_HttpGet) {
-		this.partyTimeEmployeeService = partyTimeEmployeeService;
+			PersonQualificationService_HttpGet personQualificationService_HttpGet,
+			PersonQualificationService_HttpPut personQualificationService_HttpPut,
+			PersonQualificationService_HttpDelete personQualificationService_HttpDelete) {
 		this.personQualificationService_HttpPost = personQualificationService_HttpPost;
 		this.personQualificationService_HttpGet = personQualificationService_HttpGet;
+		this.personQualificationService_HttpPut = personQualificationService_HttpPut;
+		this.personQualificationService_HttpDelete = personQualificationService_HttpDelete;
 	}
 
 	@PostMapping
@@ -71,21 +73,22 @@ public class PartyTimeEmployeeController {
 	
 	@PutMapping
 	@Transactional
-	public ResponseEntity<OutputDtoClass_PartTimeEmployee> update(
+	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> update(
 			@RequestBody InputDtoRecord_PartTimeEmployee partyTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		return partyTimeEmployeeService.update(	partyTimeEmployeeRecordDto, 
-												uriComponentsBuilder,
-												PART_TIME_EMPLOYEE);
+		return personQualificationService_HttpPut.update(	
+					new InputDtoClass_PartTimeEmployee(partyTimeEmployeeRecordDto), 
+					uriComponentsBuilder,
+					PART_TIME_EMPLOYEE);
 	}
 	
 	@DeleteMapping("/{person_Id}")
 	@Transactional
-	public ResponseEntity<OutputDtoClassExclude_PartTimeEmployee> exclude( 
+	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> exclude( 
 				@NonNull @PathVariable Long person_Id, 
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		return partyTimeEmployeeService.exclude(person_Id, 
-												uriComponentsBuilder,
-												PART_TIME_EMPLOYEE);
+		return personQualificationService_HttpDelete.exclude(	person_Id, 
+																uriComponentsBuilder,
+																PART_TIME_EMPLOYEE);
 	}
 }

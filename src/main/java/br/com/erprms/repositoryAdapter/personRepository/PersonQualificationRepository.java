@@ -50,8 +50,8 @@ public interface PersonQualificationRepository extends JpaRepository<PersonQuali
 	String activeIncompatibleQualification(Long person_id);
 	
 		
-	boolean existsFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
-	
+	boolean existsPersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
+	//existsFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson
 	
 	@Query(value = "SELECT * FROM person_qualification p WHERE p.final_date IS NULL",
 			nativeQuery = true)

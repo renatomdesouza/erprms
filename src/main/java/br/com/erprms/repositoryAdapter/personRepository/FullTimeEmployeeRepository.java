@@ -16,5 +16,4 @@ public interface FullTimeEmployeeRepository  extends JpaRepository<FullTimeEmplo
 //	@Query("SELECT m FROM FullTimeEmployeePersonQualification m WHERE finalDate = null")
 	Page<FullTimeEmployeePersonQualification> findEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
 
-
 }

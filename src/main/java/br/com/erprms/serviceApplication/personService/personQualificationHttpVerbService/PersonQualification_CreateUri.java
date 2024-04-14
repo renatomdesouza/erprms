@@ -1,4 +1,4 @@
-package br.com.erprms.serviceApplication.personService.personQualificationService;
+package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
 
 import java.net.URI;
 
