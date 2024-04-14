@@ -54,7 +54,6 @@ public class PartyTimeEmployeeController {
 			@RequestBody InputDtoRecord_PartTimeEmployee partyTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-		
 		return personQualificationService_HttpPost.registerService(
 					new InputDtoClass_PartTimeEmployee(partyTimeEmployeeRecordDto), 
 					uriComponentsBuilder,
@@ -75,7 +74,8 @@ public class PartyTimeEmployeeController {
 	@Transactional
 	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> update(
 			@RequestBody InputDtoRecord_PartTimeEmployee partyTimeEmployeeRecordDto,
-			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+			UriComponentsBuilder uriComponentsBuilder) 
+			throws ResponseStatusException {
 		return personQualificationService_HttpPut.update(	
 					new InputDtoClass_PartTimeEmployee(partyTimeEmployeeRecordDto), 
 					uriComponentsBuilder,
@@ -86,7 +86,8 @@ public class PartyTimeEmployeeController {
 	@Transactional
 	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> exclude( 
 				@NonNull @PathVariable Long person_Id, 
-				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
+				UriComponentsBuilder uriComponentsBuilder) 
+				throws ResponseStatusException {
 		return personQualificationService_HttpDelete.exclude(	person_Id, 
 																uriComponentsBuilder,
 																PART_TIME_EMPLOYEE);

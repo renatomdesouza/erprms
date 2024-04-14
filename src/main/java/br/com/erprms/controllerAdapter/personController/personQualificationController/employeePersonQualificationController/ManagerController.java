@@ -21,10 +21,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoRecord_FullTimeEmployeeAndManager;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpDelete;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPut;
-import br.com.erprms.serviceApplication.personService.personQualificationService.ManagerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 
@@ -32,28 +32,28 @@ import jakarta.transaction.Transactional;
 @RequestMapping(MANAGER)
 @SecurityRequirement(name = "bearer-key")
 public class ManagerController {
-	private final ManagerService managerService;
 	private final PersonQualificationService_HttpPost personQualificationService_HttpPost;
 	private final PersonQualificationService_HttpGet personQualificationService_HttpGet;
 	private final PersonQualificationService_HttpPut personQualificationService_HttpPut;
+	private final PersonQualificationService_HttpDelete personQualificationService_HttpDelete;
 	
 	public ManagerController (
-			ManagerService managerService,
 			PersonQualificationService_HttpPost personQualificationService_HttpPost,
 			PersonQualificationService_HttpGet personQualificationService_HttpGet,
-			PersonQualificationService_HttpPut personQualificationService_HttpPut) {
-		this.managerService = managerService;
+			PersonQualificationService_HttpPut personQualificationService_HttpPut,
+			PersonQualificationService_HttpDelete personQualificationService_HttpDelete) {
 		this.personQualificationService_HttpPost = personQualificationService_HttpPost;
 		this.personQualificationService_HttpGet = personQualificationService_HttpGet;
 		this.personQualificationService_HttpPut = personQualificationService_HttpPut;
+		this.personQualificationService_HttpDelete = personQualificationService_HttpDelete;
 	}
 	
 	@PostMapping
 	@Transactional
 	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> register(
-			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeManagerRecordDto,
-			UriComponentsBuilder uriComponentsBuilder) 
-			throws ResponseStatusException {
+				@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeManagerRecordDto,
+				UriComponentsBuilder uriComponentsBuilder) 
+				throws ResponseStatusException {
 		return personQualificationService_HttpPost.registerService(	
 					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeManagerRecordDto), 
 					uriComponentsBuilder,
@@ -73,9 +73,9 @@ public class ManagerController {
 	@PutMapping
 	@Transactional
 	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> update(
-			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeManagerRecordDto,
-			UriComponentsBuilder uriComponentsBuilder) 
-			throws ResponseStatusException {
+				@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeManagerRecordDto,
+				UriComponentsBuilder uriComponentsBuilder) 
+				throws ResponseStatusException {
 		return	personQualificationService_HttpPut.update(	
 					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeManagerRecordDto), 
 					uriComponentsBuilder,
@@ -85,11 +85,12 @@ public class ManagerController {
 	@DeleteMapping("/{person_Id}")
 	@Transactional
 	public ResponseEntity<?> exclude( 
-			@NonNull @PathVariable Long person_Id,
-			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		return managerService.exclude(	person_Id, 
-										uriComponentsBuilder,
-										MANAGER);
+				@NonNull @PathVariable Long person_Id,
+				UriComponentsBuilder uriComponentsBuilder) 
+				throws ResponseStatusException {
+		return personQualificationService_HttpDelete.exclude(	person_Id, 
+																uriComponentsBuilder,
+																MANAGER);
 	}
 }
 	
