@@ -91,11 +91,6 @@
 	      <version>2.3.0</version>
 	   	</dependency>
 
-		<dependency>
-			<groupId>br.com.alura</groupId>
-			<artifactId>spring-data</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>

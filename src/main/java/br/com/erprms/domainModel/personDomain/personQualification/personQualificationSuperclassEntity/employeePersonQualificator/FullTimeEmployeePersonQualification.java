@@ -30,4 +30,5 @@ public class FullTimeEmployeePersonQualification
 	private SectorEnum sector;
 	
 	private BigDecimal monthlySalary;
+
 }
