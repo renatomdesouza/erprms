@@ -45,7 +45,7 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);
 	}
-
+	
 	@SuppressWarnings("hiding")
 	private <T> PersonEntity createPerson(T personDto) {
 		
@@ -67,4 +67,6 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 		
 		return person;
 	}
+
 }
+
