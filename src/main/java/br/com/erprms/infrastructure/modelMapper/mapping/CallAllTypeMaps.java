@@ -28,6 +28,7 @@ public class CallAllTypeMaps {
 		new NaturalPersonTypeMaps(mapper);
 		new FullTimeEmployeeTypeMaps(mapper);
 		new PartTimeEmployeeTypeMaps(mapper);
+		new AccountantEntityTypeMaps(mapper);
 		
 	}
 	

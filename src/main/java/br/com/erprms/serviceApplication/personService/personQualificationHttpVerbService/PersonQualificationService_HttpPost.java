@@ -3,12 +3,16 @@ package br.com.erprms.serviceApplication.personService.personQualificationHttpVe
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 
 
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.AccountantPersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.InputDtoClass_Accountant;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputDtoClass_Accountant;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,12 +25,12 @@ import br.com.erprms.domainModel.personDomain.personQualification.personQualific
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.PartTimeEmployeePersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.PersonQualificationInputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoClass_PartTimeEmployee;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClass_PartTimeEmployee;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoClass_FullTimeEmployeeAndManager;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.OutputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.InputDtoClass_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.OutputDtoClass_PartTimeEmployee;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.serviceApplication.personService.StatusPerson;
@@ -65,7 +69,7 @@ public class PersonQualificationService_HttpPost {
 					String specifiedQualification) 
 			throws ResponseStatusException {
 		exceptionService.exceptionForPersonWhoDoesNotExist(personQualificationInputDto.getPerson_Id());
-		exceptionService.mismatchExceptionBetweenQualifications(personQualificationInputDto.getPerson_Id());
+		exceptionService.mismatchExceptionBetweenQualifications(personQualificationInputDto.getPerson_Id(), specifiedQualification);
 
 		PersonEntity person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id() );
 
@@ -90,6 +94,12 @@ public class PersonQualificationService_HttpPost {
 															person, 
 															(InputDtoClass_PartTimeEmployee) personQualificationInputDto, 
 															specifiedQualification); break;}
+			case ACCOUNTANT -> {
+				personQualification = mapper.map(personQualificationInputDto, AccountantPersonQualification.class);
+				personQualificationOutputDto = (U) new OutputDtoClass_Accountant(
+						person,
+						(InputDtoClass_Accountant) personQualificationInputDto,
+						specifiedQualification); break;}
 			default -> { exceptionService.exceptionForNullPersonalQualification(Optional.ofNullable(personQualification)); }
 		}
 

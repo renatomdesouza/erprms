@@ -19,8 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoClass_PartTimeEmployee;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataInputDto.InputDtoRecord_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.InputDtoClass_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.InputDtoRecord_PartTimeEmployee;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpDelete;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;

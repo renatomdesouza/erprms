@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutputDtoClassPage_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.OutputDtoClassPage_FullTimeEmployeeAndManager;
 
 public interface PersonQualificationRepository extends JpaRepository<PersonQualificationSuperclassEntity, Long> {
 	
@@ -31,25 +31,28 @@ public interface PersonQualificationRepository extends JpaRepository<PersonQuali
 					LIMIT 1 
 			""", nativeQuery = true)
 	PersonQualificationSuperclassEntity personActiveQualification(Long person_id, String specified_qualification);
-	
+
+
 	@Query(	value = """
-			SELECT p.specified_qualification 
-				FROM person_qualification p 
-					WHERE 
-						p.person_id = :person_id 
-						AND p.final_date IS NULL 
-						AND (
-								p.specified_qualification = 'manager' 
-								OR 
-								p.specified_qualification = 'full-time-employee' 
-								OR 
-								p.specified_qualification = 'part-time-employee' 
-						)
-						LIMIT 1 
+			SELECT p.specified_qualification
+				FROM person_qualification p
+					WHERE
+						p.person_id = :person_id
+						AND p.final_date IS NULL
+						AND (   p.specified_qualification = 'manager'
+								OR
+								p.specified_qualification = 'full-time-employee'
+								OR
+								p.specified_qualification = 'part-time-employee'
+								OR
+								p.specified_qualification = 'accountant'
+							)
+						AND :specified_qualification = :specified_qualification 
+				LIMIT 1
 			""", nativeQuery = true)
-	String activeIncompatibleQualification(Long person_id);
-	
-		
+	String activeIncompatibleQualification(Long person_id, String specified_qualification);
+
+
 	boolean existsPersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
 	//existsFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson
 	

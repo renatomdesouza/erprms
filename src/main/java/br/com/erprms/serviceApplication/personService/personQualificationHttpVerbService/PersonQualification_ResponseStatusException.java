@@ -9,7 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.PartTimeEmployeePersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.PersonQualificationInputDtoInterface;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 
@@ -25,8 +25,8 @@ public class PersonQualification_ResponseStatusException {
 		this.personQualificationRepository = personQualificationRepository;
 	}
 
-	public void mismatchExceptionBetweenQualifications(@NonNull Long id_Person) {
-		String qualification = personQualificationRepository.activeIncompatibleQualification(id_Person);
+	public void mismatchExceptionBetweenQualifications(@NonNull Long id_Person, String specifiedQualification) {
+		String qualification = personQualificationRepository.activeIncompatibleQualification(id_Person, specifiedQualification);
 		
 		Optional<String> qualificationOptional = Optional.ofNullable(qualification);
 		

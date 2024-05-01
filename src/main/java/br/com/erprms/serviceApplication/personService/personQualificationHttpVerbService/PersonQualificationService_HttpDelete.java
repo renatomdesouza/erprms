@@ -3,10 +3,12 @@ package br.com.erprms.serviceApplication.personService.personQualificationHttpVe
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
+import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputExcludeDto_Accountant;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PartTimeEmployeeDto.DataOutputDto.OutputDtoClassExclude_PartTimeEmployee;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataOutPutDto.OutPutExcludeDto_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.OutPutExcludeDto_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.OutputDtoClassExclude_PartTimeEmployee;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.serviceApplication.personService.StatusPerson;
@@ -73,12 +75,15 @@ public class PersonQualificationService_HttpDelete {
 				case MANAGER -> { outPutExcludeDto = 
 								new OutPutExcludeDto_FullTimeEmployeeAndManager(	personQualification, 
 																					specifiedQualification); break; }
-				case FULL_TIME_EMPLOYEE -> { outPutExcludeDto = 
+				case FULL_TIME_EMPLOYEE -> { outPutExcludeDto =
 						new OutPutExcludeDto_FullTimeEmployeeAndManager(	personQualification, 
 																			specifiedQualification); break; }
 				case PART_TIME_EMPLOYEE -> { outPutExcludeDto = 
 								new OutputDtoClassExclude_PartTimeEmployee(	personQualification, 
 																			specifiedQualification); break; }
+				case ACCOUNTANT -> { outPutExcludeDto =
+						new OutputExcludeDto_Accountant(	personQualification,
+															specifiedQualification); break; }
 			}
 			
 			var dtoRecord_ServicePersonQualification = 
@@ -87,6 +92,6 @@ public class PersonQualificationService_HttpDelete {
 			return ResponseEntity
 					.created(dtoRecord_ServicePersonQualification.uri())
 					.body(dtoRecord_ServicePersonQualification.dtoOfPerson());
-			
+
 	}
 }

@@ -19,8 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoClass_FullTimeEmployeeAndManager;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.DataInputDto.InputDtoRecord_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoRecord_FullTimeEmployeeAndManager;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpDelete;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
@@ -84,7 +84,7 @@ public class ManagerController {
 	
 	@DeleteMapping("/{person_Id}")
 	@Transactional
-	public ResponseEntity<?> exclude( 
+	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> exclude( 
 				@NonNull @PathVariable Long person_Id,
 				UriComponentsBuilder uriComponentsBuilder) 
 				throws ResponseStatusException {
