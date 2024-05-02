@@ -29,8 +29,7 @@ public class ClientTypeMaps {
     public void inputDtoClass_Client_To_ClientPersonQualification(ModelMapper modelMapper) {
         modelMapper.createTypeMap(InputDtoClass_Client.class, ClientPersonQualification.class)
                 .addMapping(InputDtoClass_Client::getCreditTerms, ClientPersonQualification::setCreditTerms)
-                .addMapping(InputDtoClass_Client::getObservation, ClientPersonQualification::setObservation)
-                .addMapping(InputDtoClass_Client::getProfessionalRegistry, ClientPersonQualification::setProfessionalRegistry);
+                .addMapping(InputDtoClass_Client::getObservation, ClientPersonQualification::setObservation);
     }
 
     private void clientPersonQualification_To_OutputDtoClassPage_Client(ModelMapper modelMapper) {

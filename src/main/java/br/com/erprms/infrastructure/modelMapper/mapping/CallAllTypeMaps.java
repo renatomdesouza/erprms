@@ -24,6 +24,7 @@ public class CallAllTypeMaps {
 		new PartTimeEmployeeTypeMaps(mapper);
 		new AccountantTypeMaps(mapper);
 		new ClientTypeMaps(mapper);
+		new ProviderTypeMaps(mapper);
 	}
 	
 }

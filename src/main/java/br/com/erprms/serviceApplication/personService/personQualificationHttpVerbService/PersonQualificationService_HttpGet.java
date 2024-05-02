@@ -5,12 +5,14 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 
 import java.net.URI;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification_Page;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputDtoClassPage_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputDtoClassPage_Client;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClassPage_Provider;
 import br.com.erprms.repositoryAdapter.personRepository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,7 @@ public class PersonQualificationService_HttpGet {
 	private final PartTimeEmployeeRepository partTimeEmployeeRepository;
 	private final AccountantRepository accountantRepository;
 	private final ClientRepository clientRepository;
+	private final ProviderRepository providerRepository;
 	private final PersonQualification_CreateUri createUri;
 	
 	public PersonQualificationService_HttpGet(
@@ -41,6 +44,7 @@ public class PersonQualificationService_HttpGet {
 			PartTimeEmployeeRepository partTimeEmployeeRepository,
 			AccountantRepository accountantRepository,
 			ClientRepository clientRepository,
+			ProviderRepository providerRepository,
 			PersonQualification_CreateUri createUri) {
 		this.mapper = mapper;
 		this.managerRepository = managerRepository;
@@ -48,6 +52,7 @@ public class PersonQualificationService_HttpGet {
 		this.partTimeEmployeeRepository = partTimeEmployeeRepository;
 		this.accountantRepository = accountantRepository;
 		this.clientRepository = clientRepository;
+		this.providerRepository = providerRepository;
 		this.createUri = createUri;
 	}
 	
@@ -79,6 +84,10 @@ public class PersonQualificationService_HttpGet {
 				outputDtoClassPage = clientRepository
 						.findClientPersonQualificationByFinalDateIsNull(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_Client.class)); break; }
+			case PROVIDER -> {
+				outputDtoClassPage = providerRepository
+						.findProviderPersonQualificationByFinalDateIsNull(qualificationPageable)
+						.map(p -> mapper.map(p, OutputDtoClassPage_Provider.class)); break; }
 		};
 		
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 

@@ -5,16 +5,20 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 
 import java.net.URI;
 import java.util.Optional;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.AccountantPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ClientPersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ProviderPersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.InputDtoClass_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputDtoClass_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.InputDtoClass_Client;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputDtoClass_Client;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoClass_Provider;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
 import br.com.erprms.repositoryAdapter.personRepository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +48,7 @@ public class PersonQualificationService_HttpPut {
 	private final PartTimeEmployeeRepository partTimeEmployeeRepository;
 	private final AccountantRepository accountantRepository;
 	private final ClientRepository clientRepository;
+	private final ProviderRepository providerRepository;
 	private final PersonQualification_ResponseStatusException exceptionService;
 	private final PersonQualification_CreateUri createUri;
 	
@@ -54,6 +59,7 @@ public class PersonQualificationService_HttpPut {
 			FullTimeEmployeeRepository fullTimeEmployeeRepository,
 			PartTimeEmployeeRepository partTimeEmployeeRepository,
 			ClientRepository clientRepository,
+			ProviderRepository providerRepository,
 			AccountantRepository accountantRepository,
 
 			PersonQualification_ResponseStatusException exceptionService,
@@ -65,6 +71,7 @@ public class PersonQualificationService_HttpPut {
 		this.partTimeEmployeeRepository = partTimeEmployeeRepository;
 		this.accountantRepository = accountantRepository;
 		this.clientRepository = clientRepository;
+		this.providerRepository = providerRepository;
 		this.exceptionService = exceptionService;
 		this.createUri = createUri;
 	}
@@ -93,6 +100,8 @@ public class PersonQualificationService_HttpPut {
 											.findAccountantPersonQualificationByFinalDateIsNullAndPerson(person); break; }
 			case CLIENT -> { personQualification = clientRepository
 					.findClientPersonQualificationByFinalDateIsNullAndPerson(person); break; }
+			case PROVIDER -> { personQualification = providerRepository
+					.findProviderPersonQualificationByFinalDateIsNullAndPerson(person); break; }
 		}
 	
 		exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(personQualification));
@@ -130,6 +139,12 @@ public class PersonQualificationService_HttpPut {
 				personQualificationOutputDto =
 						new OutputDtoClass_Client(	person,
 								(InputDtoClass_Client) inputDtoClass,
+								specifiedQualification); break; }
+			case PROVIDER -> {
+				providerRepository.save((ProviderPersonQualification) personQualification);
+				personQualificationOutputDto =
+						new OutputDtoClass_Provider(	person,
+								(InputDtoClass_Provider) inputDtoClass,
 								specifiedQualification); break; }
 		}
 		

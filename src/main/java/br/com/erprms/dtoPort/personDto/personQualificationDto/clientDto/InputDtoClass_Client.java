@@ -9,13 +9,11 @@ import lombok.Getter;
 public class InputDtoClass_Client  implements PersonQualificationInputDtoInterface {
     private final Long person_Id;
     private final String observation;
-    private final String professionalRegistry;
     private final Integer creditTerms;
 
     public InputDtoClass_Client(InputDtoRecord_Client client) {
         this.person_Id = client.person_Id();
         this.observation = client.observation();
-        this.professionalRegistry = client.professionalRegistry();
         this.creditTerms = client.creditDays();
     }
 }

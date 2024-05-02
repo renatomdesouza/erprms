@@ -6,10 +6,14 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 
 import java.net.URI;
 import java.time.LocalDate;
 
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ProviderPersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoClass_Provider;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,6 +113,12 @@ public class PersonQualificationService_HttpPost {
 				personQualificationOutputDto = (U) new OutputDtoClass_Client(
 						person,
 						(InputDtoClass_Client) personQualificationInputDto,
+						specifiedQualification); break;}
+			case PROVIDER -> {
+				personQualification = mapper.map(personQualificationInputDto, ProviderPersonQualification.class);
+				personQualificationOutputDto = (U) new OutputDtoClass_Provider(
+						person,
+						(InputDtoClass_Provider) personQualificationInputDto,
 						specifiedQualification); break;}
 			default -> { throw new ResponseStatusException( HttpStatus.INSUFFICIENT_STORAGE,
 															"personal qualifications not provided for in the role");}
