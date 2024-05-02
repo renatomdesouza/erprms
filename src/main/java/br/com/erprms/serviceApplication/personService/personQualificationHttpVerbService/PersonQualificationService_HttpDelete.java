@@ -6,6 +6,7 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputExcludeDto_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputExcludeDto_Client;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputExcludeDto_Provider;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputExcludeDto_ResponsibleForLegalPerson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -94,7 +96,9 @@ public class PersonQualificationService_HttpDelete {
 				case PROVIDER -> { outPutExcludeDto =
 						new OutputExcludeDto_Provider(	personQualification,
 								specifiedQualification); break; }
-
+				case RESPONSIBLE_FOR_LEGAL_PERSON -> { outPutExcludeDto =
+						new OutputExcludeDto_ResponsibleForLegalPerson(	personQualification,
+								specifiedQualification); break; }
 			}
 			
 			var dtoRecord_ServicePersonQualification = 

@@ -25,6 +25,7 @@ public class CallAllTypeMaps {
 		new AccountantTypeMaps(mapper);
 		new ClientTypeMaps(mapper);
 		new ProviderTypeMaps(mapper);
+		new ResponsibleForLegalPersonTypeMap(mapper);
 	}
 	
 }

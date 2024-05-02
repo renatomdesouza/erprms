@@ -42,7 +42,6 @@ public class ClientTypeMaps {
                 .addMapping(PersonQualificationSuperclassEntity::getObservation, OutputDtoClassPage_Client::setObservation)
                 .addMapping(PersonQualificationSuperclassEntity::getInitialDate, OutputDtoClassPage_Client::setInitialDate)
                 .addMapping(PersonQualificationSuperclassEntity::getFinalDate, OutputDtoClassPage_Client::setFinalDate)
-                .<String>addMapping(mappingByDefaultValueWithoutSourceClass -> (CLIENT), OutputDtoClassPage_Client::setSpecifiedQualification)
-        ;
+                .<String>addMapping(mappingByDefaultValueWithoutSourceClass -> (CLIENT), OutputDtoClassPage_Client::setSpecifiedQualification);
     }
 }

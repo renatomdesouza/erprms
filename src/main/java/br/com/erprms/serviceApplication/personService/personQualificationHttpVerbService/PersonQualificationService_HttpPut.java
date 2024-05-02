@@ -6,6 +6,7 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
 import java.net.URI;
 import java.util.Optional;
@@ -13,12 +14,15 @@ import java.util.Optional;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.AccountantPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ClientPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ProviderPersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ResponsibleForLegalPersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.InputDtoClass_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputDtoClass_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.InputDtoClass_Client;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputDtoClass_Client;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoClass_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoClass_ResponsibleForLegalPerson;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.repositoryAdapter.personRepository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +53,7 @@ public class PersonQualificationService_HttpPut {
 	private final AccountantRepository accountantRepository;
 	private final ClientRepository clientRepository;
 	private final ProviderRepository providerRepository;
+	private final ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository;
 	private final PersonQualification_ResponseStatusException exceptionService;
 	private final PersonQualification_CreateUri createUri;
 	
@@ -60,6 +65,7 @@ public class PersonQualificationService_HttpPut {
 			PartTimeEmployeeRepository partTimeEmployeeRepository,
 			ClientRepository clientRepository,
 			ProviderRepository providerRepository,
+			ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
 			AccountantRepository accountantRepository,
 
 			PersonQualification_ResponseStatusException exceptionService,
@@ -72,6 +78,7 @@ public class PersonQualificationService_HttpPut {
 		this.accountantRepository = accountantRepository;
 		this.clientRepository = clientRepository;
 		this.providerRepository = providerRepository;
+		this.responsibleForLegalPersonRepository = responsibleForLegalPersonRepository;
 		this.exceptionService = exceptionService;
 		this.createUri = createUri;
 	}
@@ -102,6 +109,8 @@ public class PersonQualificationService_HttpPut {
 					.findClientPersonQualificationByFinalDateIsNullAndPerson(person); break; }
 			case PROVIDER -> { personQualification = providerRepository
 					.findProviderPersonQualificationByFinalDateIsNullAndPerson(person); break; }
+			case RESPONSIBLE_FOR_LEGAL_PERSON -> { personQualification = responsibleForLegalPersonRepository
+					.findResponsibleForLegalPersonQualificationByFinalDateIsNullAndPerson(person); break; }
 		}
 	
 		exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(personQualification));
@@ -145,6 +154,12 @@ public class PersonQualificationService_HttpPut {
 				personQualificationOutputDto =
 						new OutputDtoClass_Provider(	person,
 								(InputDtoClass_Provider) inputDtoClass,
+								specifiedQualification); break; }
+			case RESPONSIBLE_FOR_LEGAL_PERSON -> {
+				responsibleForLegalPersonRepository.save((ResponsibleForLegalPersonQualification) personQualification);
+				personQualificationOutputDto =
+						new OutputDtoClass_ResponsibleForLegalPerson(	person,
+								(InputDtoClass_ResponsibleForLegalPerson) inputDtoClass,
 								specifiedQualification); break; }
 		}
 		
