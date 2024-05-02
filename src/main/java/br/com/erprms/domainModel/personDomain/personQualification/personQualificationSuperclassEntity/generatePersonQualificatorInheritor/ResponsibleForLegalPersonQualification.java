@@ -4,7 +4,9 @@ import br.com.erprms.domainModel.personDomain.personQualification.PersonQualific
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
+
 @Entity
-@DiscriminatorValue("RESPONSIBLE_FOR_LEGAL_PERSON")
+@DiscriminatorValue(RESPONSIBLE_FOR_LEGAL_PERSON)
 public class ResponsibleForLegalPersonQualification extends PersonQualificationSuperclassEntity{
 }

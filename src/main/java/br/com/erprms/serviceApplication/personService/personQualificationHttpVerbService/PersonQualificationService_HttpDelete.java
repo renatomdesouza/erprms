@@ -4,11 +4,13 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputExcludeDto_Accountant;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputExcludeDto_Client;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -84,6 +86,10 @@ public class PersonQualificationService_HttpDelete {
 				case ACCOUNTANT -> { outPutExcludeDto =
 						new OutputExcludeDto_Accountant(	personQualification,
 															specifiedQualification); break; }
+				case CLIENT -> { outPutExcludeDto =
+						new OutputExcludeDto_Client(	personQualification,
+														specifiedQualification); break; }
+
 			}
 			
 			var dtoRecord_ServicePersonQualification = 

@@ -4,12 +4,14 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 
 import java.net.URI;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification_Page;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputDtoClassPage_Accountant;
-import br.com.erprms.repositoryAdapter.personRepository.AccountantRepository;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputDtoClassPage_Client;
+import br.com.erprms.repositoryAdapter.personRepository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +22,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.OutputDtoClassPage_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.OutputDtoClassPage_PartTimeEmployee;
-import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
-import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
-import br.com.erprms.repositoryAdapter.personRepository.PartTimeEmployeeRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -32,6 +31,7 @@ public class PersonQualificationService_HttpGet {
 	private final FullTimeEmployeeRepository fullTimeEmployeeRepository;
 	private final PartTimeEmployeeRepository partTimeEmployeeRepository;
 	private final AccountantRepository accountantRepository;
+	private final ClientRepository clientRepository;
 	private final PersonQualification_CreateUri createUri;
 	
 	public PersonQualificationService_HttpGet(
@@ -40,12 +40,14 @@ public class PersonQualificationService_HttpGet {
 			FullTimeEmployeeRepository fullTimeEmployeeRepository,
 			PartTimeEmployeeRepository partTimeEmployeeRepository,
 			AccountantRepository accountantRepository,
+			ClientRepository clientRepository,
 			PersonQualification_CreateUri createUri) {
 		this.mapper = mapper;
 		this.managerRepository = managerRepository;
 		this.fullTimeEmployeeRepository = fullTimeEmployeeRepository;
 		this.partTimeEmployeeRepository = partTimeEmployeeRepository;
 		this.accountantRepository = accountantRepository;
+		this.clientRepository = clientRepository;
 		this.createUri = createUri;
 	}
 	
@@ -73,6 +75,10 @@ public class PersonQualificationService_HttpGet {
 				outputDtoClassPage = accountantRepository
 						.findAccountantPersonQualificationByFinalDateIsNull(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_Accountant.class)); break; }
+			case CLIENT -> {
+				outputDtoClassPage = clientRepository
+						.findClientPersonQualificationByFinalDateIsNull(qualificationPageable)
+						.map(p -> mapper.map(p, OutputDtoClassPage_Client.class)); break; }
 		};
 		
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 

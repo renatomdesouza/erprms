@@ -11,7 +11,7 @@ import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfUpda
 
 @Configuration
 public class LegalPersonTypeMaps {
-	private ModelMapper mapper; 
+	private final ModelMapper mapper;
 	
 	public LegalPersonTypeMaps(ModelMapper mapper) {
 		this.mapper = mapper;

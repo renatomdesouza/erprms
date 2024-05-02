@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 
 @Configuration
-public class AccountantEntityTypeMaps {
-	private ModelMapper mapper; 
+public class AccountantTypeMaps {
+	private final ModelMapper mapper;
 	
-	public AccountantEntityTypeMaps(ModelMapper mapper) {
+	public AccountantTypeMaps(ModelMapper mapper) {
 		this.mapper = mapper;
 	}
 

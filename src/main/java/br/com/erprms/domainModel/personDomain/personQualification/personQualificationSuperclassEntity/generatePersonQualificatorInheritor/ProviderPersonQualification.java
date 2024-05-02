@@ -4,7 +4,9 @@ import br.com.erprms.domainModel.personDomain.personQualification.PersonQualific
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
+
 @Entity
-@DiscriminatorValue("PROVIDER")
+@DiscriminatorValue(PROVIDER)
 public class ProviderPersonQualification extends PersonQualificationSuperclassEntity{
 }

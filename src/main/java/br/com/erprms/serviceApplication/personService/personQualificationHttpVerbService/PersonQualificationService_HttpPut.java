@@ -4,13 +4,17 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 
 import java.net.URI;
 import java.util.Optional;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.AccountantPersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ClientPersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.InputDtoClass_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputDtoClass_Accountant;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.InputDtoClass_Client;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputDtoClass_Client;
 import br.com.erprms.repositoryAdapter.personRepository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +43,7 @@ public class PersonQualificationService_HttpPut {
 	private final FullTimeEmployeeRepository fullTimeEmployeeRepository;
 	private final PartTimeEmployeeRepository partTimeEmployeeRepository;
 	private final AccountantRepository accountantRepository;
+	private final ClientRepository clientRepository;
 	private final PersonQualification_ResponseStatusException exceptionService;
 	private final PersonQualification_CreateUri createUri;
 	
@@ -48,7 +53,9 @@ public class PersonQualificationService_HttpPut {
 			ManagerRepository managerRepository,
 			FullTimeEmployeeRepository fullTimeEmployeeRepository,
 			PartTimeEmployeeRepository partTimeEmployeeRepository,
+			ClientRepository clientRepository,
 			AccountantRepository accountantRepository,
+
 			PersonQualification_ResponseStatusException exceptionService,
 			PersonQualification_CreateUri createUri) {
 		this.mapper = mapper;
@@ -57,6 +64,7 @@ public class PersonQualificationService_HttpPut {
 		this.fullTimeEmployeeRepository = fullTimeEmployeeRepository;
 		this.partTimeEmployeeRepository = partTimeEmployeeRepository;
 		this.accountantRepository = accountantRepository;
+		this.clientRepository = clientRepository;
 		this.exceptionService = exceptionService;
 		this.createUri = createUri;
 	}
@@ -83,6 +91,8 @@ public class PersonQualificationService_HttpPut {
 											.findPartTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(person); break; }
 			case ACCOUNTANT -> { personQualification = accountantRepository
 											.findAccountantPersonQualificationByFinalDateIsNullAndPerson(person); break; }
+			case CLIENT -> { personQualification = clientRepository
+					.findClientPersonQualificationByFinalDateIsNullAndPerson(person); break; }
 		}
 	
 		exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(personQualification));
@@ -115,6 +125,12 @@ public class PersonQualificationService_HttpPut {
 						new OutputDtoClass_Accountant(	person,
 														(InputDtoClass_Accountant) inputDtoClass,
 														specifiedQualification); break; }
+			case CLIENT -> {
+				clientRepository.save((ClientPersonQualification) personQualification);
+				personQualificationOutputDto =
+						new OutputDtoClass_Client(	person,
+								(InputDtoClass_Client) inputDtoClass,
+								specifiedQualification); break; }
 		}
 		
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 

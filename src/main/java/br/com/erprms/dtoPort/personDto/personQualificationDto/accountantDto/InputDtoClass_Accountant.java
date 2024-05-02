@@ -1,11 +1,9 @@
 package br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto;
 
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoRecord_FullTimeEmployeeAndManager;
-import lombok.Getter;
-
 import java.math.BigDecimal;
+
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
+import lombok.Getter;
 
 @Getter
 public class InputDtoClass_Accountant  implements PersonQualificationInputDtoInterface {

@@ -1,4 +1,4 @@
-package br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto;
+package br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
@@ -7,18 +7,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OutputExcludeDto_Accountant implements PersonQualificationOutputDtoInterface {
+public class OutputExcludeDto_Client implements PersonQualificationOutputDtoInterface {
     private String specifiedQualification;
     private String personName;
     private String cpfOrCnpj;
     private String observation;
 
-    public OutputExcludeDto_Accountant(
-            PersonQualificationSuperclassEntity accountantToDelete,
+    public OutputExcludeDto_Client(
+            PersonQualificationSuperclassEntity clientToDelete,
             String specifiedQualification) {
         this.specifiedQualification = specifiedQualification;
-        this.personName = accountantToDelete.getPerson().getFullNameOrEntityName();
-        this.cpfOrCnpj = accountantToDelete.getPerson().getCpfOrCnpj();
-        this.observation = accountantToDelete.getObservation();
+        this.personName = clientToDelete.getPerson().getFullNameOrEntityName();
+        this.cpfOrCnpj = clientToDelete.getPerson().getCpfOrCnpj();
+        this.observation = clientToDelete.getObservation();
     }
 }

@@ -13,7 +13,7 @@ import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOf
 
 @Configuration
 public class NaturalPersonTypeMaps {
-	private ModelMapper mapper; 
+	private final ModelMapper mapper;
 	
 	public NaturalPersonTypeMaps(ModelMapper mapper) {
 		this.mapper = mapper;
