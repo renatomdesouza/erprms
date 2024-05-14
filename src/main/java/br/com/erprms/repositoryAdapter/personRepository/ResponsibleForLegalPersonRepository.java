@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ResponsibleForLegalPersonRepository extends JpaRepository<ResponsibleForLegalPersonQualification, Long> {
 
     ResponsibleForLegalPersonQualification findResponsibleForLegalPersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
+    ResponsibleForLegalPersonQualification findResponsibleForLegalPersonQualificationByIsActualIsTrueAndPerson(PersonEntity person);
 
     Page<ResponsibleForLegalPersonQualification> findResponsibleForLegalPersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+    Page<ResponsibleForLegalPersonQualification> findResponsibleForLegalPersonQualificationByIsActualIsTrue(Pageable qualificationPageable);
 
 }

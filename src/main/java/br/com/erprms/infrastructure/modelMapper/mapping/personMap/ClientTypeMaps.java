@@ -1,6 +1,5 @@
 package br.com.erprms.infrastructure.modelMapper.mapping.personMap;
 
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 
 import org.modelmapper.ModelMapper;

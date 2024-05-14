@@ -26,9 +26,14 @@ public class FullTimeEmployeePersonQualification
 					extends PersonQualificationSuperclassEntity 
 					implements FullTimeEmployeePersonQualificatorInterface, EmployeePersonQualificatorInterface {
 
-	@Enumerated(EnumType.STRING) 
+	@Enumerated(EnumType.STRING)
 	private SectorEnum sector;
-	
+
 	private BigDecimal monthlySalary;
 
+	public FullTimeEmployeePersonQualification (FullTimeEmployeePersonQualification oldQualification) {
+		super(oldQualification);
+		this.sector = oldQualification.getSector();
+		this.monthlySalary = oldQualification.getMonthlySalary();
+	}
 }

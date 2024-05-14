@@ -1,6 +1,6 @@
 package br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import lombok.Getter;
@@ -16,6 +16,6 @@ public class OutputDtoClassPage_Client implements PersonQualificationOutputDtoIn
     private String cpfOrCnpj;
     private Integer creditDays;
     private String observation;
-    private LocalDate initialDate;
-    private LocalDate finalDate;
+    private LocalDateTime initialDate;
+    private LocalDateTime finalDate;
 }

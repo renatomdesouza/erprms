@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,6 +18,6 @@ public class OutputDtoClassPage_Accountant  implements PersonQualificationOutput
     private BigDecimal monthlyCost;
     private String observation;
     private String professionalRegistry;
-    private LocalDate initialDate;
-    private LocalDate finalDate;
+    private LocalDateTime initialDate;
+    private LocalDateTime finalDate;
 }

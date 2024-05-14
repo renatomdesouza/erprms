@@ -1,10 +1,7 @@
 package br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.InputDtoRecord_Accountant;
 import lombok.Getter;
-
-import java.math.BigDecimal;
 
 @Getter
 public class InputDtoClass_Provider implements PersonQualificationInputDtoInterface {

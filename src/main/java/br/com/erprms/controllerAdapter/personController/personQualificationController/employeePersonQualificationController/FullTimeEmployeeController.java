@@ -2,6 +2,7 @@ package br.com.erprms.controllerAdapter.personController.personQualificationCont
 
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
 
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,10 +22,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoRecord_FullTimeEmployeeAndManager;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpDelete;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPut;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 
@@ -34,18 +31,18 @@ import jakarta.transaction.Transactional;
 public class FullTimeEmployeeController {
 	private final PersonQualificationService_HttpPost personQualificationService_HttpPost;
 	private final PersonQualificationService_HttpGet personQualificationService_HttpGet;
-	private final PersonQualificationService_HttpPut personQualificationService_HttpPut;
-	private final PersonQualificationService_HttpDelete personQualificationService_HttpDelete;
+	private final PersonQualificationService_HttpPut personQualificationService_HttpPut2;
+	private final PersonQualificationService_HttpDelete personQualificationService_HttpDelete2;
 	
 	public FullTimeEmployeeController(
 			PersonQualificationService_HttpPost personQualificationService_HttpPost,
 			PersonQualificationService_HttpGet personQualificationService_HttpGet,
-			PersonQualificationService_HttpPut personQualificationService_HttpPut,
-			PersonQualificationService_HttpDelete personQualificationService_HttpDelete) {
+			PersonQualificationService_HttpPut personQualificationService_HttpPut2,
+			PersonQualificationService_HttpDelete personQualificationService_HttpDelete2) {
 		this.personQualificationService_HttpPost = personQualificationService_HttpPost;
 		this.personQualificationService_HttpGet = personQualificationService_HttpGet;
-		this.personQualificationService_HttpPut = personQualificationService_HttpPut;
-		this.personQualificationService_HttpDelete = personQualificationService_HttpDelete;
+		this.personQualificationService_HttpPut2 = personQualificationService_HttpPut2;
+		this.personQualificationService_HttpDelete2 = personQualificationService_HttpDelete2;
 	}
 
 	@PostMapping
@@ -76,7 +73,7 @@ public class FullTimeEmployeeController {
 			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-		return personQualificationService_HttpPut.update(	
+		return personQualificationService_HttpPut2.update(
 					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeEmployeeRecordDto), 
 					uriComponentsBuilder,
 					FULL_TIME_EMPLOYEE);
@@ -87,7 +84,7 @@ public class FullTimeEmployeeController {
 	public ResponseEntity<?> exclude( 
 				@NonNull @PathVariable Long person_Id, 
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		return	personQualificationService_HttpDelete.exclude(	person_Id, 
+		return	personQualificationService_HttpDelete2.exclude(	person_Id,
 																uriComponentsBuilder,
 																FULL_TIME_EMPLOYEE);
 	}

@@ -3,10 +3,7 @@ package br.com.erprms.controllerAdapter.personController.personQualificationCont
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.InputDtoClass_Client;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.InputDtoRecord_Client;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpDelete;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpGet;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPost;
-import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.PersonQualificationService_HttpPut;
+import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;

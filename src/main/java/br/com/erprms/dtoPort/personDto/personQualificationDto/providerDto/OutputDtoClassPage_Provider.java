@@ -4,7 +4,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificatio
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,6 +15,6 @@ public class OutputDtoClassPage_Provider implements PersonQualificationOutputDto
     private String personName;
     private String cpfOrCnpj;
     private String observation;
-    private LocalDate initialDate;
-    private LocalDate finalDate;
+    private LocalDateTime initialDate;
+    private LocalDateTime finalDate;
 }

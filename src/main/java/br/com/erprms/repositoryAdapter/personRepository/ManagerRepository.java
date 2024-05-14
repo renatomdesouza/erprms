@@ -14,10 +14,13 @@ public interface ManagerRepository extends JpaRepository<ManagerPersonQualificat
 	boolean existsManagerEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
 	
 	ManagerPersonQualification findManagerEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
+
 	
 	@Query("SELECT m FROM ManagerPersonQualification m WHERE finalDate = null")
 	Page<ManagerPersonQualification>findManagerPersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+	Page<ManagerPersonQualification>findManagerPersonQualificationByIsActualIsTrue(Pageable qualificationPageable);
 	
 	ManagerPersonQualification findManagerPersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
+	ManagerPersonQualification findManagerPersonQualificationByIsActualIsTrueAndPerson(PersonEntity person);
 
 }

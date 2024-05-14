@@ -11,5 +11,9 @@ public interface AccountantRepository  extends JpaRepository<AccountantPersonQua
 
     AccountantPersonQualification findAccountantPersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
 
+    AccountantPersonQualification findAccountantPersonQualificationByIsActualIsTrueAndPerson(PersonEntity person);
+
     Page<AccountantPersonQualification> findAccountantPersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+
+    Page<AccountantPersonQualification> findAccountantPersonQualificationByIsActualIsTrue(Pageable qualificationPageable);
 }

@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ProviderRepository extends JpaRepository<ProviderPersonQualification, Long> {
 
     ProviderPersonQualification findProviderPersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
+    ProviderPersonQualification findProviderPersonQualificationByIsActualIsTrueAndPerson(PersonEntity person);
 
     Page<ProviderPersonQualification> findProviderPersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+    Page<ProviderPersonQualification> findProviderPersonQualificationByIsActualIsTrue(Pageable qualificationPageable);
 }

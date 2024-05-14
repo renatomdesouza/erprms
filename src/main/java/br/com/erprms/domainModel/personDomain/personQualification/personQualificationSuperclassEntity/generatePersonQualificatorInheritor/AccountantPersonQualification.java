@@ -5,6 +5,7 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import java.math.BigDecimal;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -20,4 +21,9 @@ import lombok.Setter;
 @Getter
 public class AccountantPersonQualification extends PersonQualificationSuperclassEntity{
     private BigDecimal monthlyCost;
+
+    public AccountantPersonQualification (AccountantPersonQualification oldQualification) {
+        super(oldQualification);
+        this.monthlyCost = oldQualification.getMonthlyCost();
+    }
 }

@@ -1,4 +1,4 @@
-package br.com.erprms.infrastructure.exceptionHandler;
+package br.com.erprms.infrastructure.exceptionManager;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
-public class ExceptionControl {
+public class Exception_Handler {
 
 	@ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> notFound_404() {

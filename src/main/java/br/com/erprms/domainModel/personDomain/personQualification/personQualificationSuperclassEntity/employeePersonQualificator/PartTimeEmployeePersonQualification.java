@@ -31,4 +31,10 @@ public class PartTimeEmployeePersonQualification
 	private SectorEnum sector;
 	
 	private BigDecimal hourlyRate;
+
+	public PartTimeEmployeePersonQualification (PartTimeEmployeePersonQualification oldQualification) {
+		super(oldQualification);
+		this.sector = oldQualification.getSector();
+		this.hourlyRate = oldQualification.getHourlyRate();
+	}
 }

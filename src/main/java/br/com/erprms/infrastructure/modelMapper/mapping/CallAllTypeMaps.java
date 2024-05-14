@@ -1,6 +1,7 @@
 package br.com.erprms.infrastructure.modelMapper.mapping;
 
 import br.com.erprms.infrastructure.modelMapper.mapping.personMap.*;
+import br.com.erprms.infrastructure.modelMapper.mapping.personMap.ResponsibleForLegalPersonTypeMap;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ public class CallAllTypeMaps {
 		new ClientTypeMaps(mapper);
 		new ProviderTypeMaps(mapper);
 		new ResponsibleForLegalPersonTypeMap(mapper);
+		new PersonQualificationTypeMap(mapper);
 	}
 	
 }

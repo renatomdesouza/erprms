@@ -1,4 +1,4 @@
-package br.com.erprms.infrastructure.exceptionHandler;
+package br.com.erprms.infrastructure.exceptionManager;
 
 public class ValidacaoException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

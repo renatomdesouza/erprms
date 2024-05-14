@@ -10,14 +10,18 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
 import java.net.URI;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ProviderPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ResponsibleForLegalPersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoClass_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
+import br.com.erprms.infrastructure.exceptionManager.ResponseStatus_Exception;
+import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
+import ch.qos.logback.core.net.SyslogOutputStream;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,23 +57,26 @@ public class PersonQualificationService_HttpPost {
 	private final ModelMapper mapper;
 	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
-	private final PersonQualification_ResponseStatusException exceptionService;
+	private final ResponseStatus_Exception exceptionService;
 	private final PersonQualification_CreateUri createUri;
 	private final StatusPerson statusPerson;
+	private final AuthenticationFacade authenticationFacade;
 	
 	public PersonQualificationService_HttpPost(
 			ModelMapper mapper, 
 			PersonRepository personRepository, 
 			PersonQualificationRepository personQualificationRepository,
-			PersonQualification_ResponseStatusException exceptionService,
+			ResponseStatus_Exception exceptionService,
 			PersonQualification_CreateUri createUri,
-			StatusPerson statusPerson) {
+			StatusPerson statusPerson,
+			AuthenticationFacade authenticationFacade) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
 		this.exceptionService = exceptionService;
 		this.createUri = createUri;
 		this.statusPerson = statusPerson;
+		this.authenticationFacade = authenticationFacade;
 	}
 	
 	@Transactional
@@ -120,6 +127,7 @@ public class PersonQualificationService_HttpPost {
 						specifiedQualification); break;}
 			case PROVIDER -> {
 				personQualification = mapper.map(personQualificationInputDto, ProviderPersonQualification.class);
+
 				personQualificationOutputDto = (U) new OutputDtoClass_Provider(
 						person,
 						(InputDtoClass_Provider) personQualificationInputDto,
@@ -130,16 +138,17 @@ public class PersonQualificationService_HttpPost {
 						person,
 						(InputDtoClass_ResponsibleForLegalPerson) personQualificationInputDto,
 						specifiedQualification); break;}
-			default -> { throw new ResponseStatusException( HttpStatus.INSUFFICIENT_STORAGE,
-															"personal qualifications not provided for in the role");}
 		}
 
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
 										specifiedQualification, 
 										person.getId());
 
+		personQualification.setIsActual(true);
 		personQualification.setPerson(person);
-		personQualification.setInitialDate(LocalDate.now());
+		personQualification.setInitialDate(LocalDateTime.now());
+		personQualification.setHttpVerb(HttpVerbEnum.POST);
+		personQualification.setLoginUser(authenticationFacade.getAuthentication());
 		
 		personQualificationRepository.save(personQualification);
 		statusPerson.setStatusOfUse(person);

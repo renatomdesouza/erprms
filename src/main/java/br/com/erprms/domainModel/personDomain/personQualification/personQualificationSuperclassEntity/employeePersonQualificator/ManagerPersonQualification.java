@@ -30,4 +30,10 @@ public class ManagerPersonQualification
 	private SectorEnum sector;
 	
 	private BigDecimal MonthlySalary;
+
+	public ManagerPersonQualification (ManagerPersonQualification oldQualification) {
+		super(oldQualification);
+		this.sector = oldQualification.getSector();
+		this.MonthlySalary = oldQualification.getMonthlySalary();
+	}
 }

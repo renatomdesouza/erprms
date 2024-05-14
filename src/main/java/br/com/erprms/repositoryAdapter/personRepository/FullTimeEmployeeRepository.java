@@ -12,8 +12,10 @@ public interface FullTimeEmployeeRepository  extends JpaRepository<FullTimeEmplo
 	boolean existsFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
 
 	FullTimeEmployeePersonQualification findFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
-	
+	FullTimeEmployeePersonQualification findFullTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(PersonEntity person);
+
 //	@Query("SELECT m FROM FullTimeEmployeePersonQualification m WHERE finalDate = null")
 	Page<FullTimeEmployeePersonQualification> findEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+	Page<FullTimeEmployeePersonQualification> findEmployeePersonQualificationByIsActualIsTrue(Pageable qualificationPageable);
 
 }

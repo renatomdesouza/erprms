@@ -1,7 +1,5 @@
 package br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto;
 
-import java.time.Period;
-
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
 import lombok.Getter;
 

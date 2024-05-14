@@ -11,5 +11,9 @@ public interface ClientRepository extends JpaRepository<ClientPersonQualificatio
 
     ClientPersonQualification findClientPersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
 
+    ClientPersonQualification findClientPersonQualificationByIsActualIsTrueAndPerson(PersonEntity person);
+
     Page<ClientPersonQualification> findClientPersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+
+    Page<ClientPersonQualification> findClientPersonQualificationByIsActualIsTrue(Pageable qualificationPageable);
 }

@@ -10,8 +10,10 @@ import br.com.erprms.domainModel.personDomain.personQualification.personQualific
 public interface PartTimeEmployeeRepository extends JpaRepository<PartTimeEmployeePersonQualification, Long> { 
 	
 	PartTimeEmployeePersonQualification findPartTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(PersonEntity person);
+	PartTimeEmployeePersonQualification findPartTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(PersonEntity person);
 	
 	Page<PartTimeEmployeePersonQualification> findPartTimeEmployeePersonQualificationByFinalDateIsNull(Pageable qualificationPageable);
+	Page<PartTimeEmployeePersonQualification> findPartTimeEmployeePersonQualificationByIsActualIsTrue(Pageable qualificationPageable);
 	
 //	Page<PartTimeEmployeePersonQualification> findPartTimeEmployeePersonQualificationByFinalDateIsNullAndSpecifiedQualification(Pageable qualificationPageable, String specifiedQualification);
 }

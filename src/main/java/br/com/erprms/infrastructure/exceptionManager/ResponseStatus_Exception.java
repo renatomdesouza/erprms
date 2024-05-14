@@ -1,4 +1,4 @@
-package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
+package br.com.erprms.infrastructure.exceptionManager;
 
 import java.util.Optional;
 
@@ -11,12 +11,21 @@ import br.com.erprms.domainModel.personDomain.personQualification.PersonQualific
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
+
+
 @Service
-public class PersonQualification_ResponseStatusException {
+public class ResponseStatus_Exception {
 	private PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	
-	public PersonQualification_ResponseStatusException(
+	public ResponseStatus_Exception(
 			PersonRepository personRepository, 
 			PersonQualificationRepository personQualificationRepository) {
 		this.personRepository = personRepository;
@@ -24,15 +33,28 @@ public class PersonQualification_ResponseStatusException {
 	}
 
 	public void mismatchExceptionBetweenQualifications(@NonNull Long id_Person, String specifiedQualification) {
-		String qualification = personQualificationRepository.activeIncompatibleQualification(id_Person, specifiedQualification);
-		
-		Optional<String> qualificationOptional = Optional.ofNullable(qualification);
-		
-		if(qualificationOptional.isPresent()) {
+		String mismatchQualification = null;
+
+		if(specifiedQualification.equals(MANAGER) ||
+			specifiedQualification.equals(FULL_TIME_EMPLOYEE) ||
+			specifiedQualification.equals(PART_TIME_EMPLOYEE))
+				mismatchQualification = personQualificationRepository.multipleQualificationIncompatibilities(id_Person);
+
+		if(specifiedQualification.equals(CLIENT) ||
+			specifiedQualification.equals(ACCOUNTANT) ||
+			specifiedQualification.equals(RESPONSIBLE_FOR_LEGAL_PERSON) ||
+			specifiedQualification.equals(PROVIDER))
+				mismatchQualification = personQualificationRepository.individualQualificationIncompatibilities(id_Person, specifiedQualification);
+
+		Optional<String> mismatchQualificationOptional = Optional.ofNullable(mismatchQualification);
+
+		if(mismatchQualificationOptional.isPresent()) {
 			throw new ResponseStatusException(
-					HttpStatus.INSUFFICIENT_STORAGE, 
-						"A person can only be a manager, a regular Employee or a Part-Time employee. " 
-						+	"Active qualification: " + qualificationOptional.get());
+					HttpStatus.INSUFFICIENT_STORAGE, """
+						A person can only be a Manager, a regular Employee or a Part-Time employee,
+						and still cannot have the same active qualification.
+						Active qualification:
+					""" + mismatchQualificationOptional.get());
 		}
 	}
 

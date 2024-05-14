@@ -1,176 +1,295 @@
 package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
 
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
-import java.net.URI;
-import java.util.Optional;
-
+import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
+import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.PartTimeEmployeePersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.AccountantPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ClientPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ProviderPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ResponsibleForLegalPersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.InputDtoClass_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.OutputDtoClass_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.InputDtoClass_Client;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputDtoClass_Client;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.OutputDtoClass_FullTimeEmployeeAndManager;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.InputDtoClass_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.OutputDtoClass_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoClass_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
+import br.com.erprms.infrastructure.exceptionManager.ResponseStatus_Exception;
+import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.*;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.PartTimeEmployeePersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoClass_FullTimeEmployeeAndManager;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.OutputDtoClass_FullTimeEmployeeAndManager;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.InputDtoClass_PartTimeEmployee;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.OutputDtoClass_PartTimeEmployee;
-import jakarta.transaction.Transactional;
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class PersonQualificationService_HttpPut {
-	private final ModelMapper mapper;
-	private final PersonRepository personRepository;
-	private final ManagerRepository managerRepository;
-	private final FullTimeEmployeeRepository fullTimeEmployeeRepository;
-	private final PartTimeEmployeeRepository partTimeEmployeeRepository;
-	private final AccountantRepository accountantRepository;
-	private final ClientRepository clientRepository;
-	private final ProviderRepository providerRepository;
-	private final ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository;
-	private final PersonQualification_ResponseStatusException exceptionService;
-	private final PersonQualification_CreateUri createUri;
-	
-	public PersonQualificationService_HttpPut(
-			ModelMapper mapper, 
-			PersonRepository personRepository, 
-			ManagerRepository managerRepository,
-			FullTimeEmployeeRepository fullTimeEmployeeRepository,
-			PartTimeEmployeeRepository partTimeEmployeeRepository,
-			ClientRepository clientRepository,
-			ProviderRepository providerRepository,
-			ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
-			AccountantRepository accountantRepository,
+    private final ModelMapper mapper;
+    private final PersonRepository personRepository;
+    private final PersonQualificationRepository personQualificationRepository;
+    private final ManagerRepository managerRepository;
+    private final FullTimeEmployeeRepository fullTimeEmployeeRepository;
+    private final PartTimeEmployeeRepository partTimeEmployeeRepository;
+    private final AccountantRepository accountantRepository;
+    private final ClientRepository clientRepository;
+    private final ProviderRepository providerRepository;
+    private final ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository;
+    private final ResponseStatus_Exception exceptionService;
+    private final PersonQualification_CreateUri createUri;
+    private final AuthenticationFacade authenticationFacade;
 
-			PersonQualification_ResponseStatusException exceptionService,
-			PersonQualification_CreateUri createUri) {
-		this.mapper = mapper;
-		this.personRepository = personRepository;
-		this.managerRepository = managerRepository;
-		this.fullTimeEmployeeRepository = fullTimeEmployeeRepository;
-		this.partTimeEmployeeRepository = partTimeEmployeeRepository;
-		this.accountantRepository = accountantRepository;
-		this.clientRepository = clientRepository;
-		this.providerRepository = providerRepository;
-		this.responsibleForLegalPersonRepository = responsibleForLegalPersonRepository;
-		this.exceptionService = exceptionService;
-		this.createUri = createUri;
-	}
-	
-	@Transactional
-	@SuppressWarnings("null")
-	public <T extends PersonQualificationInputDtoInterface> ResponseEntity<PersonQualificationOutputDtoInterface> update(
-				T inputDtoClass, 
-				UriComponentsBuilder uriComponentsBuilder,
-				String specifiedQualification) 
-			throws ResponseStatusException {
-		
-		exceptionService.exceptionForPersonWhoDoesNotExist(inputDtoClass.getPerson_Id());
+    public PersonQualificationService_HttpPut(
+            ModelMapper mapper,
+            PersonRepository personRepository,
+            PersonQualificationRepository personQualificationRepository,
+            ManagerRepository managerRepository,
+            FullTimeEmployeeRepository fullTimeEmployeeRepository,
+            PartTimeEmployeeRepository partTimeEmployeeRepository,
+            ClientRepository clientRepository,
+            ProviderRepository providerRepository,
+            ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
+            AccountantRepository accountantRepository,
+            AuthenticationFacade authenticationFacade,
+            ResponseStatus_Exception exceptionService,
+            PersonQualification_CreateUri createUri) {
+        this.mapper = mapper;
+        this.personRepository = personRepository;
+        this.personQualificationRepository = personQualificationRepository;
+        this.managerRepository = managerRepository;
+        this.fullTimeEmployeeRepository = fullTimeEmployeeRepository;
+        this.partTimeEmployeeRepository = partTimeEmployeeRepository;
+        this.accountantRepository = accountantRepository;
+        this.clientRepository = clientRepository;
+        this.providerRepository = providerRepository;
+        this.responsibleForLegalPersonRepository = responsibleForLegalPersonRepository;
+        this.authenticationFacade = authenticationFacade;
+        this.exceptionService = exceptionService;
+        this.createUri = createUri;
+    }
 
-		var person = personRepository.getReferenceById(inputDtoClass.getPerson_Id());
-		
-		PersonQualificationSuperclassEntity personQualification = null;  
-		switch (specifiedQualification) {
-			case MANAGER -> { personQualification = managerRepository 
-											.findManagerPersonQualificationByFinalDateIsNullAndPerson(person); break; }
-			case FULL_TIME_EMPLOYEE -> { personQualification = fullTimeEmployeeRepository
-											.findFullTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(person); break; }
-			case PART_TIME_EMPLOYEE -> { personQualification = partTimeEmployeeRepository
-											.findPartTimeEmployeePersonQualificationByFinalDateIsNullAndPerson(person); break; }
-			case ACCOUNTANT -> { personQualification = accountantRepository
-											.findAccountantPersonQualificationByFinalDateIsNullAndPerson(person); break; }
-			case CLIENT -> { personQualification = clientRepository
-					.findClientPersonQualificationByFinalDateIsNullAndPerson(person); break; }
-			case PROVIDER -> { personQualification = providerRepository
-					.findProviderPersonQualificationByFinalDateIsNullAndPerson(person); break; }
-			case RESPONSIBLE_FOR_LEGAL_PERSON -> { personQualification = responsibleForLegalPersonRepository
-					.findResponsibleForLegalPersonQualificationByFinalDateIsNullAndPerson(person); break; }
-		}
-	
-		exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(personQualification));
+    @Transactional
+    @SuppressWarnings("null")
+    public <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface> ResponseEntity<PersonQualificationOutputDtoInterface> update(
+            T personQualificationInputDto,
+            UriComponentsBuilder uriComponentsBuilder,
+            String specifiedQualification)
+            throws ResponseStatusException {
 
-		mapper.map(inputDtoClass, personQualification);
-		
-		PersonQualificationOutputDtoInterface personQualificationOutputDto = null;
-		switch (specifiedQualification) {
-			case MANAGER -> { 
-				managerRepository.save((ManagerPersonQualification) personQualification);
-				personQualificationOutputDto = 
-						new OutputDtoClass_FullTimeEmployeeAndManager( 	person, 
-																		(InputDtoClass_FullTimeEmployeeAndManager) inputDtoClass, 
-																		specifiedQualification); break; }
-			case FULL_TIME_EMPLOYEE -> { 
-				fullTimeEmployeeRepository.save((FullTimeEmployeePersonQualification) personQualification);
-				personQualificationOutputDto = 
-						new OutputDtoClass_FullTimeEmployeeAndManager(	person, 
-																		(InputDtoClass_FullTimeEmployeeAndManager) inputDtoClass, 
-																		specifiedQualification); break; }
-			case PART_TIME_EMPLOYEE -> { 
-				partTimeEmployeeRepository.save((PartTimeEmployeePersonQualification) personQualification); 
-				personQualificationOutputDto = 
-						new OutputDtoClass_PartTimeEmployee(	person, 
-																(InputDtoClass_PartTimeEmployee) inputDtoClass, 
-																specifiedQualification); break; }
-			case ACCOUNTANT -> {
-				accountantRepository.save((AccountantPersonQualification) personQualification);
-				personQualificationOutputDto =
-						new OutputDtoClass_Accountant(	person,
-														(InputDtoClass_Accountant) inputDtoClass,
-														specifiedQualification); break; }
-			case CLIENT -> {
-				clientRepository.save((ClientPersonQualification) personQualification);
-				personQualificationOutputDto =
-						new OutputDtoClass_Client(	person,
-								(InputDtoClass_Client) inputDtoClass,
-								specifiedQualification); break; }
-			case PROVIDER -> {
-				providerRepository.save((ProviderPersonQualification) personQualification);
-				personQualificationOutputDto =
-						new OutputDtoClass_Provider(	person,
-								(InputDtoClass_Provider) inputDtoClass,
-								specifiedQualification); break; }
-			case RESPONSIBLE_FOR_LEGAL_PERSON -> {
-				responsibleForLegalPersonRepository.save((ResponsibleForLegalPersonQualification) personQualification);
-				personQualificationOutputDto =
-						new OutputDtoClass_ResponsibleForLegalPerson(	person,
-								(InputDtoClass_ResponsibleForLegalPerson) inputDtoClass,
-								specifiedQualification); break; }
-		}
-		
-		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
-										specifiedQualification, 
-										person.getId());
-		
-		var dtoRecord_ServicePersonQualification = new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
-		
-		return ResponseEntity
-				.created(dtoRecord_ServicePersonQualification.uri())
-				.body(dtoRecord_ServicePersonQualification.dtoOfPerson());
-	}
+        var person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id());
+
+        exceptionService.exceptionForPersonWhoDoesNotExist(personQualificationInputDto.getPerson_Id());
+
+        PersonQualificationOutputDtoInterface personQualificationOutputDto = null;
+        switch (specifiedQualification) {
+            case MANAGER -> {personQualificationOutputDto =
+                case_MANAGER(personQualificationInputDto, person, specifiedQualification); break;}
+            case FULL_TIME_EMPLOYEE -> { personQualificationOutputDto =
+                case_FULL_TIME_EMPLOYEE(personQualificationInputDto, person, specifiedQualification); break;}
+            case PART_TIME_EMPLOYEE -> { personQualificationOutputDto =
+                case_PART_TIME_EMPLOYEE(personQualificationInputDto, person, specifiedQualification); break;}
+            case ACCOUNTANT -> { personQualificationOutputDto =
+                case_ACCOUNTANT(personQualificationInputDto, person, specifiedQualification); break;}
+            case CLIENT -> { personQualificationOutputDto =
+                case_CLIENT(personQualificationInputDto, person, specifiedQualification); break;}
+            case PROVIDER -> { personQualificationOutputDto =
+                case_PROVIDER(personQualificationInputDto, person, specifiedQualification); break;}
+            case RESPONSIBLE_FOR_LEGAL_PERSON -> {
+                System.out.println(" =======> ****************************************** " );
+                personQualificationOutputDto =
+                case_RESPONSIBLE_FOR_LEGAL_PERSON(personQualificationInputDto, person, specifiedQualification); break;}
+        }
+
+        URI uri = createUri.uriCreator(	uriComponentsBuilder,
+                specifiedQualification,
+                person.getId());
+
+        var dtoRecord_ServicePersonQualification =
+                new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
+
+        return ResponseEntity
+                .created(dtoRecord_ServicePersonQualification.uri())
+                .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
+    PersonQualificationOutputDtoInterface
+    case_MANAGER(T personQualificationInputDto,
+                            PersonEntity person,
+                            String specifiedQualification ) throws ResponseStatusException {
+        var oldPersonQualification = managerRepository.findManagerPersonQualificationByIsActualIsTrueAndPerson(person);
+        exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(oldPersonQualification));
+
+        var newPersonQualification = new ManagerPersonQualification(oldPersonQualification);
+        mapper.map(personQualificationInputDto, newPersonQualification);
+        entitiesEqualization(oldPersonQualification, newPersonQualification);
+        entitiesSave(oldPersonQualification, newPersonQualification);
+
+        return (U) new OutputDtoClass_FullTimeEmployeeAndManager(
+                        person,
+                        (InputDtoClass_FullTimeEmployeeAndManager) personQualificationInputDto,
+                        specifiedQualification);
+    }
+
+    @SuppressWarnings("unchecked")
+	private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
+    PersonQualificationOutputDtoInterface
+    case_FULL_TIME_EMPLOYEE(T personQualificationInputDto,
+                            PersonEntity person,
+                            String specifiedQualification ) throws ResponseStatusException {
+        var oldPersonQualification = fullTimeEmployeeRepository.findFullTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(person);
+        exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(oldPersonQualification));
+
+        var newPersonQualification = new FullTimeEmployeePersonQualification(oldPersonQualification);
+        mapper.map(personQualificationInputDto, newPersonQualification);
+        entitiesEqualization(oldPersonQualification, newPersonQualification);
+        entitiesSave(oldPersonQualification, newPersonQualification);
+
+        return (U) new OutputDtoClass_FullTimeEmployeeAndManager(
+                person,
+                (InputDtoClass_FullTimeEmployeeAndManager) personQualificationInputDto,
+                specifiedQualification);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
+    PersonQualificationOutputDtoInterface
+    case_ACCOUNTANT(T personQualificationInputDto,
+                            PersonEntity person,
+                            String specifiedQualification ) throws ResponseStatusException {
+        var oldPersonQualification = accountantRepository.findAccountantPersonQualificationByIsActualIsTrueAndPerson(person);
+        exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(oldPersonQualification));
+
+        var newPersonQualification = new AccountantPersonQualification(oldPersonQualification);
+        mapper.map(personQualificationInputDto, newPersonQualification);
+        entitiesEqualization(oldPersonQualification, newPersonQualification);
+        entitiesSave(oldPersonQualification, newPersonQualification);
+
+        return (U) new OutputDtoClass_Accountant(
+                        person,
+                        (InputDtoClass_Accountant) personQualificationInputDto,
+                        specifiedQualification);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
+    PersonQualificationOutputDtoInterface
+    case_PART_TIME_EMPLOYEE(T personQualificationInputDto,
+                            PersonEntity person,
+                            String specifiedQualification ) throws ResponseStatusException {
+        var oldPersonQualification = partTimeEmployeeRepository.findPartTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(person);
+        exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(oldPersonQualification));
+
+        var newPersonQualification = new PartTimeEmployeePersonQualification(oldPersonQualification);
+        mapper.map(personQualificationInputDto, newPersonQualification);
+        entitiesEqualization(oldPersonQualification, newPersonQualification);
+        entitiesSave(oldPersonQualification, newPersonQualification);
+
+        return (U) new OutputDtoClass_PartTimeEmployee(
+                person,
+                (InputDtoClass_PartTimeEmployee) personQualificationInputDto,
+                specifiedQualification);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
+    PersonQualificationOutputDtoInterface
+    case_CLIENT(T personQualificationInputDto,
+                            PersonEntity person,
+                            String specifiedQualification ) throws ResponseStatusException {
+        var oldPersonQualification = clientRepository.findClientPersonQualificationByIsActualIsTrueAndPerson(person);
+        exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(oldPersonQualification));
+
+        var newPersonQualification = new ClientPersonQualification(oldPersonQualification);
+        mapper.map(personQualificationInputDto, newPersonQualification);
+        entitiesEqualization(oldPersonQualification, newPersonQualification);
+        entitiesSave(oldPersonQualification, newPersonQualification);
+
+        return (U) new OutputDtoClass_Client(
+                person,
+                (InputDtoClass_Client) personQualificationInputDto,
+                specifiedQualification);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
+    PersonQualificationOutputDtoInterface
+    case_PROVIDER(T personQualificationInputDto,
+                PersonEntity person,
+                String specifiedQualification ) throws ResponseStatusException {
+        var oldPersonQualification = providerRepository.findProviderPersonQualificationByIsActualIsTrueAndPerson(person);
+        exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(oldPersonQualification));
+
+        var newPersonQualification = new ProviderPersonQualification(oldPersonQualification);
+        mapper.map(personQualificationInputDto, newPersonQualification);
+        entitiesEqualization(oldPersonQualification, newPersonQualification);
+        entitiesSave(oldPersonQualification, newPersonQualification);
+
+        return (U) new OutputDtoClass_Provider(
+                person,
+                (InputDtoClass_Provider) personQualificationInputDto,
+                specifiedQualification);
+    }
+
+@SuppressWarnings("unchecked")
+private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
+PersonQualificationOutputDtoInterface
+case_RESPONSIBLE_FOR_LEGAL_PERSON(T personQualificationInputDto,
+              PersonEntity person,
+              String specifiedQualification ) throws ResponseStatusException {
+
+    var oldPersonQualification = responsibleForLegalPersonRepository.findResponsibleForLegalPersonQualificationByIsActualIsTrueAndPerson(person);
+    exceptionService.exceptionForUnqualifiedPerson(Optional.ofNullable(oldPersonQualification));
+
+    var newPersonQualification = new ResponsibleForLegalPersonQualification(oldPersonQualification);
+    mapper.map(personQualificationInputDto, newPersonQualification);
+    entitiesEqualization(oldPersonQualification, newPersonQualification);
+    entitiesSave(oldPersonQualification, newPersonQualification);
+
+    return (U) new OutputDtoClass_ResponsibleForLegalPerson(
+            person,
+            (InputDtoClass_ResponsibleForLegalPerson) personQualificationInputDto,
+            specifiedQualification);
+}
+
+    private void entitiesEqualization(PersonQualificationSuperclassEntity oldPersonQualification, PersonQualificationSuperclassEntity newPersonQualification) {
+        oldPersonQualification.setIsActual(false);
+        newPersonQualification.setIsActual(true);
+        newPersonQualification.setInitialDate(LocalDateTime.now());
+        newPersonQualification.setHttpVerb(HttpVerbEnum.PUT);
+        newPersonQualification.setLoginUser(authenticationFacade.getAuthentication());
+    }
+
+    private void entitiesSave(PersonQualificationSuperclassEntity oldPersonQualification, PersonQualificationSuperclassEntity newPersonQualification) {
+        personQualificationRepository.save(oldPersonQualification);
+        personQualificationRepository.save(newPersonQualification);
+    }
+
 }

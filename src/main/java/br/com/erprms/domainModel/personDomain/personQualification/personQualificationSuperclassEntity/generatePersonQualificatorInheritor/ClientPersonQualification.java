@@ -18,4 +18,9 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 @Getter
 public class ClientPersonQualification extends PersonQualificationSuperclassEntity{
     private Integer creditTerms;
+
+    public ClientPersonQualification (ClientPersonQualification oldQualification) {
+        super(oldQualification);
+        this.creditTerms = oldQualification.getCreditTerms();
+    }
 }

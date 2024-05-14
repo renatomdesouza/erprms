@@ -1,7 +1,7 @@
 package br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
@@ -20,6 +20,6 @@ public class OutputDtoClassPage_PartTimeEmployee implements PersonQualificationO
 	private BigDecimal hourlyRate;
 	private String observation;
 	private String professionalRegistry;
-	private LocalDate initialDate;
-	private LocalDate finalDate;
+	private LocalDateTime initialDate;
+	private LocalDateTime finalDate;
 }

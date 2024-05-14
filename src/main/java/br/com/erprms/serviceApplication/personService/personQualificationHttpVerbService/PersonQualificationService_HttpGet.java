@@ -71,31 +71,31 @@ public class PersonQualificationService_HttpGet {
 		switch (specifiedQualification) {
 			case MANAGER -> {
 				outputDtoClassPage = managerRepository
-						.findManagerPersonQualificationByFinalDateIsNull(qualificationPageable)
+						.findManagerPersonQualificationByIsActualIsTrue(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_FullTimeEmployeeAndManager.class)); break; }
 			case FULL_TIME_EMPLOYEE -> {
 				outputDtoClassPage = fullTimeEmployeeRepository
-						.findEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
+						.findEmployeePersonQualificationByIsActualIsTrue(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_FullTimeEmployeeAndManager.class)); break; }
 			case PART_TIME_EMPLOYEE -> {
 				outputDtoClassPage = partTimeEmployeeRepository
-						.findPartTimeEmployeePersonQualificationByFinalDateIsNull(qualificationPageable)
+						.findPartTimeEmployeePersonQualificationByIsActualIsTrue(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_PartTimeEmployee.class)); break; }
 			case ACCOUNTANT -> {
 				outputDtoClassPage = accountantRepository
-						.findAccountantPersonQualificationByFinalDateIsNull(qualificationPageable)
+						.findAccountantPersonQualificationByIsActualIsTrue(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_Accountant.class)); break; }
 			case CLIENT -> {
 				outputDtoClassPage = clientRepository
-						.findClientPersonQualificationByFinalDateIsNull(qualificationPageable)
+						.findClientPersonQualificationByIsActualIsTrue(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_Client.class)); break; }
 			case PROVIDER -> {
 				outputDtoClassPage = providerRepository
-						.findProviderPersonQualificationByFinalDateIsNull(qualificationPageable)
+						.findProviderPersonQualificationByIsActualIsTrue(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_Provider.class)); break; }
 			case RESPONSIBLE_FOR_LEGAL_PERSON -> {
 				outputDtoClassPage = responsibleForLegalPersonRepository
-						.findResponsibleForLegalPersonQualificationByFinalDateIsNull(qualificationPageable)
+						.findResponsibleForLegalPersonQualificationByIsActualIsTrue(qualificationPageable)
 						.map(p -> mapper.map(p, OutputDtoClassPage_ResponsibleForLegalPerson.class)); break; }
 		};
 
