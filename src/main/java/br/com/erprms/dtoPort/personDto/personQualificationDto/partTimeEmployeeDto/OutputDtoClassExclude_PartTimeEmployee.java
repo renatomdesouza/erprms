@@ -10,7 +10,7 @@ import lombok.Setter;
 public class OutputDtoClassExclude_PartTimeEmployee implements PersonQualificationOutputDtoInterface{
 	private String specifiedQualification;
 	private String personName;
-	private String cpfOrCnpj;
+	private Long cpfOrCnpj;
 	private String observation;
 	
 	public OutputDtoClassExclude_PartTimeEmployee(	

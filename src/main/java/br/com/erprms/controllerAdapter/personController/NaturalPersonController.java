@@ -1,5 +1,6 @@
 package br.com.erprms.controllerAdapter.personController;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -50,7 +51,7 @@ public class NaturalPersonController {
 	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> register(
-			@RequestBody DtoRecord_NaturalPersonOfRegistry naturalPersonOfRecord, 
+			@RequestBody @Valid DtoRecord_NaturalPersonOfRegistry naturalPersonOfRecord,
 			UriComponentsBuilder uriComponentsBuilder) { 
 		
 		var dtoRecordToNaturalPerson = personPost.registerService(naturalPersonOfRecord, uriComponentsBuilder);

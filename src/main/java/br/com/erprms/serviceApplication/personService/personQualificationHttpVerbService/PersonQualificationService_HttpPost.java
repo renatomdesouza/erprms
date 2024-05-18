@@ -19,7 +19,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputD
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
-import br.com.erprms.infrastructure.exceptionManager.ResponseStatus_Exception;
+import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import org.modelmapper.ModelMapper;
@@ -57,7 +57,7 @@ public class PersonQualificationService_HttpPost {
 	private final ModelMapper mapper;
 	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
-	private final ResponseStatus_Exception exceptionService;
+	private final PersonQualificationExceptions exceptionService;
 	private final PersonQualification_CreateUri createUri;
 	private final StatusPerson statusPerson;
 	private final AuthenticationFacade authenticationFacade;
@@ -66,7 +66,7 @@ public class PersonQualificationService_HttpPost {
 			ModelMapper mapper, 
 			PersonRepository personRepository, 
 			PersonQualificationRepository personQualificationRepository,
-			ResponseStatus_Exception exceptionService,
+			PersonQualificationExceptions exceptionService,
 			PersonQualification_CreateUri createUri,
 			StatusPerson statusPerson,
 			AuthenticationFacade authenticationFacade) {

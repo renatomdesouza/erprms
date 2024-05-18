@@ -13,7 +13,7 @@ import lombok.Setter;
 public class OutputDtoClass_FullTimeEmployeeAndManager implements PersonQualificationOutputDtoInterface {
 	private String specifiedQualification;
 	private String personName;
-	private String cpfOrCnpj;
+	private Long cpfOrCnpj;
 	private String observation;
 	private String professionalRegistry;
 	

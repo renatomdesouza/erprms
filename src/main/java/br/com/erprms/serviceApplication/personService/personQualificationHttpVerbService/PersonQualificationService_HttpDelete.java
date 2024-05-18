@@ -18,7 +18,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManager
 import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.OutputDtoClassExclude_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputExcludeDto_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputExcludeDto_ResponsibleForLegalPerson;
-import br.com.erprms.infrastructure.exceptionManager.ResponseStatus_Exception;
+import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.*;
 import br.com.erprms.serviceApplication.personService.StatusPerson;
@@ -47,7 +47,7 @@ public class PersonQualificationService_HttpDelete {
     private final ProviderRepository providerRepository;
     private final ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository;
     private final PersonQualificationRepository personQualificationRepository;
-    private final ResponseStatus_Exception exceptionService;
+    private final PersonQualificationExceptions exceptionService;
     private final PersonQualification_CreateUri createUri;
     private final StatusPerson statusPersonOfQualification;
     private final AuthenticationFacade authenticationFacade;
@@ -63,7 +63,7 @@ public class PersonQualificationService_HttpDelete {
             ProviderRepository providerRepository,
             ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
             AccountantRepository accountantRepository,
-            ResponseStatus_Exception exceptionService,
+            PersonQualificationExceptions exceptionService,
             PersonQualification_CreateUri createUri,
             StatusPerson statusPersonOfQualification,
             AuthenticationFacade authenticationFacade) {

@@ -1,4 +1,4 @@
-package br.com.erprms.infrastructure.exceptionManager;
+package br.com.erprms.infrastructure.exceptionManager.responseStatusException;
 
 import java.util.Optional;
 
@@ -21,11 +21,11 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 
 
 @Service
-public class ResponseStatus_Exception {
+public class PersonQualificationExceptions {
 	private PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	
-	public ResponseStatus_Exception(
+	public PersonQualificationExceptions(
 			PersonRepository personRepository, 
 			PersonQualificationRepository personQualificationRepository) {
 		this.personRepository = personRepository;

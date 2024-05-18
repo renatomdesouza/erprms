@@ -1,5 +1,9 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
+import br.com.erprms.domainModel.personDomain.PersonsManagement_Entity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
+import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
+import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -14,16 +18,24 @@ import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonO
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 public class PersonService_HttpPut <T extends PersonListingDto> {
 	private PersonRepository personRepository;
+	private PersonsManagementRepository personsManagementRepository;
 	private ModelMapper mapper;
+	private final AuthenticationFacade authenticationFacade;
 
 	public PersonService_HttpPut(
-			PersonRepository personRepository, 
-			ModelMapper mapper) {
+			PersonRepository personRepository,
+			ModelMapper mapper,
+			PersonsManagementRepository personsManagementRepository,
+			AuthenticationFacade authenticationFacade) {
 		this.personRepository = personRepository;
+		this.personsManagementRepository = personsManagementRepository;
 		this.mapper = mapper;
+		this.authenticationFacade = authenticationFacade;
 	}
 	
 	@Transactional
@@ -36,9 +48,11 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 		var person = personRepository.getReferenceById(id_person);
 		
 		updatePerson(person, personDtoOfRecord);
-		
+		var personManagement = setPersonsManagement(person);
+
 		personRepository.save(person);
-				
+		personsManagementRepository.save(personManagement);
+
 		var uri = new PersonService_CreateUri().uriBuild(
 							uriComponentsBuilder, 
 							person.getId(), 
@@ -50,7 +64,17 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);
 		
 	}
-	
+
+	private PersonsManagement_Entity setPersonsManagement(PersonEntity person) {
+		var personManagement = new PersonsManagement_Entity();
+		personManagement.setPerson(person);
+		personManagement.setHttpVerb(HttpVerbEnum.PUT);
+		personManagement.setInitialDate(LocalDateTime.now());
+		personManagement.setLoginUser(authenticationFacade.getAuthentication());
+
+		return personManagement;
+	}
+
 	@SuppressWarnings("hiding")
 	private <T> void updatePerson(PersonEntity person, T personDtoOfRecord) {
 

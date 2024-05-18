@@ -4,8 +4,8 @@ import java.util.Set;
 
 import br.com.erprms.domainModel.personDomain.personComponent.AddressInterface;
 import br.com.erprms.domainModel.personDomain.personComponent.LegalPersonInterface;
-import br.com.erprms.domainModel.personDomain.personComponent.PepleCommonDataInterface;
 import br.com.erprms.domainModel.personDomain.personComponent.NaturalPersonInterface;
+import br.com.erprms.domainModel.personDomain.personComponent.PepleCommonDataInterface;
 import br.com.erprms.domainModel.personDomain.personComponent.foneAndAdditionalAddress.AdditionalAddressEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.foneAndAdditionalAddress.FoneEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
@@ -24,10 +24,14 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.validation.annotation.Validated;
 
 @Entity
 @Table(name = "person")
@@ -35,6 +39,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Validated
 public  class PersonEntity implements 
 									PepleCommonDataInterface, 
 									NaturalPersonInterface, 
@@ -44,7 +49,7 @@ public  class PersonEntity implements
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
 	private Set<PersonQualificationSuperclassEntity> personQualification;
 	
@@ -60,10 +65,10 @@ public  class PersonEntity implements
  
 	@Column(name = "nickname")
 	private String nickname;
-	 
-	@Column(name = "cpf_or_Cnpj")
- 	private String cpfOrCnpj;
-	 
+
+	@Column(name = "cpf_or_Cnpj", unique = true)
+	private Long cpfOrCnpj;
+
 	@Column(name = "email")
  	private String email;
 	 
@@ -120,5 +125,6 @@ public  class PersonEntity implements
 		inverseJoinColumns = 
 		{ @JoinColumn(name = "additionalAddressEntityId", referencedColumnName = "id") })
 	private AdditionalAddressEntity additionalAddressEntity;
+
 }
 

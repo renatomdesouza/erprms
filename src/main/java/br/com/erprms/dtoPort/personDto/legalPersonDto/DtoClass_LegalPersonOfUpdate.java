@@ -7,7 +7,7 @@ public class DtoClass_LegalPersonOfUpdate {
 	final private Long id;
 	final private String fullNameOrEntityName;
 	final private String nickname;
-	final private String cnpj;
+	final private Long cnpj;
 	final private String email;
 	final private String site;
 	final	private	String	inscricEstad;
@@ -23,7 +23,7 @@ public class DtoClass_LegalPersonOfUpdate {
     	this.id	= legalPerson.id();
     	this.fullNameOrEntityName = legalPerson.fullNameOrEntityName();
     	this.nickname = legalPerson. nickname();
-    	this.cnpj = legalPerson. cnpj();
+    	this.cnpj = legalPerson.cnpj();
     	this.email = legalPerson.email();
     	this.site = legalPerson.site();
     	this.inscricEstad = legalPerson.inscricEstad();

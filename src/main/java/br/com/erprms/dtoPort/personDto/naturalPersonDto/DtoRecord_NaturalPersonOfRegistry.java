@@ -1,23 +1,54 @@
 package br.com.erprms.dtoPort.personDto.naturalPersonDto;
 
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import lombok.NonNull;
 
 public record DtoRecord_NaturalPersonOfRegistry(
+		@NonNull
 		String fullNameOrEntityName,
+
 		String nickname,
-	    String cpf,
-	    String email,
-	    String site,
-	    String dateBorn,
-	    String maritalStatus,
-	    String cityBorn,
-	    String countryBorn,
-	    SexEnum sex,
-	    String street,
-	    String number,
+
+		@Pattern(regexp = "^\\d{11}$")
+		Long cpf,
+
+		@Email @NonNull
+		String email,
+
+		String site,
+
+		@NonNull
+		String dateBorn,
+
+		@NonNull
+		String maritalStatus,
+
+		@NonNull
+		String cityBorn,
+
+		@NonNull
+		String countryBorn,
+
+		@NonNull
+		SexEnum sex,
+
+		@NonNull
+		String street,
+
+		@NonNull
+		String number,
+
+		@NonNull
 		String neighborhood,
+
 		String complement,
-	    String postalCode,
-	    String cityAndStateOrProvince
+
+		@NonNull
+		String postalCode,
+
+		@NonNull
+		String cityAndStateOrProvince
 	) {
 }

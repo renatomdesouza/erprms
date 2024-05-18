@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 
 public interface PersonRepository extends JpaRepository<PersonEntity, Long>{
@@ -18,4 +21,13 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long>{
 	
 	PersonEntity findByIdAndStatusPersonEnum(Long id, StatusPersonalUseEnum statusPersonEnum);
 
+	
+	@Query(	value = """
+					SELECT p.email
+						FROM person p
+							WHERE
+								p.email = :email
+					LIMIT 1
+			""", nativeQuery = true)
+	String findByEmail(String email);
 }

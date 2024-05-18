@@ -7,8 +7,8 @@ public interface PersonQualificationOutputDtoInterface {
 	void setPersonName(String personName);
 	String getPersonName();
 
-	void setCpfOrCnpj(String cpfOrCnpj);
-	String getCpfOrCnpj();
+//	void setCpfOrCnpj(String cpfOrCnpj);
+//	String getCpfOrCnpj();
 
 	void setObservation(String observation);
 	String getObservation();

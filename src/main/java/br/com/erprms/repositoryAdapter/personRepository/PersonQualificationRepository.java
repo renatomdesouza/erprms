@@ -39,13 +39,13 @@ public interface PersonQualificationRepository extends JpaRepository<PersonQuali
 						p.person_id = :person_id
 						AND p.final_date IS NULL
 						AND p.is_actual IS TRUE
-						AND ( 
+						AND (
 								p.specified_qualification = 'manager'
 								OR
 								p.specified_qualification = 'full-time-employee'
 								OR
 								p.specified_qualification = 'part-time-employee'
-							) 
+							)
 				LIMIT 1
 			""", nativeQuery = true)
 	String multipleQualificationIncompatibilities(Long person_id);

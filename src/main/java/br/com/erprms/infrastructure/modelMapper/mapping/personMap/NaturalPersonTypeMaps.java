@@ -77,7 +77,7 @@ public class NaturalPersonTypeMaps {
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getId, PersonEntity::setId)
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getFullNameOrEntityName, PersonEntity::setFullNameOrEntityName)
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getNickname, PersonEntity::setNickname)
-			.addMapping(DtoClass_NaturalPersonOfUpdate::getCpf, PersonEntity::setCpfOrCnpj)
+			.addMapping(DtoClass_NaturalPersonOfUpdate::getCpfOrCnpj, PersonEntity::setCpfOrCnpj)
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getEmail, PersonEntity::setEmail)
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getSite, PersonEntity::setSite)
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getDateBorn, PersonEntity::setDateBorn)

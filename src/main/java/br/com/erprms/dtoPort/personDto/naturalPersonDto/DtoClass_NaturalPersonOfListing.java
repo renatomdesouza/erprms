@@ -11,7 +11,7 @@ public class DtoClass_NaturalPersonOfListing implements PersonListingDto {
 	public String fullNameOrEntityName;
 	public String nickname;
 	public StatusPersonalUseEnum statusPersonEnum;
-	public String CpfOrCnpj;
+	public Long CpfOrCnpj;
 	public String email;
 	public String site;
 	public String dateBorn;

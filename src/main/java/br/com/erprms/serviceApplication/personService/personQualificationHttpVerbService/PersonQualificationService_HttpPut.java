@@ -33,7 +33,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputD
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
-import br.com.erprms.infrastructure.exceptionManager.ResponseStatus_Exception;
+import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.*;
 import jakarta.transaction.Transactional;
@@ -60,7 +60,7 @@ public class PersonQualificationService_HttpPut {
     private final ClientRepository clientRepository;
     private final ProviderRepository providerRepository;
     private final ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository;
-    private final ResponseStatus_Exception exceptionService;
+    private final PersonQualificationExceptions exceptionService;
     private final PersonQualification_CreateUri createUri;
     private final AuthenticationFacade authenticationFacade;
 
@@ -76,7 +76,7 @@ public class PersonQualificationService_HttpPut {
             ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
             AccountantRepository accountantRepository,
             AuthenticationFacade authenticationFacade,
-            ResponseStatus_Exception exceptionService,
+            PersonQualificationExceptions exceptionService,
             PersonQualification_CreateUri createUri) {
         this.mapper = mapper;
         this.personRepository = personRepository;

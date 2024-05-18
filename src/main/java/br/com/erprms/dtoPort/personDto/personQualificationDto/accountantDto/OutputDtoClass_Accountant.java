@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class OutputDtoClass_Accountant implements PersonQualificationOutputDtoInterface {
     private String specifiedQualification;
     private String personName;
-    private String cpfOrCnpj;
+    private Long cpfOrCnpj;
     private String observation;
     private String professionalRegistry;
 

@@ -15,8 +15,8 @@ public interface PepleCommonDataInterface {
 	String getNickname();
 	void setNickname(String string);
 	
- 	String getCpfOrCnpj();
- 	void setCpfOrCnpj(String string);
+// 	String getCpfOrCnpj();
+// 	void setCpfOrCnpj(String string);
  	
  	String getEmail();
  	void setEmail(String string);

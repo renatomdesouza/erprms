@@ -1,7 +1,11 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
+import br.com.erprms.domainModel.personDomain.PersonsManagement_Entity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
+import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
+import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
+import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,16 +17,27 @@ import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 public class PersonService_HttpDelete <T extends PersonListingDto> {
 	private PersonRepository personRepository;
+	private PersonsManagementRepository personsManagementRepository;
 	private ModelMapper mapper;
+	private final AuthenticationFacade authenticationFacade;
+	private final PersonExceptions personException;
 
 	public PersonService_HttpDelete(
-			PersonRepository personRepository, 
-			ModelMapper mapper) {
+			PersonRepository personRepository,
+			PersonsManagementRepository personsManagementRepository,
+			ModelMapper mapper,
+			AuthenticationFacade authenticationFacade,
+			PersonExceptions personException) {
 		this.personRepository = personRepository;
+		this.personsManagementRepository = personsManagementRepository;
 		this.mapper = mapper;
+		this.authenticationFacade = authenticationFacade;
+		this.personException = personException;
 	}	
 
 	@Transactional
@@ -34,16 +49,15 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 		var person = new PersonEntity();
 		
 		person = personRepository.getReferenceById(id);
-		
-		if ( person.getStatusPersonEnum() == StatusPersonalUseEnum.USED ) 
-			throw new ResponseStatusException(
-					HttpStatus.INSUFFICIENT_STORAGE, 
-					"This person cannot be deleted because there is a qualification registered for them") ; 
+		var statusPerson = person.getStatusPersonEnum();
+		personException.personWithStatusInUse(statusPerson);
 
 		person.setStatusPersonEnum(StatusPersonalUseEnum.DELETED);
-		
+		var personManagement = getPersonsManagement(person);
+
 		personRepository.save(person);
-		
+		personsManagementRepository.save(personManagement);
+
 		var uri = new PersonService_CreateUri().uriBuild(
 						uriComponentsBuilder, 
 						person.getId(), 
@@ -53,5 +67,15 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 				.selectNaturalOrLegalPersonToListing_Dto(person);
 		
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);
-	}	
+	}
+
+	private PersonsManagement_Entity getPersonsManagement(PersonEntity person) {
+		var personManagement = new PersonsManagement_Entity();
+		personManagement.setPerson(person);
+		personManagement.setHttpVerb(HttpVerbEnum.DELETE);
+		personManagement.setInitialDate(LocalDateTime.now());
+		personManagement.setLoginUser(authenticationFacade.getAuthentication());
+
+		return personManagement;
+	}
 }

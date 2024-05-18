@@ -7,7 +7,7 @@ import lombok.Getter;
 public class DtoClass_LegalPersonOfRegistry {
 	final	private	String	fullNameOrEntityName;
 	final	private	String	nickname;
-	final	private	String	cnpj;
+	final	private	Long	cnpj;
 	final	private	String	email;
 	final	private	String	site;
 	final	private	String	inscricEstad;
