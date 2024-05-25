@@ -12,30 +12,22 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import java.net.URI;
 import java.time.LocalDateTime;
 
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ProviderPersonQualification;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ResponsibleForLegalPersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoClass_Provider;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoClass_ResponsibleForLegalPerson;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
-import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
-import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
-import ch.qos.logback.core.net.SyslogOutputStream;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.PartTimeEmployeePersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.AccountantPersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ClientPersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ProviderPersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ResponsibleForLegalPersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
@@ -47,6 +39,12 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManager
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.OutputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.InputDtoClass_PartTimeEmployee;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.OutputDtoClass_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoClass_Provider;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputDtoClass_Provider;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoClass_ResponsibleForLegalPerson;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
+import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
+import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.serviceApplication.personService.StatusPerson;

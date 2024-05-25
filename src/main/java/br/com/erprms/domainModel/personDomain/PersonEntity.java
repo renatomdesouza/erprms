@@ -2,6 +2,8 @@ package br.com.erprms.domainModel.personDomain;
 
 import java.util.Set;
 
+import org.springframework.validation.annotation.Validated;
+
 import br.com.erprms.domainModel.personDomain.personComponent.AddressInterface;
 import br.com.erprms.domainModel.personDomain.personComponent.LegalPersonInterface;
 import br.com.erprms.domainModel.personDomain.personComponent.NaturalPersonInterface;
@@ -24,14 +26,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
 
 @Entity
 @Table(name = "person")

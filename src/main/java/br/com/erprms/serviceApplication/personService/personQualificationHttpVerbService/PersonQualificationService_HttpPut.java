@@ -8,6 +8,16 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
@@ -35,18 +45,16 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLega
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
-import br.com.erprms.repositoryAdapter.personRepository.*;
+import br.com.erprms.repositoryAdapter.personRepository.AccountantRepository;
+import br.com.erprms.repositoryAdapter.personRepository.ClientRepository;
+import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
+import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
+import br.com.erprms.repositoryAdapter.personRepository.PartTimeEmployeeRepository;
+import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
+import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
+import br.com.erprms.repositoryAdapter.personRepository.ProviderRepository;
+import br.com.erprms.repositoryAdapter.personRepository.ResponsibleForLegalPersonRepository;
 import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class PersonQualificationService_HttpPut {

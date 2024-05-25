@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.erprms.dtoPort.LoginDto;
 import br.com.erprms.dtoPort.TokenDto;
 import br.com.erprms.serviceApplication.LoginService;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/login")

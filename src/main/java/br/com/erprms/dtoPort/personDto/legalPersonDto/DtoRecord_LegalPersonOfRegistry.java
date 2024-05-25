@@ -3,7 +3,6 @@ package br.com.erprms.dtoPort.personDto.legalPersonDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.NonNull;
-import org.springframework.data.util.TypeCollector;
 
 public record DtoRecord_LegalPersonOfRegistry(
 		@NonNull

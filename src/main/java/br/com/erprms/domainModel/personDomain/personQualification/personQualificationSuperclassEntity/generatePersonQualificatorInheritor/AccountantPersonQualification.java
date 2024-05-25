@@ -5,7 +5,6 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import java.math.BigDecimal;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;

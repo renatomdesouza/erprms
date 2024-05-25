@@ -1,0 +1,22 @@
+.idea/
+.settings/
+.vscode/
+logs/
+target/
+
+.classpath
+.factorypath
+.project
+
+
+# Java template
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# web application files
+/web-app/WEB-INF/classes
+

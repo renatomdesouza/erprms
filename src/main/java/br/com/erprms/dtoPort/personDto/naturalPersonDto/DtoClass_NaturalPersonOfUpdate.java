@@ -1,8 +1,6 @@
 package br.com.erprms.dtoPort.personDto.naturalPersonDto;
 
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
-import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import lombok.Getter;
 import lombok.Setter;
 

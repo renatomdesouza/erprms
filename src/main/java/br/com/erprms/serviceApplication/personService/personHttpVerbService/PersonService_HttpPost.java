@@ -1,28 +1,24 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import br.com.erprms.domainModel.personDomain.PersonsManagement_Entity;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
-import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
-import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
-import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
+import java.time.LocalDateTime;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.PersonsManagement_Entity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
+import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
+import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
+import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import jakarta.transaction.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PersonService_HttpPost <T extends PersonListingDto> {

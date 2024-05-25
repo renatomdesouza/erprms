@@ -3,12 +3,10 @@ package br.com.erprms.repositoryAdapter.personRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
-import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 
 public interface PersonRepository extends JpaRepository<PersonEntity, Long>{
