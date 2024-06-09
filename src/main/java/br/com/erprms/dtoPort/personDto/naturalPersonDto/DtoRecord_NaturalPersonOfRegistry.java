@@ -11,7 +11,7 @@ public record DtoRecord_NaturalPersonOfRegistry(
 
 		String nickname,
 
-		@Pattern(regexp = "^\\d{11}$")
+//		@Pattern(regexp = "^\\d{11}$")
 		Long cpf,
 
 		@Email @NonNull

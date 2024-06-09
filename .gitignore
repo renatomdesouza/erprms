@@ -1,22 +1,29 @@
+# IntellyJ Idea
 .idea/
+
+# Spring Tool Suite (Eclipse)
 .settings/
+
+# VS Code
 .vscode/
+
+# Project default folders
 logs/
 target/
 
+# Project default files
 .classpath
 .factorypath
 .project
 
-
 # Java template
 *.class
 
-# Package Files #
+# Package files
 *.jar
 *.war
 *.ear
 
-# web application files
+# Web application files
 /web-app/WEB-INF/classes
 
