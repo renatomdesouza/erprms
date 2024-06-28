@@ -9,8 +9,7 @@ public record LoginDto(String login, String password) {
 			@NonNull @Email
 			String login,
 
-			@NonNull @Pattern(regexp =
-					"(?=^.{8,}$)((?=.*\\d)(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")
+			@NonNull @Pattern(regexp = "(?=^.{8,}$)((?=.*\\d)(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")
 			String password
 		) {
 		this.login = login;
