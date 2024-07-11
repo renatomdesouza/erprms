@@ -15,7 +15,7 @@ import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfReg
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
-import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import jakarta.transaction.Transactional;
@@ -50,8 +50,8 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 		var person = createPerson(personDto);
 
 		String email = person.getEmail();
-		var oldEmail = personRepository.findByEmail(email);
-		personException.existingEmailException(oldEmail);
+		var existingEmail = personRepository.findByEmail(email);
+		personException.existingEmailException(existingEmail);
 
 		var personManagement = setPersonsManagement(person);
 

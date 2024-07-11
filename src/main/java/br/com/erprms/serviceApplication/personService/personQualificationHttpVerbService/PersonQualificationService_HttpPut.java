@@ -44,7 +44,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.Output
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
-import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.AccountantRepository;
 import br.com.erprms.repositoryAdapter.personRepository.ClientRepository;
 import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;

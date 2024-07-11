@@ -11,7 +11,6 @@ public class DtoClass_NaturalPersonOfUpdate {
 		final private String fullNameOrEntityName;
 		final private String nickname;
 		final private Long cpfOrCnpj;
-		final private String email;
 		final private String site;
 		final private String dateBorn;
 		final private String maritalStatus;
@@ -30,7 +29,6 @@ public class DtoClass_NaturalPersonOfUpdate {
 	    	this.fullNameOrEntityName = naturalPersonUpdate.fullNameOrEntityName();
 	    	this.nickname = naturalPersonUpdate. nickname();
 	    	this.cpfOrCnpj = naturalPersonUpdate.cpf();
-	    	this.email = naturalPersonUpdate.email();
 	    	this.site = naturalPersonUpdate.site();
 	    	this.dateBorn = naturalPersonUpdate.dateBorn();
 	    	this.maritalStatus = naturalPersonUpdate.maritalStatus();

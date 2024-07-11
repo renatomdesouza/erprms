@@ -67,7 +67,7 @@ public  class PersonEntity implements
 	@Column(name = "cpf_or_Cnpj", unique = true)
 	private Long cpfOrCnpj;
 
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
  	private String email;
 	 
 	@Column(name = "site")

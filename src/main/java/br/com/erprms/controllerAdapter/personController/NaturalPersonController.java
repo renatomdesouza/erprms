@@ -35,9 +35,9 @@ public class NaturalPersonController {
 	private final PersonService_HttpGet<? extends PersonListingDto> personGet;  
 	private final PersonService_HttpPut<? extends PersonListingDto> personPut;
 	private final PersonService_HttpDelete<? extends PersonListingDto> personDelete;
-	
+
 	public NaturalPersonController(
-			PersonService_HttpPost<? extends PersonListingDto> personPost, 
+			PersonService_HttpPost<? extends PersonListingDto> personPost,
 			PersonService_HttpGet<? extends PersonListingDto> personGet,
 			PersonService_HttpPut<? extends PersonListingDto> personPut,
 			PersonService_HttpDelete<? extends PersonListingDto> personDelete) {
@@ -52,15 +52,15 @@ public class NaturalPersonController {
 	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> register(
 			@RequestBody @Valid DtoRecord_NaturalPersonOfRegistry naturalPersonOfRecord,
-			UriComponentsBuilder uriComponentsBuilder) { 
-		
+			UriComponentsBuilder uriComponentsBuilder) {
+
 		var dtoRecordToNaturalPerson = personPost.registerService(naturalPersonOfRecord, uriComponentsBuilder);
 
 		return ResponseEntity
 				.created(dtoRecordToNaturalPerson.uri())
-				.body(dtoRecordToNaturalPerson.dtoOfPerson());	
+				.body(dtoRecordToNaturalPerson.dtoOfPerson());
 	}
-	
+
 	@GetMapping
 	@Transactional
 	@SuppressWarnings("null")

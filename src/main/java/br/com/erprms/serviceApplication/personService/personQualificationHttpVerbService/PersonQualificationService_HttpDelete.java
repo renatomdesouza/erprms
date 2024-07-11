@@ -19,7 +19,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDt
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.OutputExcludeDto_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.OutputExcludeDto_ResponsibleForLegalPerson;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
-import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.*;
 import br.com.erprms.serviceApplication.personService.StatusPerson;
 import jakarta.transaction.Transactional;

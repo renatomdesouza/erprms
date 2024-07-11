@@ -17,8 +17,8 @@ public class PersonExceptions {
                     "This person cannot be deleted because there is a qualification registered for them") ;
     }
 
-    public void existingEmailException(String oldEmail) {
-        Optional<String> emailOptimal = Optional.ofNullable(oldEmail);
+    public void existingEmailException(String email) {
+        Optional<String> emailOptimal = Optional.ofNullable(email);
         if(emailOptimal.isPresent())
             throw new ResponseStatusException(
                     HttpStatus.INSUFFICIENT_STORAGE,

@@ -3,7 +3,7 @@ package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 import br.com.erprms.domainModel.personDomain.PersonsManagement_Entity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
-import br.com.erprms.infrastructure.springSecurity.AuthenticationFacade;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.lang.NonNull;
@@ -53,7 +53,7 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 		personException.personWithStatusInUse(statusPerson);
 
 		person.setStatusPersonEnum(StatusPersonalUseEnum.DELETED);
-		var personManagement = getPersonsManagement(person);
+		var personManagement = setPersonsManagement(person);
 
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
@@ -69,7 +69,7 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);
 	}
 
-	private PersonsManagement_Entity getPersonsManagement(PersonEntity person) {
+	private PersonsManagement_Entity setPersonsManagement(PersonEntity person) {
 		var personManagement = new PersonsManagement_Entity();
 		personManagement.setPerson(person);
 		personManagement.setHttpVerb(HttpVerbEnum.DELETE);

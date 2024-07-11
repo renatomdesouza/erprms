@@ -33,7 +33,7 @@ public class PersonService_HttpGet <T extends PersonListingDto> {
 				Boolean isNaturalPerson) {
 		
 		var personListingDto_Page = setterPersonListingDtoPage(personPageable, isNaturalPerson);
-
+		
 		URI uri = new PersonService_CreateUri().uriBuild(uriComponentsBuilder, isNaturalPerson);
 		
 		return new DtoRecord_ServicePerson_Page<>(uri, personListingDto_Page);
