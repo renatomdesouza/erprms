@@ -54,7 +54,7 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 
 		person.setStatusPersonEnum(StatusPersonalUseEnum.DELETED);
 		var personManagement = setPersonsManagement(person);
-
+				
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
 

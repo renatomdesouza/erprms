@@ -13,7 +13,7 @@ public class OutputDtoClassPage_Provider implements PersonQualificationOutputDto
     private String specifiedQualification;
     private Long personId;
     private String personName;
-    private String cpfOrCnpj;
+    private Long cpfOrCnpj;
     private String observation;
     private LocalDateTime initialDate;
     private LocalDateTime finalDate;

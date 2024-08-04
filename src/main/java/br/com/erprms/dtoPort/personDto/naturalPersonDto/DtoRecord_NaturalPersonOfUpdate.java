@@ -12,7 +12,7 @@ public record DtoRecord_NaturalPersonOfUpdate (
 		String nickname,
 
 		@Pattern(regexp = "^\\d{11}$")
-		Long cpf,
+		String cpf,
 
 		@Email
 		String email,

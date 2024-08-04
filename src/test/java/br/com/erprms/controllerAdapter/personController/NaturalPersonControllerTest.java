@@ -1,16 +1,14 @@
 package br.com.erprms.controllerAdapter.personController;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
-import br.com.erprms.dtoPort.personDto.PersonListingDto;
-import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
-import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfUpdate;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPost;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPut;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,12 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+
+import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
+import br.com.erprms.dtoPort.personDto.PersonListingDto;
+import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPost;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -115,14 +119,14 @@ class NaturalPersonControllerTest {
 	DtoRecord_NaturalPersonOfRegistry dataFromNaturalPersonRegistry_Of_SaveOk = new DtoRecord_NaturalPersonOfRegistry(
 			"Martim Afonso",
 			"Tibiriçá",
-			72145656812L,
+			"72145656812",
 			"caciquetibirica@email.com",
 			"museudoipiranga.org.br",
 			"29/12/1520",
 			"Solteiro",
 			"São Paulo-SP",
 			"brasileira",
-			SexEnum.MASCULINE,
+			"MASCULINE",
 			"Praça da Sé",
 			"sem numero",
 			"Catedral da Sé",
@@ -134,14 +138,14 @@ class NaturalPersonControllerTest {
 	DtoRecord_NaturalPersonOfRegistry dataFromNaturalPersonRegistry_Of_FailureForEmail = new DtoRecord_NaturalPersonOfRegistry(
 			"Martim Afonso",
 			"Tibiriçá",
-			82145656812L,
+			"82145656812",
 			"caciquetibirica@email.com",
 			"museudoipiranga.org.br",
 			"29/12/1520",
 			"Solteiro",
 			"São Paulo-SP",
 			"brasileira",
-			SexEnum.MASCULINE,
+			"MASCULINE",
 			"Praça da Sé",
 			"sem numero",
 			"Catedral da Sé",
@@ -153,14 +157,14 @@ class NaturalPersonControllerTest {
 	DtoRecord_NaturalPersonOfRegistry dataFromNaturalPersonRegistry_Of_FailureForCpf = new DtoRecord_NaturalPersonOfRegistry(
 			"Martim Afonso",
 			"Tibiriçá",
-			72145656812L,
+			"72145656812",
 			"ccaciquetibirica@email.com",
 			"museudoipiranga.org.br",
 			"29/12/1520",
 			"Solteiro",
 			"São Paulo-SP",
 			"brasileira",
-			SexEnum.MASCULINE,
+			"MASCULINE",
 			"Praça da Sé",
 			"sem numero",
 			"Catedral da Sé",

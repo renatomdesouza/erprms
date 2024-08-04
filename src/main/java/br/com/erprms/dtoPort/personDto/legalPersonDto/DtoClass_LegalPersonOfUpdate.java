@@ -7,7 +7,7 @@ public class DtoClass_LegalPersonOfUpdate {
 	final private Long id;
 	final private String fullNameOrEntityName;
 	final private String nickname;
-	final private Long cnpj;
+	final private String cnpj;
 	final private String email;
 	final private String site;
 	final	private	String	inscricEstad;

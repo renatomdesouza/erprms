@@ -11,8 +11,8 @@ public record DtoRecord_LegalPersonOfRegistry(
 		String nickname,
 
 		@NonNull 
-//		@Pattern(regexp = "^\\d{14}$")
-		Long cnpj,
+		@Pattern(regexp = "^\\d{14}$")
+		String cnpj,
 
 		@Email
 		@NonNull

@@ -10,7 +10,7 @@ public class DtoClass_NaturalPersonOfUpdate {
 		final private Long id;
 		final private String fullNameOrEntityName;
 		final private String nickname;
-		final private Long cpfOrCnpj;
+		final private String cpfOrCnpj;
 		final private String site;
 		final private String dateBorn;
 		final private String maritalStatus;

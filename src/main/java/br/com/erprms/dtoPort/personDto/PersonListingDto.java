@@ -9,7 +9,7 @@ public interface PersonListingDto {
  	
 	void setNickname(String string);
 	
- 	void setCpfOrCnpj(Long string);
+ 	void setCpfOrCnpj(String string);
  	
  	void setEmail(String string);
  	

@@ -116,7 +116,7 @@ class LegalPersonControllerTest {
 	DtoRecord_LegalPersonOfRegistry dataFromLegalPersonRegistry_Of_SaveOk = new DtoRecord_LegalPersonOfRegistry(
 			"Empresa Fulana SA",
 			"EmpFulana",
-			95345678901234L,
+			"95345678901234",
 			"fulana5@mail.com",
 			"www.fulana10.com",
 			"2323232323",
@@ -132,7 +132,7 @@ class LegalPersonControllerTest {
 	DtoRecord_LegalPersonOfRegistry dataFromLegalPersonRegistry_Of_FailureForEmail = new DtoRecord_LegalPersonOfRegistry(
 			"Empresa Fulana SA",
 			"EmpFulana",
-			85345678901237L,
+			"85345678901237",
 			"fulana5@mail.com",
 			"www.fulana10.com",
 			"2323232323",
@@ -148,7 +148,7 @@ class LegalPersonControllerTest {
 	DtoRecord_LegalPersonOfRegistry getDataFromLegalPersonRegistry_Of_FailureForCpf = new DtoRecord_LegalPersonOfRegistry(
 			"Empresa Fulana SA",
 			"EmpFulana",
-			95345678901237L,
+			"95345678901237",
 			"fulana5@mail.com",
 			"www.fulana11.com",
 			"2323232323",

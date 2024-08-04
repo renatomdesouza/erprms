@@ -9,7 +9,7 @@ public class DtoClass_LegalPersonOfListing implements PersonListingDto{
 	public Long id;
 	public String fullNameOrEntityName;
 	public String nickname;
-	public Long CpfOrCnpj;
+	public String CpfOrCnpj;
 	public StatusPersonalUseEnum statusPersonEnum;
 	public String email;
 	public String site;

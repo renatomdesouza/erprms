@@ -25,9 +25,9 @@ import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPost;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @AutoConfigureJsonTesters
-@ActiveProfiles("test")
 class LoginControllerTest {
 	@InjectMocks
 	private PersonService_HttpPost<? extends PersonListingDto> personPost;

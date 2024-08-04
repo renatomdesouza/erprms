@@ -82,7 +82,7 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 	}
 
 	@SuppressWarnings("hiding")
-	private <T> void updatePerson(PersonEntity person, T personDtoOfRecord) {
+	public <T> void updatePerson(PersonEntity person, T personDtoOfRecord) {
 
 		if (personDtoOfRecord instanceof DtoRecord_NaturalPersonOfUpdate) {
 			var personUpdateDto = new DtoClass_NaturalPersonOfUpdate((DtoRecord_NaturalPersonOfUpdate) personDtoOfRecord);
