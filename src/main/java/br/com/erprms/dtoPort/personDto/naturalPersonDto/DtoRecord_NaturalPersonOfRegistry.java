@@ -3,7 +3,6 @@ package br.com.erprms.dtoPort.personDto.naturalPersonDto;
 import jakarta.validation.constraints.*;
 
 public record DtoRecord_NaturalPersonOfRegistry(
-
 		@NotNull(message = "The full name of the natural person cannot be null")
 		@Pattern(	regexp = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$",
 					message = "The full name must be described with letters only")
@@ -31,8 +30,8 @@ public record DtoRecord_NaturalPersonOfRegistry(
 		String site,
 
 		@NotBlank(message = "The date born of the natural person cannot be null")
-		@Pattern(	regexp = "^(0?[1-9]|[12][0-9]|3[01])[\\/\\-](0?[1-9]|1[012])[\\/\\-]\\d{4}$",
-					message = "The website must be described with the correct name")
+		@Pattern(	regexp = "^(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[012])\\/\\d{4}$",  // "^(0?[1-9]|[12][0-9]|3[01])[\\/\\-](0?[1-9]|1[012])[\\/\\-]\\d{4}$"
+					message = "The date must be described with the correct format")
 		String dateBorn,
 
 		@NotBlank(message = "The marital status of the natural person cannot be null")

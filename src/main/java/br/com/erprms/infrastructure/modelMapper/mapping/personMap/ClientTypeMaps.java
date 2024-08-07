@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.generatePersonQualificatorInheritor.ClientPersonQualification;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.InputDtoClass_Client;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.OutputDtoClassPage_Client;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.internalDto_Client.InputDtoClass_Client;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.internalDto_Client.OutputDtoClassPage_Client;
 
 @Configuration
 public class ClientTypeMaps {

@@ -5,24 +5,21 @@ import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVer
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
-import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfUpdate;
+import br.com.erprms.dtoPort.personDto.legalPersonDto.internalDto_LegalPerson.DtoClass_LegalPersonOfUpdate;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfUpdate;
-import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfUpdate;
+import br.com.erprms.dtoPort.personDto.naturalPersonDto.internalDto_LegalPerson.DtoClass_NaturalPersonOfUpdate;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfUpdate;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class PersonService_HttpPut <T extends PersonListingDto> {
@@ -49,10 +46,10 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 	@SuppressWarnings("hiding")
 	public <T> DtoRecord_ServicePerson<? extends PersonListingDto> updateService(
 			T personDtoOfRecord,
-			@NonNull Long id_person,
+			@NonNull String id_person,
 			UriComponentsBuilder uriComponentsBuilder) {
 		
-		var person = personRepository.getReferenceById(id_person);
+		var person = personRepository.getReferenceById(Long.parseLong(id_person));
 
 		updatePerson(person, personDtoOfRecord);
 		var personManagement = setPersonsManagement(person);

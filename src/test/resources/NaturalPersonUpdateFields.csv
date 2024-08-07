@@ -1,0 +1,23 @@
+respective fields => id~fullNameOrEntityName~nickname~cpf ~email~site~dateBorn~maritalStatus~cityBorn~countryBorn~sex~street~number~neighborhood~complement~postalCode~cityAndStateOrProvince
+NULL~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01'~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~jj~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva'~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~123456789123~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilvaemailcombr~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~wwwsilvacom br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva'com'br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20'01'1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20-01-1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado'~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São P'aulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São P'aulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULIN'~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua das Alamedas'~0001~Bairro das Alamedas~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Ba~não há~01153-000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153000~São Paulo/SP
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~Sa
+01~José da Silva~Silva~12345678912~josesilva@email.com.br~www.silva.com.br~20/01/1980~casado~São Paulo~São Paulo~MASCULINE~Rua Das Alamedas~0001~Bairro das Alamedas~não há~01153-000~São Paulo'

@@ -4,9 +4,9 @@ import org.modelmapper.ModelMapper;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
-import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoClass_LegalPersonOfListing;
-import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfListing;
-import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoClass_NaturalPersonOfUpdate;
+import br.com.erprms.dtoPort.personDto.legalPersonDto.internalDto_LegalPerson.DtoClass_LegalPersonOfListing;
+import br.com.erprms.dtoPort.personDto.naturalPersonDto.internalDto_LegalPerson.DtoClass_NaturalPersonOfListing;
+import br.com.erprms.dtoPort.personDto.naturalPersonDto.internalDto_LegalPerson.DtoClass_NaturalPersonOfUpdate;
 
 public class PersonService_CreateDto <T extends PersonListingDto> {
 	private ModelMapper mapper;

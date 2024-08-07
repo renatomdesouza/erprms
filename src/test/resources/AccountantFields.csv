@@ -1,0 +1,9 @@
+person_Id~monthlyCost~observation~professionalRegistry
+NULL~1000.01~Observação qualquer~25687
+1a~1000.01~Observação qualquer~25687
+11a~1000.01~Observação qualquer~25687
+1~NULL~Observação qualquer~25687
+1~1000,01~Observação qualquer~25687
+1~1000.01~Ob~2568
+1~1000.01~Observação qualquer~NULL
+1~1000.01~Observação qualquer~1a

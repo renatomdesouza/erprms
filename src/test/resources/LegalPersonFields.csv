@@ -1,0 +1,23 @@
+fullNameOrEntityName~nickname~cnpj~email~site~inscricEstad~inscricMunicip~street~number~neighborhood~complement~postalCode~cityAndStateOrProvince
+NULL~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa' Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa'~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~1234567891234~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~1234567891234a~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasaemail.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www'empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~NULL~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~12345678~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~NULL~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~123456789123456~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~NULL~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empres@a~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~NULL~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~000'1~Bairro Empresarial~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~NULL~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~B~Não Possui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Pos'sui~01153-000~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-00~São Paulo/SP
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~NULL
+Empresa Jurídica SA~Empresa~12345678912345~empresasa@email.com.br~www.empresasa.com.br~123456789~12345678912345~Rua da Empresa~0001~Bairro Empresarial~Não Possui~01153-000~São Paulo/*SP
+

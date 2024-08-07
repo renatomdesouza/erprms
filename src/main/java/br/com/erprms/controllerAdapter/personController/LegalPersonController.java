@@ -52,7 +52,7 @@ public class LegalPersonController {
 	@Transactional
 	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> register(
-			@RequestBody @Valid DtoRecord_LegalPersonOfRegistry legalPersonOfRecord, 
+			@RequestBody @Valid DtoRecord_LegalPersonOfRegistry legalPersonOfRecord,
 			UriComponentsBuilder uriComponentsBuilder) { 
 	
 		var dtoRecordTolegalPerson = personPost.registerService(legalPersonOfRecord, uriComponentsBuilder);

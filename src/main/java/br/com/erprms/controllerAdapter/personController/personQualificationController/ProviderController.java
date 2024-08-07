@@ -1,7 +1,7 @@
 package br.com.erprms.controllerAdapter.personController.personQualificationController;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoClass_Provider;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.internalDto_Provider.InputDtoClass_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.InputDtoRecord_Provider;
 import br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
