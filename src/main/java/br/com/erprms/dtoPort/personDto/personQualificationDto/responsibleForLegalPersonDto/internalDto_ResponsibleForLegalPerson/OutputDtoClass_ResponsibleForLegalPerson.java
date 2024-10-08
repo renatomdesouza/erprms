@@ -19,7 +19,7 @@ public class OutputDtoClass_ResponsibleForLegalPerson implements PersonQualifica
             String specifiedQualification) {
         this.specifiedQualification = specifiedQualification;
         this.personName = person.getFullNameOrEntityName();
-        this.cpfOrCnpj = person.getCpfOrCnpj();
+        this.cpfOrCnpj = person.getCpfCnpj();
         this.observation = responsible.getObservation();
     }
 }

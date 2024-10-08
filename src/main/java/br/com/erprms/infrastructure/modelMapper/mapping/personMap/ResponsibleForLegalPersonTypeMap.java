@@ -34,7 +34,7 @@ public class ResponsibleForLegalPersonTypeMap {
 	                .addMapping(PersonQualificationSuperclassEntity ::getId, OutputDtoClassPage_ResponsibleForLegalPerson::setId)
 	                .addMapping((ori) -> ori.getPerson().getId(), OutputDtoClassPage_ResponsibleForLegalPerson::setPersonId)
 	                .addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), OutputDtoClassPage_ResponsibleForLegalPerson::setPersonName)
-	                .addMapping((ori) -> ori.getPerson().getCpfOrCnpj(), OutputDtoClassPage_ResponsibleForLegalPerson::setCpfOrCnpj)
+	                .addMapping((ori) -> ori.getPerson().getCpfCnpj(), OutputDtoClassPage_ResponsibleForLegalPerson::setCpfOrCnpj)
 	                .addMapping(PersonQualificationSuperclassEntity::getObservation, OutputDtoClassPage_ResponsibleForLegalPerson::setObservation)
 	                .addMapping(PersonQualificationSuperclassEntity::getInitialDate, OutputDtoClassPage_ResponsibleForLegalPerson::setInitialDate)
 	                .addMapping(PersonQualificationSuperclassEntity::getFinalDate, OutputDtoClassPage_ResponsibleForLegalPerson::setFinalDate)

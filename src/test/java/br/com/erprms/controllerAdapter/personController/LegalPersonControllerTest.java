@@ -24,7 +24,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @WithMockUser
 @AutoConfigureMockMvc
@@ -50,6 +50,7 @@ class LegalPersonControllerTest {
 		MockHttpServletResponse response =
 				mockMvc.perform(
 								post("/legalPerson")
+										.with(user("user"))  // Alternative to @WithMockUser
 										.content(jacksonTester_As_DtoRecord_LegalPersonOfRegistry
 												.write(dataFromLegalPersonRegistry_Of_SaveOk).getJson())
 										.contentType(MediaType.APPLICATION_JSON) )
@@ -77,13 +78,13 @@ class LegalPersonControllerTest {
 
 	@Test
 	@Order(Ordered.LOWEST_PRECEDENCE)
-	@DisplayName("Should return 500 for the user's CPF is already registered in the system")
+	@DisplayName("Should return 500 for the user's CNPJ is already registered in the system")
 	void integrityTest_IncorrectAccessToPost_WithCpf()  throws Exception {
 		MockHttpServletResponse response =
 				mockMvc.perform(
 								post("/legalPerson")
 										.content(jacksonTester_As_DtoRecord_LegalPersonOfRegistry
-												.write(getDataFromLegalPersonRegistry_Of_FailureForCpf).getJson())
+												.write(getDataFromLegalPersonRegistry_Of_FailureForCnpj).getJson())
 										.contentType(MediaType.APPLICATION_JSON) )
 						.andReturn()
 						.getResponse();
@@ -117,13 +118,13 @@ class LegalPersonControllerTest {
 			"95345678901234",
 			"fulana5@mail.com",
 			"www.fulana10.com",
-			"2323232323",
-			"4545454545",
+			"232323232",
+			"12345678912345",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01010101-0101",
+			"01153-000",
 			"São Paulo/SP"
 			);
 
@@ -133,29 +134,29 @@ class LegalPersonControllerTest {
 			"85345678901237",
 			"fulana5@mail.com",
 			"www.fulana10.com",
-			"2323232323",
-			"4545454545",
+			"232323232",
+			"12345678912345",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01010101-0101",
+			"01153-000",
 			"São Paulo/SP"
 	);
 
-	DtoRecord_LegalPersonOfRegistry getDataFromLegalPersonRegistry_Of_FailureForCpf = new DtoRecord_LegalPersonOfRegistry(
+	DtoRecord_LegalPersonOfRegistry getDataFromLegalPersonRegistry_Of_FailureForCnpj = new DtoRecord_LegalPersonOfRegistry(
 			"Empresa Fulana SA",
 			"EmpFulana",
-			"95345678901237",
+			"95345678901234",
 			"fulana5@mail.com",
 			"www.fulana11.com",
-			"2323232323",
-			"4545454545",
+			"232323232",
+			"12345678912345",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01010101-0101",
+			"01153-000",
 			"São Paulo/SP"
 	);
 }

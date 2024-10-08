@@ -25,8 +25,8 @@ public class DtoClass_LegalPersonOfRegistry {
 	public DtoClass_LegalPersonOfRegistry(DtoRecord_LegalPersonOfRegistry legalPerson) {
 		this.fullNameOrEntityName = legalPerson.fullNameOrEntityName();
 		this.nickname = legalPerson.nickname();
-		this.cnpj =
-                Long.parseLong(legalPerson.cnpj());
+		this.cnpj = 
+				Long.parseUnsignedLong(legalPerson.cnpj());
 
 		this.email = legalPerson.email();
 		this.site = legalPerson.site();

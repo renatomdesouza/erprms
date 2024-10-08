@@ -151,7 +151,8 @@ public class PersonQualificationService_HttpPost {
 		personQualificationRepository.save(personQualification);
 		statusPerson.setStatusOfUse(person);
 
-		var dtoRecord_ServicePersonQualification = new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
+		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =
+				new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
 			
 		return ResponseEntity.created(dtoRecord_ServicePersonQualification.uri())
 								.body(dtoRecord_ServicePersonQualification.dtoOfPerson());

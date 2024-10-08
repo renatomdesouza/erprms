@@ -18,7 +18,7 @@ public class OutputExcludeDto_ResponsibleForLegalPerson implements PersonQualifi
             String specifiedQualification) {
         this.specifiedQualification = specifiedQualification;
         this.personName = responsibleToDelete.getPerson().getFullNameOrEntityName();
-        this.cpfOrCnpj = responsibleToDelete.getPerson().getCpfOrCnpj();
+        this.cpfOrCnpj = responsibleToDelete.getPerson().getCpfCnpj();
         this.observation = responsibleToDelete.getObservation();
     }
 }

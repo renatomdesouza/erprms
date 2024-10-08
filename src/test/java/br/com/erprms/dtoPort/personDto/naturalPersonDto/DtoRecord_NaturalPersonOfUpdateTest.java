@@ -1,22 +1,18 @@
 package br.com.erprms.dtoPort.personDto.naturalPersonDto;
 
-import static br.com.erprms.testBuilders.NaturalPersonTestBuilder.naturalPersonTestBuilder;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Set;
 
-import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfUpdate;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Set;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 class DtoRecord_NaturalPersonOfUpdateTest {
 	Validator validator;

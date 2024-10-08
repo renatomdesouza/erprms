@@ -36,7 +36,7 @@ public class AccountantTypeMaps {
 				.addMapping(PersonQualificationSuperclassEntity::getId, OutputDtoClassPage_Accountant::setId)
 				.addMapping((ori) -> ori.getPerson().getId(), OutputDtoClassPage_Accountant::setPersonId)
 				.addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), OutputDtoClassPage_Accountant::setPersonName)
-				.addMapping((ori) -> ori.getPerson().getCpfOrCnpj(), OutputDtoClassPage_Accountant::setCpfOrCnpj)
+				.addMapping((ori) -> ori.getPerson().getCpfCnpj(), OutputDtoClassPage_Accountant::setCpfOrCnpj)
 				.addMapping(AccountantPersonQualification::getMonthlyCost, OutputDtoClassPage_Accountant::setMonthlyCost)
 				.addMapping(PersonQualificationSuperclassEntity::getObservation, OutputDtoClassPage_Accountant::setObservation)
 				.addMapping(PersonQualificationSuperclassEntity::getProfessionalRegistry, OutputDtoClassPage_Accountant::setProfessionalRegistry)

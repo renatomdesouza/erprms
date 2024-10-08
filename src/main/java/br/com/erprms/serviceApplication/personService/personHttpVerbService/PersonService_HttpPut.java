@@ -19,6 +19,7 @@ import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 @Service
@@ -48,28 +49,30 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 			T personDtoOfRecord,
 			@NonNull String id_person,
 			UriComponentsBuilder uriComponentsBuilder) {
-		
-		var person = personRepository.getReferenceById(Long.parseLong(id_person));
+
+		PersonEntity person = personRepository.getReferenceById(Long.parseLong(id_person));
 
 		updatePerson(person, personDtoOfRecord);
-		var personManagement = setPersonsManagement(person);
+
+		PersonsManagement_Entity personManagement =
+				setPersonsManagement(person);
 
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
 
-		var uri = new PersonService_CreateUri().uriBuild(
+		URI uri = new PersonService_CreateUri().uriBuild(
 							uriComponentsBuilder, 
 							person.getId(), 
 							person.getIsNaturalPerson());
 
-		var personListingDto =  new PersonService_CreateDto<>(mapper)
-										.selectNaturalOrLegalPersonToListing_Dto(person); 
+		PersonListingDto personListingDto =
+				new PersonService_CreateDto<>(mapper).selectNaturalOrLegalPersonToListing_Dto(person);
 		
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);
 	}
 
 	private PersonsManagement_Entity setPersonsManagement(PersonEntity person) {
-		var personManagement = new PersonsManagement_Entity();
+		PersonsManagement_Entity personManagement = new PersonsManagement_Entity();
 		personManagement.setPerson(person);
 		personManagement.setHttpVerb(HttpVerbEnum.PUT);
 		personManagement.setInitialDate(LocalDateTime.now());
@@ -82,13 +85,15 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 	public <T> void updatePerson(PersonEntity person, T personDtoOfRecord) {
 
 		if (personDtoOfRecord instanceof DtoRecord_NaturalPersonOfUpdate) {
-			var personUpdateDto = new DtoClass_NaturalPersonOfUpdate((DtoRecord_NaturalPersonOfUpdate) personDtoOfRecord);
+			DtoClass_NaturalPersonOfUpdate personUpdateDto =
+					new DtoClass_NaturalPersonOfUpdate((DtoRecord_NaturalPersonOfUpdate) personDtoOfRecord);
 
 			mapper.map(personUpdateDto, person);
 		};
 		
 		if ( personDtoOfRecord instanceof DtoRecord_LegalPersonOfUpdate) {
-			var personUpdateDto = new DtoClass_LegalPersonOfUpdate((DtoRecord_LegalPersonOfUpdate) personDtoOfRecord);
+			DtoClass_LegalPersonOfUpdate personUpdateDto =
+					new DtoClass_LegalPersonOfUpdate((DtoRecord_LegalPersonOfUpdate) personDtoOfRecord);
 
 			mapper.map(personUpdateDto, person);
 		};

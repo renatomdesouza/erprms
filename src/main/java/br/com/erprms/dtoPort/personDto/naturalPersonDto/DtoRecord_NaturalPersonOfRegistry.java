@@ -2,7 +2,7 @@ package br.com.erprms.dtoPort.personDto.naturalPersonDto;
 
 import jakarta.validation.constraints.*;
 
-public record DtoRecord_NaturalPersonOfRegistry(
+public record DtoRecord_NaturalPersonOfRegistry (
 		@NotNull(message = "The full name of the natural person cannot be null")
 		@Pattern(	regexp = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$",
 					message = "The full name must be described with letters only")

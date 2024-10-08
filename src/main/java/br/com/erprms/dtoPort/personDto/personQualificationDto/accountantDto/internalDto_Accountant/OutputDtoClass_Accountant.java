@@ -26,7 +26,7 @@ public class OutputDtoClass_Accountant implements PersonQualificationOutputDtoIn
             String specifiedQualification) {
         this.specifiedQualification = specifiedQualification;
         this.personName = person.getFullNameOrEntityName();
-        this.cpfOrCnpj = person.getCpfOrCnpj();
+        this.cpfOrCnpj = person.getCpfCnpj();
         this.observation = accountant.getObservation();
         this.professionalRegistry = accountant.getProfessionalRegistry();
         this.monthlyCost = accountant.getMonthlyCost();

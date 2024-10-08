@@ -109,7 +109,7 @@ public class PersonQualificationService_HttpPut {
             String specifiedQualification)
             throws ResponseStatusException {
 
-        var person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id());
+        PersonEntity person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id());
 
         exceptionService.exceptionForPersonWhoDoesNotExist(personQualificationInputDto.getPerson_Id());
 
@@ -134,10 +134,10 @@ public class PersonQualificationService_HttpPut {
         }
 
         URI uri = createUri.uriCreator(	uriComponentsBuilder,
-                specifiedQualification,
-                person.getId());
+                                        specifiedQualification,
+                                        person.getId());
 
-        var dtoRecord_ServicePersonQualification =
+        DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =
                 new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
 
         return ResponseEntity

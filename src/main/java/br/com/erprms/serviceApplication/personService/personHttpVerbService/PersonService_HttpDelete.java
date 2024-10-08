@@ -17,6 +17,7 @@ import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 @Service
@@ -45,32 +46,34 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 			@NonNull Long id, 
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-		
-		var person = new PersonEntity();
-		
-		person = personRepository.getReferenceById(id);
-		var statusPerson = person.getStatusPersonEnum();
+
+		PersonEntity person = personRepository.getReferenceById(id);
+		StatusPersonalUseEnum statusPerson =
+				person.getStatusPersonEnum();
+
 		personException.personWithStatusInUse(statusPerson);
 
 		person.setStatusPersonEnum(StatusPersonalUseEnum.DELETED);
-		var personManagement = setPersonsManagement(person);
+
+		PersonsManagement_Entity personManagement =
+				setPersonsManagement(person);
 				
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
 
-		var uri = new PersonService_CreateUri().uriBuild(
+		URI uri = new PersonService_CreateUri().uriBuild(
 						uriComponentsBuilder, 
 						person.getId(), 
 						person.getIsNaturalPerson());
-		
-		var personListingDto = new PersonService_CreateDto<>(mapper)
+
+		PersonListingDto personListingDto = new PersonService_CreateDto<>(mapper)
 				.selectNaturalOrLegalPersonToListing_Dto(person);
 		
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);
 	}
 
 	private PersonsManagement_Entity setPersonsManagement(PersonEntity person) {
-		var personManagement = new PersonsManagement_Entity();
+		PersonsManagement_Entity personManagement = new PersonsManagement_Entity();
 		personManagement.setPerson(person);
 		personManagement.setHttpVerb(HttpVerbEnum.DELETE);
 		personManagement.setInitialDate(LocalDateTime.now());

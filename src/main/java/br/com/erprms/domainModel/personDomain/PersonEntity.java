@@ -64,10 +64,10 @@ public  class PersonEntity implements
 	@Column(name = "nickname")
 	private String nickname;
 
-	@Column(name = "cpf_or_Cnpj", unique = true)
-	private Long cpfOrCnpj;
+	@Column(name = "cpf_or_Cnpj")
+	private Long cpfCnpj;
 
-	@Column(name = "email", unique = true)
+	@Column(name = "email")
  	private String email;
 	 
 	@Column(name = "site")
@@ -123,6 +123,10 @@ public  class PersonEntity implements
 		inverseJoinColumns = 
 		{ @JoinColumn(name = "additionalAddressEntityId", referencedColumnName = "id") })
 	private AdditionalAddressEntity additionalAddressEntity;
+
+    public String getEmail() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }
 

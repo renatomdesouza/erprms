@@ -20,7 +20,7 @@ public class OutputDtoClass_Client implements PersonQualificationOutputDtoInterf
             String specifiedQualification) {
         this.specifiedQualification = specifiedQualification;
         this.personName = person.getFullNameOrEntityName();
-        this.cpfOrCnpj = person.getCpfOrCnpj();
+        this.cpfOrCnpj = person.getCpfCnpj();
         this.observation = client.getObservation();
         this.creditDays = client.getCreditTerms();
     }

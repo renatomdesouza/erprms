@@ -1,5 +1,6 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 import org.modelmapper.ModelMapper;
@@ -44,13 +45,11 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 	@Transactional     
 	@SuppressWarnings({ "hiding", "null" })
 	public <T> DtoRecord_ServicePerson<? extends PersonListingDto> registerService(
-				T personDto,	 
+				T personDto,
 				UriComponentsBuilder uriComponentsBuilder) {
+		PersonEntity person = createPerson(personDto);
 
-		var person = createPerson(personDto);
-
-		String email = person.getEmail();
-		var existingEmail = personRepository.findByEmail(email);
+		String existingEmail = personRepository.findEmail(person.getEmail());
 		personException.existingEmailException(existingEmail);
 
 		var personManagement = setPersonsManagement(person);
@@ -58,19 +57,19 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
 
-		var uri = new PersonService_CreateUri().uriBuild(
+		URI uri = new PersonService_CreateUri().uriBuild(
 							uriComponentsBuilder, 
 							person.getId(), 
 							person.getIsNaturalPerson());
 
-		var personListingDto = new PersonService_CreateDto<>(mapper)
-				.selectNaturalOrLegalPersonToListing_Dto(person);
+		PersonListingDto personListingDto =
+				new PersonService_CreateDto<>(mapper).selectNaturalOrLegalPersonToListing_Dto(person);
 
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);
 	}
 
 	private PersonsManagement_Entity setPersonsManagement(PersonEntity person) {
-		var personManagement = new PersonsManagement_Entity();
+		PersonsManagement_Entity personManagement = new PersonsManagement_Entity();
 		personManagement.setPerson(person);
 		personManagement.setHttpVerb(HttpVerbEnum.POST);
 		personManagement.setInitialDate(LocalDateTime.now());
@@ -80,9 +79,9 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 	}
 
 	@SuppressWarnings("hiding")
-	private <T> PersonEntity createPerson(T personDto) {
+	public <T> PersonEntity createPerson(T personDto) {
 
-		var person = new PersonEntity();
+		PersonEntity person = new PersonEntity();
 
 		if (personDto instanceof DtoRecord_NaturalPersonOfRegistry) {
 			DtoClass_NaturalPersonOfRegistry dtoNaturalPerson =
@@ -95,7 +94,7 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 				DtoClass_LegalPersonOfRegistry dtoLegalPerson =
 						new DtoClass_LegalPersonOfRegistry((DtoRecord_LegalPersonOfRegistry) personDto);
 
-				person = mapper.map(dtoLegalPerson, PersonEntity.class);
+			person = mapper.map(dtoLegalPerson, PersonEntity.class);
 		};
 
 		return person;

@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -91,7 +92,7 @@ public class PersonQualificationService_HttpDelete {
             throws ResponseStatusException {
 
         exceptionService.exceptionForPersonWhoDoesNotExist(person_Id);
-        var person = personRepository.getReferenceById(person_Id);
+        PersonEntity person = personRepository.getReferenceById(person_Id);
         statusPersonOfQualification.setSatusOfNonUse(person);
 
         PersonQualificationOutputDtoInterface outPutExcludeDto = null;
@@ -105,11 +106,11 @@ public class PersonQualificationService_HttpDelete {
             case RESPONSIBLE_FOR_LEGAL_PERSON -> { outPutExcludeDto = case_RESPONSIBLE_FOR_LEGAL_PERSON(specifiedQualification, person); break; }
         }
 
-        var uri = createUri.uriCreator(	uriComponentsBuilder,
-                specifiedQualification,
-                person_Id);
+        URI uri = createUri.uriCreator(	uriComponentsBuilder,
+                                        specifiedQualification,
+                                        person_Id);
 
-        var dtoRecord_ServicePersonQualification =
+        DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =
                 new DtoRecord_ServicePersonQualification<>(uri, outPutExcludeDto);
 
         return ResponseEntity

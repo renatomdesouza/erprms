@@ -102,7 +102,8 @@ public class PersonQualificationService_HttpGet {
 		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
 										specifiedQualification);
 
-		var responseEntityOutputDtoPage = new DtoRecord_ServicePersonQualification_Page<>(uri, outputDtoClassPage);
+		DtoRecord_ServicePersonQualification_Page<? extends PersonQualificationOutputDtoInterface> responseEntityOutputDtoPage =
+				new DtoRecord_ServicePersonQualification_Page<>(uri, outputDtoClassPage);
 		
 		return ResponseEntity
 				.created(responseEntityOutputDtoPage.uri())
