@@ -79,18 +79,18 @@ class DtoRecord_LegalPersonOfRegistryTest {
 												String postalCode,
 												String cityAndStateOrProvince) {
 		var dto = new DtoRecord_LegalPersonOfRegistry(	fullNameOrEntityName,
-														nickname,
-														cnpj,
-														email,
-														site,
-														inscricEstad,
-														inscricMunicip,
-														street,
-														number,
-														neighborhood,
-														complement,
-														postalCode,
-														cityAndStateOrProvince);
+				nickname,
+				cnpj,
+				email,
+				site,
+				inscricEstad,
+				inscricMunicip,
+				street,
+				number,
+				neighborhood,
+				complement,
+				postalCode,
+				cityAndStateOrProvince);
 
 		Set<ConstraintViolation<DtoRecord_LegalPersonOfRegistry>> violations = validator.validate(dto);
 		violations.iterator().forEachRemaining(System.out::println);

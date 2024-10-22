@@ -34,7 +34,7 @@ public class ProviderTypeMaps {
                 .addMapping(PersonQualificationSuperclassEntity::getId, OutputDtoClassPage_Provider::setId)
                 .addMapping((ori) -> ori.getPerson().getId(), OutputDtoClassPage_Provider::setPersonId)
                 .addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), OutputDtoClassPage_Provider::setPersonName)
-                .addMapping((ori) -> ori.getPerson().getCpfCnpj(), OutputDtoClassPage_Provider::setCpfOrCnpj)
+                .addMapping((ori) -> ori.getPerson().getCpfOrCnpj(), OutputDtoClassPage_Provider::setCpfOrCnpj)
                 .addMapping(PersonQualificationSuperclassEntity::getObservation, OutputDtoClassPage_Provider::setObservation)
                 .addMapping(PersonQualificationSuperclassEntity::getInitialDate, OutputDtoClassPage_Provider::setInitialDate)
                 .addMapping(PersonQualificationSuperclassEntity::getFinalDate, OutputDtoClassPage_Provider::setFinalDate)

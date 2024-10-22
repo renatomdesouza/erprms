@@ -44,7 +44,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.intern
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.InputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.OutputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
-import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.serviceApplication.personService.StatusPerson;
@@ -58,7 +58,7 @@ public class PersonQualificationService_HttpPost {
 	private final PersonQualificationExceptions exceptionService;
 	private final PersonQualification_CreateUri createUri;
 	private final StatusPerson statusPerson;
-	private final AuthenticationFacade authenticationFacade;
+	private final AuthenticatedUsername authenticationFacade;
 	
 	public PersonQualificationService_HttpPost(
 			ModelMapper mapper, 
@@ -67,7 +67,7 @@ public class PersonQualificationService_HttpPost {
 			PersonQualificationExceptions exceptionService,
 			PersonQualification_CreateUri createUri,
 			StatusPerson statusPerson,
-			AuthenticationFacade authenticationFacade) {
+			AuthenticatedUsername authenticationFacade) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
@@ -146,13 +146,12 @@ public class PersonQualificationService_HttpPost {
 		personQualification.setPerson(person);
 		personQualification.setInitialDate(LocalDateTime.now());
 		personQualification.setHttpVerb(HttpVerbEnum.POST);
-		personQualification.setLoginUser(authenticationFacade.getAuthentication());
+		personQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
 		
 		personQualificationRepository.save(personQualification);
 		statusPerson.setStatusOfUse(person);
 
-		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =
-				new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
+		var dtoRecord_ServicePersonQualification = new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
 			
 		return ResponseEntity.created(dtoRecord_ServicePersonQualification.uri())
 								.body(dtoRecord_ServicePersonQualification.dtoOfPerson());

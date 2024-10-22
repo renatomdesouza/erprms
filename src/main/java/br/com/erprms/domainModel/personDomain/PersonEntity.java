@@ -2,6 +2,7 @@ package br.com.erprms.domainModel.personDomain;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import br.com.erprms.domainModel.personDomain.personComponent.AddressInterface;
@@ -11,7 +12,7 @@ import br.com.erprms.domainModel.personDomain.personComponent.PepleCommonDataInt
 import br.com.erprms.domainModel.personDomain.personComponent.foneAndAdditionalAddress.AdditionalAddressEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.foneAndAdditionalAddress.FoneEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -38,6 +39,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Validated
+@Component
 public  class PersonEntity implements 
 									PepleCommonDataInterface, 
 									NaturalPersonInterface, 
@@ -53,7 +55,7 @@ public  class PersonEntity implements
 	
 	@Column(name = "status_person_enum")
 	@Enumerated(EnumType.STRING)
-	public StatusPersonalUseEnum statusPersonEnum;
+	public StatusPersonalUsedEnum statusPersonEnum;
 
 	@Column(name = "is_natural_person")		
 	public Boolean isNaturalPerson;
@@ -64,10 +66,10 @@ public  class PersonEntity implements
 	@Column(name = "nickname")
 	private String nickname;
 
-	@Column(name = "cpf_or_Cnpj")
-	private Long cpfCnpj;
+	@Column(name = "cpf_or_Cnpj", unique = true)
+	private Long cpfOrCnpj;
 
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
  	private String email;
 	 
 	@Column(name = "site")
@@ -123,10 +125,6 @@ public  class PersonEntity implements
 		inverseJoinColumns = 
 		{ @JoinColumn(name = "additionalAddressEntityId", referencedColumnName = "id") })
 	private AdditionalAddressEntity additionalAddressEntity;
-
-    public String getEmail() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
 }
 

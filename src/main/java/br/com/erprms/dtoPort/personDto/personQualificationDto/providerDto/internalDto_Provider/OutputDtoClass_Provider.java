@@ -19,7 +19,7 @@ public class OutputDtoClass_Provider implements PersonQualificationOutputDtoInte
             String specifiedQualification) {
         this.specifiedQualification = specifiedQualification;
         this.personName = person.getFullNameOrEntityName();
-        this.cpfOrCnpj = person.getCpfCnpj();
+        this.cpfOrCnpj = person.getCpfOrCnpj();
         this.observation = provider.getObservation();
     }
 

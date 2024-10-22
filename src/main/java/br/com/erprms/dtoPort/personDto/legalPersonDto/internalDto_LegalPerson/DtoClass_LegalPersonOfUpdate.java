@@ -1,10 +1,11 @@
 package br.com.erprms.dtoPort.personDto.legalPersonDto.internalDto_LegalPerson;
 
+import br.com.erprms.dtoPort.personDto.PersonRegistryAndUpdateDto;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfUpdate;
 import lombok.Getter;
 
 @Getter
-public class DtoClass_LegalPersonOfUpdate {
+public class DtoClass_LegalPersonOfUpdate implements PersonRegistryAndUpdateDto{
 	final private Long id;
 	final private String fullNameOrEntityName;
 	final private String nickname;

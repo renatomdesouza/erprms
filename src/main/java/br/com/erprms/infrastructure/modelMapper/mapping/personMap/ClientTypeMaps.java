@@ -36,7 +36,7 @@ public class ClientTypeMaps {
                 .addMapping(PersonQualificationSuperclassEntity::getId, OutputDtoClassPage_Client::setId)
                 .addMapping((ori) -> ori.getPerson().getId(), OutputDtoClassPage_Client::setPersonId)
                 .addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), OutputDtoClassPage_Client::setPersonName)
-                .addMapping((ori) -> ori.getPerson().getCpfCnpj(), OutputDtoClassPage_Client::setCpfOrCnpj)
+                .addMapping((ori) -> ori.getPerson().getCpfOrCnpj(), OutputDtoClassPage_Client::setCpfOrCnpj)
                 .addMapping((ori) -> ori.getCreditTerms(), OutputDtoClassPage_Client::setCreditDays)
                 .addMapping(PersonQualificationSuperclassEntity::getObservation, OutputDtoClassPage_Client::setObservation)
                 .addMapping(PersonQualificationSuperclassEntity::getInitialDate, OutputDtoClassPage_Client::setInitialDate)

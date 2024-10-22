@@ -21,5 +21,5 @@ public class PersonQualification_CreateUri {
 		return  uriComponentsBuilder.path("/" + specifiedQualification)
 									.buildAndExpand()
 									.toUri();
-	}
+}
 }

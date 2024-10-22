@@ -35,7 +35,7 @@ public record DtoRecord_LegalPersonOfRegistry(
 
 		@NotBlank(message = "The CPF of the natural person cannot be null")
 		@Pattern(	regexp = "^\\d{14}$",
-					message = "The \"inscricMunicip\" must be described with only 14 decimal digits")
+					message = "The \"inscricMunicip\" must be described with only 11 decimal digits")
 		String inscricMunicip,
 
 		@NotBlank(message = "The local street of the natural person cannot be null")

@@ -26,7 +26,7 @@ public class OutputDtoClass_PartTimeEmployee implements PersonQualificationOutpu
 			String specifiedQualification) {
 		this.specifiedQualification = specifiedQualification;
 		this.personName = person.getFullNameOrEntityName();
-		this.cpfOrCnpj = person.getCpfCnpj();
+		this.cpfOrCnpj = person.getCpfOrCnpj();
 		this.observation = employee.getObservation();
 		this.professionalRegistry = employee.getProfessionalRegistry();
 		this.hourlyRate = employee.getHourlyRate();

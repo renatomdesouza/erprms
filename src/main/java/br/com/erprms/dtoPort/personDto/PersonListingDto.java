@@ -1,9 +1,9 @@
 package br.com.erprms.dtoPort.personDto;
 
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 
 public interface PersonListingDto {
-	void setStatusPersonEnum(StatusPersonalUseEnum statusPersonalUseEnum);
+	void setStatusPersonEnum(StatusPersonalUsedEnum statusPersonalUseEnum);
 	
  	void setFullNameOrEntityName(String string);
  	

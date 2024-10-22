@@ -37,7 +37,7 @@ private final ModelMapper mapper;
 			.addMapping((ori) -> ori.getId(), OutputDtoClassPage_PartTimeEmployee::setId)
 			.addMapping((ori) -> ori.getPerson().getId(), OutputDtoClassPage_PartTimeEmployee::setPersonId)
 			.addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), OutputDtoClassPage_PartTimeEmployee::setPersonName)
-			.addMapping((ori) -> ori.getPerson().getCpfCnpj(), OutputDtoClassPage_PartTimeEmployee::setCpfOrCnpj)
+			.addMapping((ori) -> ori.getPerson().getCpfOrCnpj(), OutputDtoClassPage_PartTimeEmployee::setCpfOrCnpj)
 			.addMapping((ori) -> ori.getSector(), OutputDtoClassPage_PartTimeEmployee::setSector)
 			.addMapping((ori) -> ori.getHourlyRate(), OutputDtoClassPage_PartTimeEmployee::setHourlyRate)
 			.addMapping((ori) -> ori.getObservation(), OutputDtoClassPage_PartTimeEmployee::setObservation)

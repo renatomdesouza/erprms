@@ -57,9 +57,9 @@ public class LegalPersonController {
 	
 		var dtoRecordTolegalPerson = personPost.registerService(legalPersonOfRecord, uriComponentsBuilder);
 		
-		return   ResponseEntity
-						.created(dtoRecordTolegalPerson.uri())
-						.body(dtoRecordTolegalPerson.dtoOfPerson());	
+		return ResponseEntity
+					.created(dtoRecordTolegalPerson.uri())
+					.body(dtoRecordTolegalPerson.dtoOfPerson());	
 	}
 	
 	@GetMapping
@@ -69,14 +69,13 @@ public class LegalPersonController {
 			@PageableDefault(size = 10, sort = "fullNameOrEntityName") Pageable naturalPersonPageable,
 			UriComponentsBuilder uriComponentsBuilder) {
 		
-		var dtoRecordOfServicePerson_Page = personGet.listingService(
-												naturalPersonPageable, 
-												uriComponentsBuilder, 
-												!IS_NATURAL_PERSON);
+		var dtoRecordOfServicePerson_Page = personGet.listingService(	naturalPersonPageable, 
+																		uriComponentsBuilder, 
+																		!IS_NATURAL_PERSON);
 		
 		return ResponseEntity
-				.created(dtoRecordOfServicePerson_Page.uri())
-				.body(dtoRecordOfServicePerson_Page.page());
+					.created(dtoRecordOfServicePerson_Page.uri())
+					.body(dtoRecordOfServicePerson_Page.page());
 	}
 	
 	@PutMapping
@@ -86,14 +85,14 @@ public class LegalPersonController {
 			@RequestBody @Valid DtoRecord_LegalPersonOfUpdate personUpdateRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) {
 		
-		var dtoRecordOfServicePerson = personPut.updateService(
-											personUpdateRecordDto, 
-											personUpdateRecordDto.id(),
-											uriComponentsBuilder);
+		var dtoRecordOfServicePerson = personPut.updateService(	personUpdateRecordDto, 
+																personUpdateRecordDto.id(),
+																personUpdateRecordDto.email(),
+																uriComponentsBuilder);
 		
 		return ResponseEntity
-				.created(dtoRecordOfServicePerson.uri())
-				.body(dtoRecordOfServicePerson.dtoOfPerson());
+					.created(dtoRecordOfServicePerson.uri())
+					.body(dtoRecordOfServicePerson.dtoOfPerson());
 	}
 
 	@DeleteMapping("/{id}")
@@ -106,7 +105,7 @@ public class LegalPersonController {
 		var dtoRecordToLegalPerson = personDelete.excludeService(id, uriComponentsBuilder);
 		
 		return ResponseEntity
-				.created(dtoRecordToLegalPerson.uri())
-				.body(dtoRecordToLegalPerson.dtoOfPerson());
+					.created(dtoRecordToLegalPerson.uri())
+					.body(dtoRecordToLegalPerson.dtoOfPerson());
 	}
 }

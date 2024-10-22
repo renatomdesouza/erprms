@@ -1,11 +1,12 @@
 package br.com.erprms.dtoPort.personDto.legalPersonDto.internalDto_LegalPerson;
 
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
+import br.com.erprms.dtoPort.personDto.PersonRegistryAndUpdateDto;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
 import lombok.Getter;
 
 @Getter
-public class DtoClass_LegalPersonOfRegistry {
+public class DtoClass_LegalPersonOfRegistry implements PersonRegistryAndUpdateDto{
 	final	private	String	fullNameOrEntityName;
 	final	private	String	nickname;
 	final	private	Long	cnpj;
@@ -19,14 +20,14 @@ public class DtoClass_LegalPersonOfRegistry {
 	final	private	String	complement;
 	final	private	String	postalCode;
 	final	private	String	cityAndStateOrProvince;
-	private	StatusPersonalUseEnum statusPersonEnum;
+	private	StatusPersonalUsedEnum statusPersonEnum;
 	private Boolean isNaturalPerson;
 	
 	public DtoClass_LegalPersonOfRegistry(DtoRecord_LegalPersonOfRegistry legalPerson) {
 		this.fullNameOrEntityName = legalPerson.fullNameOrEntityName();
 		this.nickname = legalPerson.nickname();
-		this.cnpj = 
-				Long.parseUnsignedLong(legalPerson.cnpj());
+		this.cnpj =
+                Long.parseLong(legalPerson.cnpj());
 
 		this.email = legalPerson.email();
 		this.site = legalPerson.site();
@@ -38,7 +39,7 @@ public class DtoClass_LegalPersonOfRegistry {
 		this.complement = legalPerson.complement();
 		this.postalCode = legalPerson.postalCode();
 		this.cityAndStateOrProvince = legalPerson.cityAndStateOrProvince();
-		this.statusPersonEnum = StatusPersonalUseEnum.NOT_USED;
+		this.statusPersonEnum = StatusPersonalUsedEnum.NOT_USED;
 		this.isNaturalPerson = false;
 	}
 }

@@ -24,7 +24,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPost;
@@ -51,7 +50,7 @@ class NaturalPersonControllerTest {
 	@Test
 	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@DisplayName("Should return 201 for save the user")
-	void integrityTest_CorrectAccessToPost() throws Exception {
+	void integrityTest_CorrectAccessToPost()  throws Exception {
 		MockHttpServletResponse response =
 				mockMvc.perform(
 						post("/naturalPerson")
@@ -67,7 +66,7 @@ class NaturalPersonControllerTest {
 	@Test
 	@Order(Ordered.LOWEST_PRECEDENCE)
 	@DisplayName("Should return 500 for the user's email is already registered in the system")
-	void integrityTest_IncorrectAccessToPost_WithEmail() throws Exception {
+	void integrityTest_IncorrectAccessToPost_WithEmail()  throws Exception {
 		MockHttpServletResponse response =
 				mockMvc.perform(
 								post("/naturalPerson")
@@ -83,7 +82,7 @@ class NaturalPersonControllerTest {
 	@Test
 	@Order(Ordered.LOWEST_PRECEDENCE)
 	@DisplayName("Should return 500 for the user's CPF is already registered in the system")
-	void integrityTest_IncorrectAccessToPost_WithCpf() throws Exception {
+	void integrityTest_IncorrectAccessToPost_WithCpf()  throws Exception {
 		MockHttpServletResponse response =
 				mockMvc.perform(
 								post("/naturalPerson")

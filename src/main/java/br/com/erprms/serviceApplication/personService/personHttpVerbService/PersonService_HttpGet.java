@@ -31,9 +31,8 @@ public class PersonService_HttpGet <T extends PersonListingDto> {
 				Pageable personPageable, 
 				UriComponentsBuilder uriComponentsBuilder,
 				Boolean isNaturalPerson) {
-
-		Page<? extends PersonListingDto> personListingDto_Page =
-				setterPersonListingDtoPage(personPageable, isNaturalPerson);
+		
+		var personListingDto_Page = setterPersonListingDtoPage(personPageable, isNaturalPerson);
 		
 		URI uri = new PersonService_CreateUri().uriBuild(uriComponentsBuilder, isNaturalPerson);
 		

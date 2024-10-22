@@ -18,7 +18,7 @@ public class OutputDtoClassExclude_PartTimeEmployee implements PersonQualificati
 			String specifiedQualification) {
 		this.specifiedQualification = specifiedQualification;
 		this.personName = partyTimeEmployeeToDelete.getPerson().getFullNameOrEntityName();
-		this.cpfOrCnpj = partyTimeEmployeeToDelete.getPerson().getCpfCnpj();
+		this.cpfOrCnpj = partyTimeEmployeeToDelete.getPerson().getCpfOrCnpj();
 		this.observation = partyTimeEmployeeToDelete.getObservation();
 	}
 }

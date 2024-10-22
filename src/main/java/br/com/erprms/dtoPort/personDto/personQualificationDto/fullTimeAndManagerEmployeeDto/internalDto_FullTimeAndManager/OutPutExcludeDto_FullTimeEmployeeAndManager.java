@@ -18,7 +18,7 @@ public class OutPutExcludeDto_FullTimeEmployeeAndManager implements PersonQualif
 			String specifiedQualification) {
 		this.specifiedQualification = specifiedQualification;
 		this.personName = managerOrEmployeeToDelete.getPerson().getFullNameOrEntityName();
-		this.cpfOrCnpj = managerOrEmployeeToDelete.getPerson().getCpfCnpj();
+		this.cpfOrCnpj = managerOrEmployeeToDelete.getPerson().getCpfOrCnpj();
 		this.observation = managerOrEmployeeToDelete.getObservation();
 	}
 }

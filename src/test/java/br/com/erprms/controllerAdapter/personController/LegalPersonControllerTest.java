@@ -1,15 +1,14 @@
 package br.com.erprms.controllerAdapter.personController;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.dtoPort.personDto.PersonListingDto;
-import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPost;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.dtoPort.personDto.PersonListingDto;
+import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPost;
+
+@SpringBootTest
 @ActiveProfiles("test")
 @WithMockUser
 @AutoConfigureMockMvc
@@ -50,7 +54,6 @@ class LegalPersonControllerTest {
 		MockHttpServletResponse response =
 				mockMvc.perform(
 								post("/legalPerson")
-										.with(user("user"))  // Alternative to @WithMockUser
 										.content(jacksonTester_As_DtoRecord_LegalPersonOfRegistry
 												.write(dataFromLegalPersonRegistry_Of_SaveOk).getJson())
 										.contentType(MediaType.APPLICATION_JSON) )
@@ -78,13 +81,13 @@ class LegalPersonControllerTest {
 
 	@Test
 	@Order(Ordered.LOWEST_PRECEDENCE)
-	@DisplayName("Should return 500 for the user's CNPJ is already registered in the system")
+	@DisplayName("Should return 500 for the user's CPF is already registered in the system")
 	void integrityTest_IncorrectAccessToPost_WithCpf()  throws Exception {
 		MockHttpServletResponse response =
 				mockMvc.perform(
 								post("/legalPerson")
 										.content(jacksonTester_As_DtoRecord_LegalPersonOfRegistry
-												.write(getDataFromLegalPersonRegistry_Of_FailureForCnpj).getJson())
+												.write(getDataFromLegalPersonRegistry_Of_FailureForCpf).getJson())
 										.contentType(MediaType.APPLICATION_JSON) )
 						.andReturn()
 						.getResponse();
@@ -118,13 +121,13 @@ class LegalPersonControllerTest {
 			"95345678901234",
 			"fulana5@mail.com",
 			"www.fulana10.com",
-			"232323232",
-			"12345678912345",
+			"2323232323",
+			"4545454545",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01153-000",
+			"01010101-0101",
 			"São Paulo/SP"
 			);
 
@@ -134,29 +137,29 @@ class LegalPersonControllerTest {
 			"85345678901237",
 			"fulana5@mail.com",
 			"www.fulana10.com",
-			"232323232",
-			"12345678912345",
+			"2323232323",
+			"4545454545",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01153-000",
+			"01010101-0101",
 			"São Paulo/SP"
 	);
 
-	DtoRecord_LegalPersonOfRegistry getDataFromLegalPersonRegistry_Of_FailureForCnpj = new DtoRecord_LegalPersonOfRegistry(
+	DtoRecord_LegalPersonOfRegistry getDataFromLegalPersonRegistry_Of_FailureForCpf = new DtoRecord_LegalPersonOfRegistry(
 			"Empresa Fulana SA",
 			"EmpFulana",
-			"95345678901234",
+			"95345678901237",
 			"fulana5@mail.com",
 			"www.fulana11.com",
-			"232323232",
-			"12345678912345",
+			"2323232323",
+			"4545454545",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01153-000",
+			"01010101-0101",
 			"São Paulo/SP"
 	);
 }

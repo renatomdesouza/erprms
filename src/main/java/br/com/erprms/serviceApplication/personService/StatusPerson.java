@@ -3,7 +3,7 @@ package br.com.erprms.serviceApplication.personService;
 import org.springframework.stereotype.Service;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
@@ -22,13 +22,13 @@ public class StatusPerson {
 	}
 	
 	public void setStatusOfUse(PersonEntity person) {
-		person.setStatusPersonEnum(StatusPersonalUseEnum.USED);
+		person.setStatusPersonEnum(StatusPersonalUsedEnum.USED);
 		personRepository.save(person);
 	}
 	
 	public void setSatusOfNonUse(PersonEntity person) {
 		if(!personQualificationRepository.existsPersonQualificationByFinalDateIsNullAndPerson(person)) {
-			person.setStatusPersonEnum(StatusPersonalUseEnum.NOT_USED);
+			person.setStatusPersonEnum(StatusPersonalUsedEnum.NOT_USED);
 			personRepository.save(person);
 		}
 	}

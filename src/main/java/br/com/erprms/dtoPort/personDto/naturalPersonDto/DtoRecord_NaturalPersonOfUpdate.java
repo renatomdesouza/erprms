@@ -1,7 +1,9 @@
 package br.com.erprms.dtoPort.personDto.naturalPersonDto;
 
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public record DtoRecord_NaturalPersonOfUpdate (
 		@NotBlank(message = "The \"Id\" of the accountant cannot be null")

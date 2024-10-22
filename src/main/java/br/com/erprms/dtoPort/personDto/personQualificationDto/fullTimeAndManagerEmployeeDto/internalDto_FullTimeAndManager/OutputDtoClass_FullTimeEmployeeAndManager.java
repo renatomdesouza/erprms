@@ -26,7 +26,7 @@ public class OutputDtoClass_FullTimeEmployeeAndManager implements PersonQualific
 			String specifiedQualification) {
 		this.specifiedQualification = specifiedQualification;
 		this.personName = person.getFullNameOrEntityName();
-		this.cpfOrCnpj = person.getCpfCnpj();
+		this.cpfOrCnpj = person.getCpfOrCnpj();
 		this.observation = employee.getObservation();
 		this.professionalRegistry = employee.getProfessionalRegistry();
 		this.monthlySalary = employee.getMonthlySalary();

@@ -1,10 +1,10 @@
 package br.com.erprms.domainModel.personDomain.personComponent;
 
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 
 public interface PepleCommonDataInterface {
-	StatusPersonalUseEnum getStatusPersonEnum();
-	void setStatusPersonEnum(StatusPersonalUseEnum statusPersonalUseEnum);
+	StatusPersonalUsedEnum getStatusPersonEnum();
+	void setStatusPersonEnum(StatusPersonalUsedEnum statusPersonalUseEnum);
 
 	Boolean getIsNaturalPerson();
 	void setIsNaturalPerson(Boolean bollean);

@@ -57,8 +57,8 @@ public class NaturalPersonController {
 		var dtoRecordToNaturalPerson = personPost.registerService(naturalPersonOfRecord, uriComponentsBuilder);
 
 		return ResponseEntity
-				.created(dtoRecordToNaturalPerson.uri())
-				.body(dtoRecordToNaturalPerson.dtoOfPerson());
+					.created(dtoRecordToNaturalPerson.uri())
+					.body(dtoRecordToNaturalPerson.dtoOfPerson());
 	}
 
 	@GetMapping
@@ -73,8 +73,8 @@ public class NaturalPersonController {
 																uriComponentsBuilder, 
 																IS_NATURAL_PERSON);
 		return ResponseEntity
-				.created(dtoRecordOfServicePerson_Page.uri())
-				.body(dtoRecordOfServicePerson_Page.page());
+					.created(dtoRecordOfServicePerson_Page.uri())
+					.body(dtoRecordOfServicePerson_Page.page());
 	}
 	
 	@PutMapping
@@ -87,11 +87,12 @@ public class NaturalPersonController {
 		var dtoRecordOfServicePerson = personPut.updateService(
 													personUpdateRecordDto,
 													personUpdateRecordDto.id(),
+													personUpdateRecordDto.email(),
 													uriComponentsBuilder);
 		
 		return ResponseEntity
-				.created(dtoRecordOfServicePerson.uri())
-				.body(dtoRecordOfServicePerson.dtoOfPerson());
+					.created(dtoRecordOfServicePerson.uri())
+					.body(dtoRecordOfServicePerson.dtoOfPerson());
 	}
 		
 	@DeleteMapping("/{id}")
@@ -105,7 +106,7 @@ public class NaturalPersonController {
 		var dtoRecordToNaturalPerson = personDelete.excludeService(id, uriComponentsBuilder);
 		
 		return ResponseEntity
-				.created(dtoRecordToNaturalPerson.uri())
-				.body(dtoRecordToNaturalPerson.dtoOfPerson());
+					.created(dtoRecordToNaturalPerson.uri())
+					.body(dtoRecordToNaturalPerson.dtoOfPerson());
 	}
 }

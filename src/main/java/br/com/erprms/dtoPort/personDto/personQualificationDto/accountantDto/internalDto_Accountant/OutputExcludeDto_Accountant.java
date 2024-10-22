@@ -18,7 +18,7 @@ public class OutputExcludeDto_Accountant implements PersonQualificationOutputDto
             String specifiedQualification) {
         this.specifiedQualification = specifiedQualification;
         this.personName = accountantToDelete.getPerson().getFullNameOrEntityName();
-        this.cpfOrCnpj = accountantToDelete.getPerson().getCpfCnpj();
+        this.cpfOrCnpj = accountantToDelete.getPerson().getCpfOrCnpj();
         this.observation = accountantToDelete.getObservation();
     }
 }

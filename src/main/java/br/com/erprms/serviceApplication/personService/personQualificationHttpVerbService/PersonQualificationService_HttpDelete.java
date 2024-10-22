@@ -19,7 +19,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDt
 import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.internalDto_Provider.OutputExcludeDto_Provider;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.OutputExcludeDto_ResponsibleForLegalPerson;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
-import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.*;
 import br.com.erprms.serviceApplication.personService.StatusPerson;
 import jakarta.transaction.Transactional;
@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -51,7 +50,7 @@ public class PersonQualificationService_HttpDelete {
     private final PersonQualificationExceptions exceptionService;
     private final PersonQualification_CreateUri createUri;
     private final StatusPerson statusPersonOfQualification;
-    private final AuthenticationFacade authenticationFacade;
+    private final AuthenticatedUsername authenticationFacade;
 
     public PersonQualificationService_HttpDelete(
             ModelMapper mapper,
@@ -67,7 +66,7 @@ public class PersonQualificationService_HttpDelete {
             PersonQualificationExceptions exceptionService,
             PersonQualification_CreateUri createUri,
             StatusPerson statusPersonOfQualification,
-            AuthenticationFacade authenticationFacade) {
+            AuthenticatedUsername authenticationFacade) {
         this.mapper = mapper;
         this.personRepository = personRepository;
         this.personQualificationRepository = personQualificationRepository;
@@ -92,7 +91,7 @@ public class PersonQualificationService_HttpDelete {
             throws ResponseStatusException {
 
         exceptionService.exceptionForPersonWhoDoesNotExist(person_Id);
-        PersonEntity person = personRepository.getReferenceById(person_Id);
+        var person = personRepository.getReferenceById(person_Id);
         statusPersonOfQualification.setSatusOfNonUse(person);
 
         PersonQualificationOutputDtoInterface outPutExcludeDto = null;
@@ -106,11 +105,11 @@ public class PersonQualificationService_HttpDelete {
             case RESPONSIBLE_FOR_LEGAL_PERSON -> { outPutExcludeDto = case_RESPONSIBLE_FOR_LEGAL_PERSON(specifiedQualification, person); break; }
         }
 
-        URI uri = createUri.uriCreator(	uriComponentsBuilder,
-                                        specifiedQualification,
-                                        person_Id);
+        var uri = createUri.uriCreator(	uriComponentsBuilder,
+                specifiedQualification,
+                person_Id);
 
-        DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =
+        var dtoRecord_ServicePersonQualification =
                 new DtoRecord_ServicePersonQualification<>(uri, outPutExcludeDto);
 
         return ResponseEntity
@@ -207,7 +206,7 @@ public class PersonQualificationService_HttpDelete {
         newPersonQualification.setIsActual(true);
         newPersonQualification.setFinalDate(LocalDateTime.now());
         newPersonQualification.setHttpVerb(HttpVerbEnum.DELETE);
-        newPersonQualification.setLoginUser(authenticationFacade.getAuthentication());
+        newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
     }
 
     private void entitiesSave(PersonQualificationSuperclassEntity oldPersonQualification, PersonQualificationSuperclassEntity newPersonQualification) {

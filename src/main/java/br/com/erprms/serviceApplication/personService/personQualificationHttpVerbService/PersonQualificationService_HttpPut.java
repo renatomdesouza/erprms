@@ -44,7 +44,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.intern
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.InputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.OutputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
-import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.AccountantRepository;
 import br.com.erprms.repositoryAdapter.personRepository.ClientRepository;
 import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
@@ -70,7 +70,7 @@ public class PersonQualificationService_HttpPut {
     private final ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository;
     private final PersonQualificationExceptions exceptionService;
     private final PersonQualification_CreateUri createUri;
-    private final AuthenticationFacade authenticationFacade;
+    private final AuthenticatedUsername authenticationFacade;
 
     public PersonQualificationService_HttpPut(
             ModelMapper mapper,
@@ -83,7 +83,7 @@ public class PersonQualificationService_HttpPut {
             ProviderRepository providerRepository,
             ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
             AccountantRepository accountantRepository,
-            AuthenticationFacade authenticationFacade,
+            AuthenticatedUsername authenticationFacade,
             PersonQualificationExceptions exceptionService,
             PersonQualification_CreateUri createUri) {
         this.mapper = mapper;
@@ -109,7 +109,7 @@ public class PersonQualificationService_HttpPut {
             String specifiedQualification)
             throws ResponseStatusException {
 
-        PersonEntity person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id());
+        var person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id());
 
         exceptionService.exceptionForPersonWhoDoesNotExist(personQualificationInputDto.getPerson_Id());
 
@@ -134,10 +134,10 @@ public class PersonQualificationService_HttpPut {
         }
 
         URI uri = createUri.uriCreator(	uriComponentsBuilder,
-                                        specifiedQualification,
-                                        person.getId());
+                specifiedQualification,
+                person.getId());
 
-        DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =
+        var dtoRecord_ServicePersonQualification =
                 new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
 
         return ResponseEntity
@@ -292,7 +292,7 @@ case_RESPONSIBLE_FOR_LEGAL_PERSON(T personQualificationInputDto,
         newPersonQualification.setIsActual(true);
         newPersonQualification.setInitialDate(LocalDateTime.now());
         newPersonQualification.setHttpVerb(HttpVerbEnum.PUT);
-        newPersonQualification.setLoginUser(authenticationFacade.getAuthentication());
+        newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
     }
 
     private void entitiesSave(PersonQualificationSuperclassEntity oldPersonQualification, PersonQualificationSuperclassEntity newPersonQualification) {

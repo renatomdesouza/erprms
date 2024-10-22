@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonsManagement_Entity {
+public class PersonsManagementEntity {
 
     @Column(name = "id")
     @Id

@@ -1,19 +1,13 @@
 package br.com.erprms.dtoPort.personDto.naturalPersonDto.internalDto_LegalPerson;
 
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
+import br.com.erprms.dtoPort.personDto.PersonRegistryAndUpdateDto;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
-import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.sql.Wrapper;
-import java.util.Optional;
 
 @Getter
-public class DtoClass_NaturalPersonOfRegistry {
+public class DtoClass_NaturalPersonOfRegistry implements PersonRegistryAndUpdateDto{
 	private String fullNameOrEntityName;
 	private String nickname;
 	private Long cpf;
@@ -31,18 +25,15 @@ public class DtoClass_NaturalPersonOfRegistry {
 	private String postalCode;
 	private String cityAndStateOrProvince;
 
-	StatusPersonalUseEnum statusPersonEnum;
+	StatusPersonalUsedEnum statusPersonEnum;
 
 	Boolean isNaturalPerson;
-
-	@Autowired
-	PersonRepository repository;
 	
 	public DtoClass_NaturalPersonOfRegistry (DtoRecord_NaturalPersonOfRegistry naturalPerson) {
 		this.fullNameOrEntityName = naturalPerson.fullNameOrEntityName();
 		this.nickname = naturalPerson.nickname();
 		this.cpf =
-                Long.parseLong(naturalPerson.cpf());
+				Long.parseLong(naturalPerson.cpf());
 
 		this.email = naturalPerson.email();
 		this.site = naturalPerson.site();
@@ -60,31 +51,8 @@ public class DtoClass_NaturalPersonOfRegistry {
 		this.postalCode = naturalPerson.postalCode();
 		this.cityAndStateOrProvince = naturalPerson.cityAndStateOrProvince();
 		
-		this.statusPersonEnum = StatusPersonalUseEnum.NOT_USED;
+		this.statusPersonEnum = StatusPersonalUsedEnum.NOT_USED;
 		this.isNaturalPerson = true;
 
-//		checksPreviousExistenceOfCpf(this.cpf);
-//		checksPreviousExistenceOfEmail(this.email);
 	}
-
-	private void checksPreviousExistenceOfCpf(Long cpf){
-		var cpfUsed = repository.findByCpfCnpj(cpf);
-		System.out.println(" ===> " + cpfUsed);
-		var cpfOptional = Optional.of(cpfUsed);
-		if (cpfOptional.isPresent())
-			throw new ResponseStatusException(
-					HttpStatus.INSUFFICIENT_STORAGE,
-					"There is already a person with this CPF") ;
-	}
-
-	private void checksPreviousExistenceOfEmail(String email){
-		var emailUsed = repository.findEmail(email);
-		System.out.println(" ===> " + emailUsed);
-		var emailOptional = Optional.of(emailUsed);
-		if (emailOptional.isPresent())
-			throw new ResponseStatusException(
-					HttpStatus.INSUFFICIENT_STORAGE,
-					"There is already a person with this email") ;
-	}
-
 }

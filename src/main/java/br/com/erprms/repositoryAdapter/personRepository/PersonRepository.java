@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 
 
 public interface PersonRepository extends JpaRepository<PersonEntity, Long>{
@@ -17,8 +17,9 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long>{
 	
 	Page<PersonEntity> findByIsNaturalPersonFalse(Pageable personPageable);
 	
-	PersonEntity findByIdAndStatusPersonEnum(Long id, StatusPersonalUseEnum statusPersonEnum);
+	PersonEntity findByIdAndStatusPersonEnum(Long id, StatusPersonalUsedEnum statusPersonEnum);
 
+	
 	@Query(	value = """
 					SELECT p.email
 						FROM person p
@@ -26,9 +27,5 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long>{
 								p.email = :email
 					LIMIT 1
 			""", nativeQuery = true)
-	String findEmail(String email);
-
 	String findByEmail(String email);
-
-	Long findByCpfCnpj(Long cpfOrCnpj);   //Retornava um PersonEntity
 }

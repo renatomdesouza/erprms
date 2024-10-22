@@ -37,7 +37,7 @@ public class FullTimeEmployeeTypeMaps {
 			.addMapping((ori) -> ori.getId(), OutputDtoClassPage_FullTimeEmployeeAndManager::setId)
 			.addMapping((ori) -> ori.getPerson().getId(), OutputDtoClassPage_FullTimeEmployeeAndManager::setPersonId)
 			.addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), OutputDtoClassPage_FullTimeEmployeeAndManager::setPersonName)
-			.addMapping((ori) -> ori.getPerson().getCpfCnpj(), OutputDtoClassPage_FullTimeEmployeeAndManager::setCpfOrCnpj)
+			.addMapping((ori) -> ori.getPerson().getCpfOrCnpj(), OutputDtoClassPage_FullTimeEmployeeAndManager::setCpfOrCnpj)
 			.addMapping((ori) -> ori.getSector(), OutputDtoClassPage_FullTimeEmployeeAndManager::setSector)
 			.addMapping((ori) -> ori.getMonthlySalary(), OutputDtoClassPage_FullTimeEmployeeAndManager::setSalary)
 			.addMapping((ori) -> ori.getObservation(), OutputDtoClassPage_FullTimeEmployeeAndManager::setObservation)

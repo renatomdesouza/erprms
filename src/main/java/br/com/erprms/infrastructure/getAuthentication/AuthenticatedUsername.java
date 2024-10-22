@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 @Component
-public class AuthenticationFacade implements AuthenticationFacadeInterface {
+public class AuthenticatedUsername implements AuthenticatedUsernameInterface {
 
     @Override
-    public String getAuthentication() {
+    public String getAuthenticatedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication instanceof AnonymousAuthenticationToken)

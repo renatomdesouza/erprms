@@ -42,5 +42,4 @@ public class PersonService_CreateDto <T extends PersonListingDto> {
 		
 		return dtoClassTolPerson_ToListing;
 	}
-
 }

@@ -18,7 +18,7 @@ public class OutputExcludeDto_Provider implements PersonQualificationOutputDtoIn
             String specifiedQualification) {
         this.specifiedQualification = specifiedQualification;
         this.personName = clientToDelete.getPerson().getFullNameOrEntityName();
-        this.cpfOrCnpj = clientToDelete.getPerson().getCpfCnpj();
+        this.cpfOrCnpj = clientToDelete.getPerson().getCpfOrCnpj();
         this.observation = clientToDelete.getObservation();
     }
 }

@@ -1,10 +1,12 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import br.com.erprms.domainModel.personDomain.PersonsManagement_Entity;
+import br.com.erprms.domainModel.personDomain.PersonsManagementEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
-import br.com.erprms.infrastructure.getAuthentication.AuthenticationFacade;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.CreatePersonManagement;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -12,12 +14,11 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUseEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
 
-import java.net.URI;
 import java.time.LocalDateTime;
 
 @Service
@@ -25,14 +26,14 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 	private PersonRepository personRepository;
 	private PersonsManagementRepository personsManagementRepository;
 	private ModelMapper mapper;
-	private final AuthenticationFacade authenticationFacade;
+	private final AuthenticatedUsername authenticationFacade;
 	private final PersonExceptions personException;
 
 	public PersonService_HttpDelete(
 			PersonRepository personRepository,
 			PersonsManagementRepository personsManagementRepository,
 			ModelMapper mapper,
-			AuthenticationFacade authenticationFacade,
+			AuthenticatedUsername authenticationFacade,
 			PersonExceptions personException) {
 		this.personRepository = personRepository;
 		this.personsManagementRepository = personsManagementRepository;
@@ -46,39 +47,43 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 			@NonNull Long id, 
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-
-		PersonEntity person = personRepository.getReferenceById(id);
-		StatusPersonalUseEnum statusPerson =
-				person.getStatusPersonEnum();
-
+		
+		var person = new PersonEntity();
+		
+		person = personRepository.getReferenceById(id);
+		var statusPerson = person.getStatusPersonEnum();
 		personException.personWithStatusInUse(statusPerson);
 
-		person.setStatusPersonEnum(StatusPersonalUseEnum.DELETED);
-
-		PersonsManagement_Entity personManagement =
-				setPersonsManagement(person);
+		person.setStatusPersonEnum(StatusPersonalUsedEnum.DELETED);
+		PersonsManagementEntity personManagement = 
+				createManagement(person);
+//				createPersonsManagement(person);
 				
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
 
-		URI uri = new PersonService_CreateUri().uriBuild(
+		var uri = new PersonService_CreateUri().uriBuild(
 						uriComponentsBuilder, 
 						person.getId(), 
 						person.getIsNaturalPerson());
-
-		PersonListingDto personListingDto = new PersonService_CreateDto<>(mapper)
+		
+		var personListingDto = new PersonService_CreateDto<>(mapper)
 				.selectNaturalOrLegalPersonToListing_Dto(person);
 		
 		return new DtoRecord_ServicePerson<>(uri, personListingDto);
 	}
 
-	private PersonsManagement_Entity setPersonsManagement(PersonEntity person) {
-		PersonsManagement_Entity personManagement = new PersonsManagement_Entity();
-		personManagement.setPerson(person);
-		personManagement.setHttpVerb(HttpVerbEnum.DELETE);
-		personManagement.setInitialDate(LocalDateTime.now());
-		personManagement.setLoginUser(authenticationFacade.getAuthentication());
-
-		return personManagement;
+	protected PersonsManagementEntity createManagement(PersonEntity person) {
+		return new CreatePersonManagement(this.authenticationFacade).create(person, HttpVerbEnum.DELETE);
 	}
+//
+//	protected PersonsManagementEntity createPersonsManagement(PersonEntity person) {
+//		var personManagement = new PersonsManagementEntity();
+//		personManagement.setPerson(person);
+//		personManagement.setHttpVerb(HttpVerbEnum.DELETE);
+//		personManagement.setInitialDate(LocalDateTime.now());
+//		personManagement.setLoginUser(authenticationFacade.getAuthenticatedUsername());
+//
+//		return personManagement;
+//	}
 }
