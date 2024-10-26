@@ -10,10 +10,10 @@ import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVer
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 
 @Service
-public class CreatePersonManagement {
+public class PersonManagement_Service {
 	private AuthenticatedUsername authenticatedUsername;
 
-	public CreatePersonManagement(AuthenticatedUsername authenticatedUsername) {
+	public PersonManagement_Service(AuthenticatedUsername authenticatedUsername) {
 		this.authenticatedUsername = authenticatedUsername;
 	}
 
@@ -27,6 +27,8 @@ public class CreatePersonManagement {
 		return personManagement;
 	}
 
+	
+	
 	protected LocalDateTime clockForNow() {
 		return LocalDateTime.now();
 	}

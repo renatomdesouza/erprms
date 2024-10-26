@@ -5,7 +5,7 @@ import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVer
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.CreatePersonManagement;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.PersonManagement_Service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.lang.NonNull;
@@ -74,7 +74,7 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 	}
 
 	protected PersonsManagementEntity createManagement(PersonEntity person) {
-		return new CreatePersonManagement(this.authenticationFacade).create(person, HttpVerbEnum.DELETE);
+		return new PersonManagement_Service(this.authenticationFacade).create(person, HttpVerbEnum.DELETE);
 	}
 //
 //	protected PersonsManagementEntity createPersonsManagement(PersonEntity person) {

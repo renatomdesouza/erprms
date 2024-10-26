@@ -32,14 +32,14 @@ public class PersonService_HttpGet <T extends PersonListingDto> {
 				UriComponentsBuilder uriComponentsBuilder,
 				Boolean isNaturalPerson) {
 		
-		var personListingDto_Page = setterPersonListingDtoPage(personPageable, isNaturalPerson);
+		var personListingDto_Page = createPersonListingDtoPage(personPageable, isNaturalPerson);
 		
 		URI uri = new PersonService_CreateUri().uriBuild(uriComponentsBuilder, isNaturalPerson);
 		
 		return new DtoRecord_ServicePerson_Page<>(uri, personListingDto_Page);
 	}
 
-	private Page<? extends PersonListingDto> setterPersonListingDtoPage(
+	protected Page<? extends PersonListingDto> createPersonListingDtoPage(
 			Pageable personPageable,
 			Boolean isNaturalPerson) {
 		

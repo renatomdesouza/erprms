@@ -2,6 +2,8 @@ package br.com.erprms.controllerAdapter.personController.personQualificationCont
 
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification_Page;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.internalDto_Accountant.InputDtoClass_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.InputDtoRecord_Accountant;
@@ -44,10 +46,14 @@ public class AccountantController {
             @RequestBody InputDtoRecord_Accountant accountantRecordDto,
             UriComponentsBuilder uriComponentsBuilder)
             throws ResponseStatusException {
-        return personQualificationService_HttpPost.registerService(
-                new InputDtoClass_Accountant(accountantRecordDto),
-                uriComponentsBuilder,
-                ACCOUNTANT);
+    	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+    			personQualificationService_HttpPost.registerService(	new InputDtoClass_Accountant(accountantRecordDto),
+														                uriComponentsBuilder,
+														                ACCOUNTANT);
+    	
+    	return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
     }
 
     @GetMapping
@@ -55,10 +61,14 @@ public class AccountantController {
     public ResponseEntity<Page<? extends PersonQualificationOutputDtoInterface>> listing(
             @PageableDefault(size = 10) Pageable qualificationPageable,
             UriComponentsBuilder uriComponentsBuilder) {
-        return personQualificationService_HttpGet.listingService(
-                qualificationPageable,
-                uriComponentsBuilder,
-                ACCOUNTANT);
+    	DtoRecord_ServicePersonQualification_Page<?> responseEntityOutputDtoPage = 
+        		personQualificationService_HttpGet.listingService(	qualificationPageable,
+													                uriComponentsBuilder,
+													                ACCOUNTANT);
+    	
+    	return ResponseEntity
+				.created(responseEntityOutputDtoPage.uri())
+				.body(responseEntityOutputDtoPage.page());
     }
 
     @PutMapping
@@ -67,10 +77,14 @@ public class AccountantController {
             @RequestBody InputDtoRecord_Accountant accountantRecordDto,
             UriComponentsBuilder uriComponentsBuilder)
             throws ResponseStatusException {
-        return	personQualificationService_HttpPut.update(
-                new InputDtoClass_Accountant(accountantRecordDto),
-                uriComponentsBuilder,
-                ACCOUNTANT);
+    	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =
+        		personQualificationService_HttpPut.update(	new InputDtoClass_Accountant(accountantRecordDto),
+											                uriComponentsBuilder,
+											                ACCOUNTANT);
+    	
+    	return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
     }
 
     @DeleteMapping("/{person_Id}")
@@ -79,9 +93,13 @@ public class AccountantController {
             @NonNull @PathVariable Long person_Id,
             UriComponentsBuilder uriComponentsBuilder)
             throws ResponseStatusException {
-        return personQualificationService_HttpDelete.exclude(	person_Id,
-                uriComponentsBuilder,
-                ACCOUNTANT);
+    	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+        		personQualificationService_HttpDelete.exclude(	person_Id,
+												                uriComponentsBuilder,
+												                ACCOUNTANT);
+    	
+    	return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
     }
-
 }

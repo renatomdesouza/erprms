@@ -103,7 +103,9 @@ public class PersonQualificationService_HttpPut {
 
     @Transactional
     @SuppressWarnings("null")
-    public <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface> ResponseEntity<PersonQualificationOutputDtoInterface> update(
+    public <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface> 
+    DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> /*ResponseEntity<PersonQualificationOutputDtoInterface>*/ 
+    update(
             T personQualificationInputDto,
             UriComponentsBuilder uriComponentsBuilder,
             String specifiedQualification)
@@ -140,10 +142,11 @@ public class PersonQualificationService_HttpPut {
         var dtoRecord_ServicePersonQualification =
                 new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
 
-        return ResponseEntity
-                .created(dtoRecord_ServicePersonQualification.uri())
-                .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
+//        return ResponseEntity
+//                .created(dtoRecord_ServicePersonQualification.uri())
+//                .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
 
+        return dtoRecord_ServicePersonQualification;
     }
 
     @SuppressWarnings("unchecked")

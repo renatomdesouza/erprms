@@ -15,8 +15,8 @@ import br.com.erprms.infrastructure.exceptionManager.responseStatusException.Per
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.CreatePersonManagement;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.IsEmailPresent_Service;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.PersonManagement_Service;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.UpdatePersonFromDto_Service;
 import jakarta.transaction.Transactional;
 
@@ -76,7 +76,7 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 	}
 
 	protected PersonsManagementEntity createManagement(PersonEntity person) {
-		return new CreatePersonManagement(this.authenticationFacade).create(person, HttpVerbEnum.PUT);
+		return new PersonManagement_Service(this.authenticationFacade).create(person, HttpVerbEnum.PUT);
 	}
 
 	@SuppressWarnings("hiding")

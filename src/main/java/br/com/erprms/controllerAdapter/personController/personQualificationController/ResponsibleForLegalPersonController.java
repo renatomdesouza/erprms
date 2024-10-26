@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification_Page;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.InputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.InputDtoRecord_ResponsibleForLegalPerson;
@@ -50,10 +52,14 @@ public class ResponsibleForLegalPersonController {
             @RequestBody InputDtoRecord_ResponsibleForLegalPerson responsibleRecordDto,
             UriComponentsBuilder uriComponentsBuilder)
             throws ResponseStatusException {
-        return personQualificationService_HttpPost.registerService(
-                new InputDtoClass_ResponsibleForLegalPerson(responsibleRecordDto),
-                uriComponentsBuilder,
-                RESPONSIBLE_FOR_LEGAL_PERSON);
+    	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =
+        		personQualificationService_HttpPost.registerService(	new InputDtoClass_ResponsibleForLegalPerson(responsibleRecordDto),
+														                uriComponentsBuilder,
+														                RESPONSIBLE_FOR_LEGAL_PERSON);
+    	
+    	return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
     }
 
     @GetMapping
@@ -61,10 +67,14 @@ public class ResponsibleForLegalPersonController {
     public ResponseEntity<Page<? extends PersonQualificationOutputDtoInterface>> listing(
             @PageableDefault(size = 10) Pageable qualificationPageable,
             UriComponentsBuilder uriComponentsBuilder) {
-        return personQualificationService_HttpGet.listingService(
-                qualificationPageable,
-                uriComponentsBuilder,
-                RESPONSIBLE_FOR_LEGAL_PERSON);
+    	DtoRecord_ServicePersonQualification_Page<?> responseEntityOutputDtoPage = 
+    			personQualificationService_HttpGet.listingService(	qualificationPageable,
+													                uriComponentsBuilder,
+													                RESPONSIBLE_FOR_LEGAL_PERSON);
+    	
+    	return ResponseEntity
+				.created(responseEntityOutputDtoPage.uri())
+				.body(responseEntityOutputDtoPage.page());
     }
 
     @PutMapping
@@ -73,10 +83,14 @@ public class ResponsibleForLegalPersonController {
             @RequestBody InputDtoRecord_ResponsibleForLegalPerson resposibleRecordDto,
             UriComponentsBuilder uriComponentsBuilder)
             throws ResponseStatusException {
-        return	personQualificationService_HttpPut.update(
-                new InputDtoClass_ResponsibleForLegalPerson(resposibleRecordDto),
-                uriComponentsBuilder,
-                RESPONSIBLE_FOR_LEGAL_PERSON);
+    	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification =	
+    			personQualificationService_HttpPut.update(	new InputDtoClass_ResponsibleForLegalPerson(resposibleRecordDto),
+											                uriComponentsBuilder,
+											                RESPONSIBLE_FOR_LEGAL_PERSON);
+    	
+    	return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
     }
 
     @DeleteMapping("/{person_Id}")
@@ -85,8 +99,13 @@ public class ResponsibleForLegalPersonController {
             @NonNull @PathVariable Long person_Id,
             UriComponentsBuilder uriComponentsBuilder)
             throws ResponseStatusException {
-        return personQualificationService_HttpDelete.exclude(	person_Id,
-                uriComponentsBuilder,
-                RESPONSIBLE_FOR_LEGAL_PERSON);
+    	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+        		personQualificationService_HttpDelete.exclude(	person_Id,
+												                uriComponentsBuilder,
+												                RESPONSIBLE_FOR_LEGAL_PERSON);
+        
+        return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
     }
 }

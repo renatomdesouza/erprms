@@ -1,11 +1,11 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import static br.com.erprms.testBuilders.Constants_Dto.DTO_RECORD_LEGAL_PERSON_OF_REGISTRY;
-import static br.com.erprms.testBuilders.Constants_Dto.DTO_RECORD_NATURAL_PERSON_OF_REGISTRY;
-import static br.com.erprms.testBuilders.Constants_Dto.IS_EMAIL_TRUE;
-import static br.com.erprms.testBuilders.Constants_Dto.LEGAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Dto.NATURAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Dto.URI_COMPONENTS_BUILDER;
+import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_LEGAL_PERSON_OF_REGISTRY;
+import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_NATURAL_PERSON_OF_REGISTRY;
+import static br.com.erprms.testBuilders.Constants_Person.IS_EMAIL_TRUE;
+import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON;
+import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
+import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -66,7 +66,7 @@ class PersonService_HttpPutTest {
 	void unitTest_IncorrectPutToSave(PersonEntity person) {	
 		when(personRepository.getReferenceById(anyLong())).thenReturn(person);
 		when(isEmailPresentService.isEmailPresent(anyString(), anyString())).thenReturn(IS_EMAIL_TRUE);
-		//
+		
 		try {
 			personService_HttpPut.updateService(	Object.class, 
 													String.valueOf(person.getId()), 

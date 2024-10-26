@@ -9,8 +9,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,10 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.PersonService_HttpPost;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -35,17 +30,9 @@ import br.com.erprms.serviceApplication.personService.personHttpVerbService.Pers
 @AutoConfigureJsonTesters
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LegalPersonControllerTest {
-	@InjectMocks
-	private PersonService_HttpPost<? extends PersonListingDto> personPost;
+	@Autowired private MockMvc mockMvc;
 
-	@Autowired
-	private MockMvc mockMvc;
-
-	@Mock
-	private PersonEntity personEntity;
-
-	@Autowired
-	private JacksonTester<DtoRecord_LegalPersonOfRegistry> jacksonTester_As_DtoRecord_LegalPersonOfRegistry;
+	@Autowired private JacksonTester<DtoRecord_LegalPersonOfRegistry> jacksonTester_As_DtoRecord_LegalPersonOfRegistry;
 
 	@Test
 	@Order(Ordered.HIGHEST_PRECEDENCE)

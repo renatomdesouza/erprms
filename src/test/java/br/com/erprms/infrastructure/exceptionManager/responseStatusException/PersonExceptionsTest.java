@@ -26,7 +26,7 @@ class PersonExceptionsTest {
 				() -> new PersonExceptions().existingEmailException(IS_EMAIL_TRUE));
 
 		assertThat(ex, notNullValue());
-		assertThat(ex.getMessage(), is("507 INSUFFICIENT_STORAGE \"The user's email is already registered in the system\""));
+		assertThat(ex.getMessage(), is("507 INSUFFICIENT_STORAGE \"The user's email is already registered in the system - They cannot be duplicated or altered\""));
 	}
 
 	@Test

@@ -84,7 +84,9 @@ public class PersonQualificationService_HttpDelete {
     }
 
     @Transactional
-    public ResponseEntity<PersonQualificationOutputDtoInterface> exclude(
+    public 
+    DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> /*ResponseEntity<PersonQualificationOutputDtoInterface>*/ 
+    exclude(
             @NonNull Long person_Id,
             UriComponentsBuilder uriComponentsBuilder,
             String specifiedQualification)
@@ -112,9 +114,11 @@ public class PersonQualificationService_HttpDelete {
         var dtoRecord_ServicePersonQualification =
                 new DtoRecord_ServicePersonQualification<>(uri, outPutExcludeDto);
 
-        return ResponseEntity
-                .created(dtoRecord_ServicePersonQualification.uri())
-                .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
+//        return ResponseEntity
+//                .created(dtoRecord_ServicePersonQualification.uri())
+//                .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
+        
+        return dtoRecord_ServicePersonQualification;
     }
 
     private PersonQualificationOutputDtoInterface case_MANAGER(String specifiedQualification, PersonEntity person) {

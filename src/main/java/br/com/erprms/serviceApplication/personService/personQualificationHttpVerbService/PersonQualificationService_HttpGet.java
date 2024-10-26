@@ -62,7 +62,9 @@ public class PersonQualificationService_HttpGet {
 	}
 	
 	@Transactional   
-	public ResponseEntity<Page<? extends PersonQualificationOutputDtoInterface>> listingService(
+	public 
+	DtoRecord_ServicePersonQualification_Page<?> /*ResponseEntity<Page<? extends PersonQualificationOutputDtoInterface>>*/ 
+	listingService(
 				Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder,
 				String specifiedQualification) {
@@ -104,8 +106,12 @@ public class PersonQualificationService_HttpGet {
 
 		var responseEntityOutputDtoPage = new DtoRecord_ServicePersonQualification_Page<>(uri, outputDtoClassPage);
 		
-		return ResponseEntity
-				.created(responseEntityOutputDtoPage.uri())
-				.body(responseEntityOutputDtoPage.page());
+//		return ResponseEntity
+//				.created(responseEntityOutputDtoPage.uri())
+//				.body(responseEntityOutputDtoPage.page());
+
+		return responseEntityOutputDtoPage;
+	
+	
 	}
 }

@@ -1,20 +1,18 @@
 package br.com.erprms.testBuilders;
 
-import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
-
 import java.net.URI;
 
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
 
 @ActiveProfiles("test")
-public class Constants_Dto {
+public class Constants_Person {
 	public static String VALID_EMAIL = "email@email.com.br";
 	public static String INVALID_EMAIL = "";
 	
@@ -163,6 +161,8 @@ public class Constants_Dto {
 			null,
 			null
 	);
+	
+	
 
 }
 

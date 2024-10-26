@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification_Page;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.internalDto_FullTimeAndManager.InputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoRecord_FullTimeEmployeeAndManager;
@@ -51,10 +53,14 @@ public class ManagerController {
 				@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeManagerRecordDto,
 				UriComponentsBuilder uriComponentsBuilder) 
 				throws ResponseStatusException {
-		return personQualificationService_HttpPost.registerService(	
-					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeManagerRecordDto), 
-					uriComponentsBuilder,
-					MANAGER);
+		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+				personQualificationService_HttpPost.registerService(	new InputDtoClass_FullTimeEmployeeAndManager(fullTimeManagerRecordDto), 
+																		uriComponentsBuilder,
+																		MANAGER);
+		
+		return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
 	}
 	
 	@GetMapping
@@ -62,9 +68,15 @@ public class ManagerController {
 	public ResponseEntity<Page<? extends PersonQualificationOutputDtoInterface>> listing(
 				@PageableDefault(size = 10, sort = {"sector"}) Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
-		return personQualificationService_HttpGet.listingService(	qualificationPageable,
+		DtoRecord_ServicePersonQualification_Page<?> responseEntityOutputDtoPage = 
+				personQualificationService_HttpGet.listingService(	qualificationPageable,
 																	uriComponentsBuilder,
 																	MANAGER);
+		
+		return ResponseEntity
+				.created(responseEntityOutputDtoPage.uri())
+				.body(responseEntityOutputDtoPage.page());
+		
 	}
 	
 	@PutMapping
@@ -73,10 +85,14 @@ public class ManagerController {
 				@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeManagerRecordDto,
 				UriComponentsBuilder uriComponentsBuilder) 
 				throws ResponseStatusException {
-		return	personQualificationService_HttpPut.update(	
-					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeManagerRecordDto), 
-					uriComponentsBuilder,
-					MANAGER);
+		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+				personQualificationService_HttpPut.update(	new InputDtoClass_FullTimeEmployeeAndManager(fullTimeManagerRecordDto), 
+															uriComponentsBuilder,
+															MANAGER);
+		
+		return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
 	}
 	
 	@DeleteMapping("/{person_Id}")
@@ -85,9 +101,14 @@ public class ManagerController {
 				@NonNull @PathVariable Long person_Id,
 				UriComponentsBuilder uriComponentsBuilder) 
 				throws ResponseStatusException {
-		return personQualificationService_HttpDelete.exclude(	person_Id, 
+		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+				personQualificationService_HttpDelete.exclude(	person_Id, 
 																uriComponentsBuilder,
 																MANAGER);
+		
+		return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
 	}
 }
 	

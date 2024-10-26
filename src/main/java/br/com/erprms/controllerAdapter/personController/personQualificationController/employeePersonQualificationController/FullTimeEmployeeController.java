@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification_Page;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.internalDto_FullTimeAndManager.InputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoRecord_FullTimeEmployeeAndManager;
@@ -51,10 +53,14 @@ public class FullTimeEmployeeController {
 			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-		return personQualificationService_HttpPost.registerService(	
-					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeEmployeeRecordDto), 
-					uriComponentsBuilder,
-					FULL_TIME_EMPLOYEE);
+		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+				personQualificationService_HttpPost.registerService( 	new InputDtoClass_FullTimeEmployeeAndManager(fullTimeEmployeeRecordDto), 
+																		uriComponentsBuilder,
+																		FULL_TIME_EMPLOYEE);
+		
+		return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
 	}
 		
 	@GetMapping
@@ -62,21 +68,31 @@ public class FullTimeEmployeeController {
 	public ResponseEntity<Page<? extends PersonQualificationOutputDtoInterface>> listing(
 				@PageableDefault Pageable qualificationPageable,
 				UriComponentsBuilder uriComponentsBuilder) {
-		return personQualificationService_HttpGet.listingService(	qualificationPageable,
+		DtoRecord_ServicePersonQualification_Page<?> responseEntityOutputDtoPage = 
+				personQualificationService_HttpGet.listingService(	qualificationPageable,
 																	uriComponentsBuilder,
 																	FULL_TIME_EMPLOYEE);
-	}
-	
+		
+		return ResponseEntity
+					.created(responseEntityOutputDtoPage.uri())
+					.body(responseEntityOutputDtoPage.page());
+	} 
+				
 	@PutMapping
 	@Transactional
 	public ResponseEntity<? extends PersonQualificationOutputDtoInterface> update(
 			@RequestBody InputDtoRecord_FullTimeEmployeeAndManager fullTimeEmployeeRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) 
 			throws ResponseStatusException {
-		return personQualificationService_HttpPut2.update(
-					new InputDtoClass_FullTimeEmployeeAndManager(fullTimeEmployeeRecordDto), 
-					uriComponentsBuilder,
-					FULL_TIME_EMPLOYEE);
+		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+				personQualificationService_HttpPut2.update(	new InputDtoClass_FullTimeEmployeeAndManager(fullTimeEmployeeRecordDto), 
+															uriComponentsBuilder,
+															FULL_TIME_EMPLOYEE);
+		
+		return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
+
 	}
 	
 	@DeleteMapping("/{person_Id}")
@@ -84,8 +100,13 @@ public class FullTimeEmployeeController {
 	public ResponseEntity<?> exclude( 
 				@NonNull @PathVariable Long person_Id, 
 				UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException {
-		return	personQualificationService_HttpDelete2.exclude(	person_Id,
+		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+				personQualificationService_HttpDelete2.exclude(	person_Id,
 																uriComponentsBuilder,
 																FULL_TIME_EMPLOYEE);
+		
+		return ResponseEntity
+			      .created(dtoRecord_ServicePersonQualification.uri())
+			      .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
 	}
 }

@@ -1,9 +1,9 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import static br.com.erprms.testBuilders.Constants_Dto.DTO_RECORD_LEGAL_PERSON_OF_REGISTRY;
-import static br.com.erprms.testBuilders.Constants_Dto.DTO_RECORD_NATURAL_PERSON_OF_REGISTRY;
-import static br.com.erprms.testBuilders.Constants_Dto.IS_EMAIL_TRUE;
-import static br.com.erprms.testBuilders.Constants_Dto.URI_COMPONENTS_BUILDER;
+import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_LEGAL_PERSON_OF_REGISTRY;
+import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_NATURAL_PERSON_OF_REGISTRY;
+import static br.com.erprms.testBuilders.Constants_Person.IS_EMAIL_TRUE;
+import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,8 +42,8 @@ import br.com.erprms.infrastructure.exceptionManager.responseStatusException.Per
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.CreatePersonManagement;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.IsEmailPresent_Service;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.PersonManagement_Service;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -54,7 +54,7 @@ class PersonService_HttpPostTest {
 	@Mock private IsEmailPresent_Service isEmailPresentService;
 	@Mock private PersonRepository personRepository;
 	@Mock private PersonsManagementRepository personsManagementRepository;
-	@Mock private CreatePersonManagement createPersonManagement;
+	@Mock private PersonManagement_Service createPersonManagement;
 	@Mock private AuthenticatedUsername authenticatedUsername;
 	@Mock private PersonEntity personEntity;
 

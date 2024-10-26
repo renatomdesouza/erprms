@@ -56,7 +56,6 @@ public class PersonQualificationService_HttpPost {
 	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	private final PersonQualificationExceptions exceptionService;
-	private final PersonQualification_CreateUri createUri;
 	private final StatusPerson statusPerson;
 	private final AuthenticatedUsername authenticationFacade;
 	
@@ -65,14 +64,12 @@ public class PersonQualificationService_HttpPost {
 			PersonRepository personRepository, 
 			PersonQualificationRepository personQualificationRepository,
 			PersonQualificationExceptions exceptionService,
-			PersonQualification_CreateUri createUri,
 			StatusPerson statusPerson,
 			AuthenticatedUsername authenticationFacade) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
 		this.exceptionService = exceptionService;
-		this.createUri = createUri;
 		this.statusPerson = statusPerson;
 		this.authenticationFacade = authenticationFacade;
 	}
@@ -80,7 +77,7 @@ public class PersonQualificationService_HttpPost {
 	@Transactional
 	@SuppressWarnings({ "unchecked", "null" })
 	public <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface> 
-	ResponseEntity<? extends PersonQualificationOutputDtoInterface> 
+	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> /*ResponseEntity<? extends PersonQualificationOutputDtoInterface>*/ 
 	registerService(T personQualificationInputDto,
 					UriComponentsBuilder uriComponentsBuilder,
 					String specifiedQualification) 
@@ -93,7 +90,7 @@ public class PersonQualificationService_HttpPost {
 		PersonQualificationSuperclassEntity personQualification = null;
 		PersonQualificationOutputDtoInterface personQualificationOutputDto = null;
 		switch (specifiedQualification) {
-			case MANAGER -> {
+			case MANAGER -> {				
 				personQualification = mapper.map(personQualificationInputDto, ManagerPersonQualification.class);
 				personQualificationOutputDto = (U) new OutputDtoClass_FullTimeEmployeeAndManager(
 															person, 
@@ -125,7 +122,6 @@ public class PersonQualificationService_HttpPost {
 						specifiedQualification); break;}
 			case PROVIDER -> {
 				personQualification = mapper.map(personQualificationInputDto, ProviderPersonQualification.class);
-
 				personQualificationOutputDto = (U) new OutputDtoClass_Provider(
 						person,
 						(InputDtoClass_Provider) personQualificationInputDto,
@@ -138,22 +134,42 @@ public class PersonQualificationService_HttpPost {
 						specifiedQualification); break;}
 		}
 
-		URI uri = createUri.uriCreator(	uriComponentsBuilder, 
-										specifiedQualification, 
-										person.getId());
+		PersonQualificationSuperclassEntity personQualificationConfigured = 
+							personQualificationConfigure(person, personQualification);
 
+		personQualificationRepository.save(personQualificationConfigured);
+		statusPerson.setStatusOfUse(person);
+		
+		URI uri = new PersonQualification_CreateUri().uriCreator(	uriComponentsBuilder, 
+																	specifiedQualification, 
+																	person.getId());
+		
+		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
+				createDtoRecord(personQualificationOutputDto, uri);
+			
+//		return ResponseEntity.created(dtoRecord_ServicePersonQualification.uri())
+//								.body(dtoRecord_ServicePersonQualification.dtoOfPerson());
+		
+		return dtoRecord_ServicePersonQualification;
+	}
+
+	protected PersonQualificationSuperclassEntity personQualificationConfigure(
+					PersonEntity person,
+					PersonQualificationSuperclassEntity personQualification) {
 		personQualification.setIsActual(true);
 		personQualification.setPerson(person);
 		personQualification.setInitialDate(LocalDateTime.now());
 		personQualification.setHttpVerb(HttpVerbEnum.POST);
 		personQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
 		
-		personQualificationRepository.save(personQualification);
-		statusPerson.setStatusOfUse(person);
+		return personQualification;
+	}
 
-		var dtoRecord_ServicePersonQualification = new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
-			
-		return ResponseEntity.created(dtoRecord_ServicePersonQualification.uri())
-								.body(dtoRecord_ServicePersonQualification.dtoOfPerson());
+	protected DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> createDtoRecord(
+			PersonQualificationOutputDtoInterface personQualificationOutputDto, URI uri) {
+		var dtoRecord_ServicePersonQualification = 
+				new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
+		
+		return dtoRecord_ServicePersonQualification;
 	}
 }

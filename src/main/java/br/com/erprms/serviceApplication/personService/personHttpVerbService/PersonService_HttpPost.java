@@ -15,8 +15,8 @@ import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.CreatePersonFromDto_Service;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.CreatePersonManagement;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.IsEmailPresent_Service;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.PersonManagement_Service;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -71,7 +71,7 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 	}
 
 	protected PersonsManagementEntity createManagement(PersonEntity person) {
-		return new CreatePersonManagement(this.authenticatedUsername).create(person, HttpVerbEnum.POST);
+		return new PersonManagement_Service(this.authenticatedUsername).create(person, HttpVerbEnum.POST);
 	}
 
 	@SuppressWarnings("hiding")

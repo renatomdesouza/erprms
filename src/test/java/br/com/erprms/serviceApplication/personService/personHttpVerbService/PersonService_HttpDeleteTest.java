@@ -1,10 +1,10 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import static br.com.erprms.testBuilders.Constants_Dto.LEGAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Dto.LEGAL_PERSON_NOT_USED;
-import static br.com.erprms.testBuilders.Constants_Dto.NATURAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Dto.NATURAL_PERSON_NOT_USED;
-import static br.com.erprms.testBuilders.Constants_Dto.URI_COMPONENTS_BUILDER;
+import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON;
+import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON_NOT_USED;
+import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
+import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON_NOT_USED;
+import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
