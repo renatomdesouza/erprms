@@ -10,11 +10,11 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class StatusPerson {
+public class StatusPerson_Setter {
 	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	
-	public StatusPerson (
+	public StatusPerson_Setter (
 			PersonRepository personRepository,
 			PersonQualificationRepository personQualificationRepository) {
 		this.personRepository = personRepository;

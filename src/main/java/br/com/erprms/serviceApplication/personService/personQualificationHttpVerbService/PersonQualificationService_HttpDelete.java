@@ -21,7 +21,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLega
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.*;
-import br.com.erprms.serviceApplication.personService.StatusPerson;
+import br.com.erprms.serviceApplication.personService.StatusPerson_Setter;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +49,7 @@ public class PersonQualificationService_HttpDelete {
     private final PersonQualificationRepository personQualificationRepository;
     private final PersonQualificationExceptions exceptionService;
     private final PersonQualification_CreateUri createUri;
-    private final StatusPerson statusPersonOfQualification;
+    private final StatusPerson_Setter statusPersonOfQualification;
     private final AuthenticatedUsername authenticationFacade;
 
     public PersonQualificationService_HttpDelete(
@@ -65,7 +65,7 @@ public class PersonQualificationService_HttpDelete {
             AccountantRepository accountantRepository,
             PersonQualificationExceptions exceptionService,
             PersonQualification_CreateUri createUri,
-            StatusPerson statusPersonOfQualification,
+            StatusPerson_Setter statusPersonOfQualification,
             AuthenticatedUsername authenticationFacade) {
         this.mapper = mapper;
         this.personRepository = personRepository;

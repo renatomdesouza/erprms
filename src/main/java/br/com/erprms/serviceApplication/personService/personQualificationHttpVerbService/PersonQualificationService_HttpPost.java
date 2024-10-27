@@ -11,15 +11,19 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
@@ -47,7 +51,7 @@ import br.com.erprms.infrastructure.exceptionManager.responseStatusException.Per
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
-import br.com.erprms.serviceApplication.personService.StatusPerson;
+import br.com.erprms.serviceApplication.personService.StatusPerson_Setter;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -56,7 +60,7 @@ public class PersonQualificationService_HttpPost {
 	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	private final PersonQualificationExceptions exceptionService;
-	private final StatusPerson statusPerson;
+	private final StatusPerson_Setter statusPerson_Setter;
 	private final AuthenticatedUsername authenticationFacade;
 	
 	public PersonQualificationService_HttpPost(
@@ -64,26 +68,30 @@ public class PersonQualificationService_HttpPost {
 			PersonRepository personRepository, 
 			PersonQualificationRepository personQualificationRepository,
 			PersonQualificationExceptions exceptionService,
-			StatusPerson statusPerson,
+			StatusPerson_Setter statusPerson,
 			AuthenticatedUsername authenticationFacade) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
 		this.exceptionService = exceptionService;
-		this.statusPerson = statusPerson;
+		this.statusPerson_Setter = statusPerson;
 		this.authenticationFacade = authenticationFacade;
 	}
 	
 	@Transactional
-	@SuppressWarnings({ "unchecked", "null" })
+	@SuppressWarnings({ "unchecked" })
 	public <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface> 
 	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> /*ResponseEntity<? extends PersonQualificationOutputDtoInterface>*/ 
 	registerService(T personQualificationInputDto,
 					UriComponentsBuilder uriComponentsBuilder,
 					String specifiedQualification) 
 			throws ResponseStatusException {
-		exceptionService.exceptionForPersonWhoDoesNotExist(personQualificationInputDto.getPerson_Id());
-		exceptionService.mismatchExceptionBetweenQualifications(personQualificationInputDto.getPerson_Id(), specifiedQualification);
+		boolean existsPerson = personRepository.existsById(personQualificationInputDto.getPerson_Id());
+		exceptionService.exceptionForPersonWhoDoesNotExist_02(existsPerson);
+		
+		boolean existsMismatch = mismatchBetweenQualifications(personQualificationInputDto.getPerson_Id(), specifiedQualification); 
+		exceptionService.mismatchExceptionBetweenQualifications_02(existsMismatch);
+//		exceptionService.mismatchExceptionBetweenQualifications(personQualificationInputDto.getPerson_Id(), specifiedQualification);
 
 		PersonEntity person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id() );
 
@@ -138,18 +146,18 @@ public class PersonQualificationService_HttpPost {
 							personQualificationConfigure(person, personQualification);
 
 		personQualificationRepository.save(personQualificationConfigured);
-		statusPerson.setStatusOfUse(person);
+		
+		person.setStatusPersonEnum(StatusPersonalUsedEnum.USED);
+		personRepository.save(person);
+//		statusPerson_Setter.setStatusOfUse(person);
 		
 		URI uri = new PersonQualification_CreateUri().uriCreator(	uriComponentsBuilder, 
 																	specifiedQualification, 
 																	person.getId());
 		
 		DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> dtoRecord_ServicePersonQualification = 
-				createDtoRecord(personQualificationOutputDto, uri);
-			
-//		return ResponseEntity.created(dtoRecord_ServicePersonQualification.uri())
-//								.body(dtoRecord_ServicePersonQualification.dtoOfPerson());
-		
+				new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
+
 		return dtoRecord_ServicePersonQualification;
 	}
 
@@ -158,18 +166,33 @@ public class PersonQualificationService_HttpPost {
 					PersonQualificationSuperclassEntity personQualification) {
 		personQualification.setIsActual(true);
 		personQualification.setPerson(person);
-		personQualification.setInitialDate(LocalDateTime.now());
+		personQualification.setInitialDate(nowSetter());
 		personQualification.setHttpVerb(HttpVerbEnum.POST);
 		personQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
 		
 		return personQualification;
 	}
+	
+	protected LocalDateTime nowSetter() {
+		return LocalDateTime.now();
+	}
+	
+	protected boolean mismatchBetweenQualifications(@NonNull Long id_Person, String specifiedQualification) {
+		String mismatchQualification = null;
 
-	protected DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> createDtoRecord(
-			PersonQualificationOutputDtoInterface personQualificationOutputDto, URI uri) {
-		var dtoRecord_ServicePersonQualification = 
-				new DtoRecord_ServicePersonQualification<>(uri, personQualificationOutputDto);
+		if(specifiedQualification.equals(MANAGER) ||
+			specifiedQualification.equals(FULL_TIME_EMPLOYEE) ||
+			specifiedQualification.equals(PART_TIME_EMPLOYEE))
+				mismatchQualification = personQualificationRepository.multipleQualificationIncompatibilities(id_Person);
+
+		if(specifiedQualification.equals(CLIENT) ||
+			specifiedQualification.equals(ACCOUNTANT) ||
+			specifiedQualification.equals(RESPONSIBLE_FOR_LEGAL_PERSON) ||
+			specifiedQualification.equals(PROVIDER))
+				mismatchQualification = personQualificationRepository.individualQualificationIncompatibilities(id_Person, specifiedQualification);
+
+		Optional<String> mismatchQualificationOptional = Optional.ofNullable(mismatchQualification);
 		
-		return dtoRecord_ServicePersonQualification;
+		return mismatchQualificationOptional.isPresent();
 	}
 }
