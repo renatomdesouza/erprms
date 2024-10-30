@@ -12,20 +12,7 @@ import java.time.LocalDateTime;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-public class Constants_PersonQualification {
-
-	private static InputDtoRecord_FullTimeEmployeeAndManager FULL_TIME_EMPLOYEE_AND_MANAGER_DTO_RECORD =
-			new InputDtoRecord_FullTimeEmployeeAndManager (
-					"1",
-					"1000",
-					"ADMINISTRATION",
-					"auxiliar administrativo",
-					"123456");
-	
-
-    public static InputDtoClass_FullTimeEmployeeAndManager FULL_TIME_EMPLOYEE_AND_MANAGER_DTO_CLASS =
-            new InputDtoClass_FullTimeEmployeeAndManager (FULL_TIME_EMPLOYEE_AND_MANAGER_DTO_RECORD);
-
+public class Constants_PersonQualifications {
     
     public static PersonQualificationSuperclassEntity PERSON_QUALIFICATION_SUPERCLASS =
     		new PersonQualificationSuperclassEntity(

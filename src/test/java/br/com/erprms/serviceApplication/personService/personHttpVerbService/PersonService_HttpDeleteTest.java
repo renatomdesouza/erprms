@@ -93,7 +93,7 @@ class PersonService_HttpDeleteTest {
 	@ParameterizedTest
 	@MethodSource("naturalPersonsToDelete")
 	@DisplayName("Should create a natural person from the natural person's Dto")
-	<T> void unitTest_CorrectCreateOfNaturalPerson(PersonEntity person) {
+	<T> void unitTest_CorrectDeleteOfNaturalPerson(PersonEntity person) {
 		when(personRepository.getReferenceById(person.getId())).thenReturn(person);
 
 		var dtoRecord = personService_HttpDelete.excludeService(person.getId(), URI_COMPONENTS_BUILDER);
@@ -104,7 +104,7 @@ class PersonService_HttpDeleteTest {
 	@ParameterizedTest
 	@MethodSource("legalPersonsToDelete")
 	@DisplayName("Should create a legal person from the natural person's Dto")
-	<T> void unitTest_CorrectCreateOfLegalPerson(PersonEntity person) {
+	<T> void unitTest_CorrectDeleteOfLegalPerson(PersonEntity person) {
 		when(personRepository.getReferenceById(person.getId())).thenReturn(person);
 
 		var dtoRecord = personService_HttpDelete.excludeService(person.getId(), URI_COMPONENTS_BUILDER);

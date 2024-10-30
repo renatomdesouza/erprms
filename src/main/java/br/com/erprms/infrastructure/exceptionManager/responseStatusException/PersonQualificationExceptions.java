@@ -61,11 +61,8 @@ public class PersonQualificationExceptions {
 	public void mismatchExceptionBetweenQualifications_02(boolean existsMismatch) {
 		if(existsMismatch) {
 			throw new ResponseStatusException(
-					HttpStatus.INSUFFICIENT_STORAGE, """
-						A person can only be a Manager, a regular Employee or a Part-Time employee,
-						and still cannot have the same active qualification.
-						Active qualification:
-					""");
+					HttpStatus.INSUFFICIENT_STORAGE,	"A person can only be a Manager, a regular Employee or a Part-Time employee, "
+														+ "and still cannot have the same active qualification.");
 		}
 	}
 
@@ -77,7 +74,7 @@ public class PersonQualificationExceptions {
 	}
 	
 	public void exceptionForPersonWhoDoesNotExist_02(boolean existsPerson) {
-		if (!existsPerson)
+		if (existsPerson)
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 
 					"There is no \"Person\" registered with this \"Id\"");

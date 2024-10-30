@@ -59,22 +59,16 @@ public class PersonQualificationService_HttpPost {
 	private final ModelMapper mapper;
 	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
-	private final PersonQualificationExceptions exceptionService;
-	private final StatusPerson_Setter statusPerson_Setter;
 	private final AuthenticatedUsername authenticationFacade;
 	
 	public PersonQualificationService_HttpPost(
 			ModelMapper mapper, 
 			PersonRepository personRepository, 
 			PersonQualificationRepository personQualificationRepository,
-			PersonQualificationExceptions exceptionService,
-			StatusPerson_Setter statusPerson,
 			AuthenticatedUsername authenticationFacade) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
-		this.exceptionService = exceptionService;
-		this.statusPerson_Setter = statusPerson;
 		this.authenticationFacade = authenticationFacade;
 	}
 	
@@ -87,10 +81,11 @@ public class PersonQualificationService_HttpPost {
 					String specifiedQualification) 
 			throws ResponseStatusException {
 		boolean existsPerson = personRepository.existsById(personQualificationInputDto.getPerson_Id());
-		exceptionService.exceptionForPersonWhoDoesNotExist_02(existsPerson);
+		new PersonQualificationExceptions(personRepository, personQualificationRepository).exceptionForPersonWhoDoesNotExist_02(existsPerson);
 		
 		boolean existsMismatch = mismatchBetweenQualifications(personQualificationInputDto.getPerson_Id(), specifiedQualification); 
-		exceptionService.mismatchExceptionBetweenQualifications_02(existsMismatch);
+		new PersonQualificationExceptions(personRepository, personQualificationRepository).mismatchExceptionBetweenQualifications_02(existsMismatch);
+		
 //		exceptionService.mismatchExceptionBetweenQualifications(personQualificationInputDto.getPerson_Id(), specifiedQualification);
 
 		PersonEntity person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id() );
