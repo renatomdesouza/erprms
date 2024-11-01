@@ -80,8 +80,8 @@ public class PersonQualificationExceptions {
 					"There is no \"Person\" registered with this \"Id\"");
 	}
 	
-	public void exceptionForUnqualifiedPerson(Optional<PersonQualificationSuperclassEntity> personQualificationOptional) {
-		if (personQualificationOptional.isEmpty()) 
+	public void exceptionForUnqualifiedPerson(boolean existsPersonQualification) {
+		if (!existsPersonQualification) 
 			throw new ResponseStatusException(	HttpStatus.INSUFFICIENT_STORAGE, 
 												"This person does not have this qualification in the database");
 	}

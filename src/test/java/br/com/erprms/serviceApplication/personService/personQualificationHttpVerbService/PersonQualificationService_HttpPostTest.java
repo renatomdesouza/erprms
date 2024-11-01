@@ -56,7 +56,6 @@ import br.com.erprms.infrastructure.exceptionManager.responseStatusException.Per
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
-import br.com.erprms.serviceApplication.personService.StatusPerson_Setter;
 import br.com.erprms.testBuilders.Constants_QualificationClass;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,7 +66,6 @@ class PersonQualificationService_HttpPostTest {
 	@Mock private PersonQualificationExceptions exceptionService;
 	@Mock private PersonRepository personRepository;
 	@Mock private PersonQualificationRepository personQualificationRepository;
-	@Mock private StatusPerson_Setter statusPerson;
 	@Mock private AuthenticatedUsername authenticatedUsername;
 
 	

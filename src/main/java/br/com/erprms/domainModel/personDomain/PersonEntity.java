@@ -1,5 +1,6 @@
 package br.com.erprms.domainModel.personDomain;
 
+import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
@@ -50,8 +51,8 @@ public  class PersonEntity implements
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-	private Set<PersonQualificationSuperclassEntity> personQualification;
+//	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+//	private Set<PersonQualificationSuperclassEntity> personQualification;
 	
 	@Column(name = "status_person_enum")
 	@Enumerated(EnumType.STRING)
@@ -115,8 +116,8 @@ public  class PersonEntity implements
 	@Column(name = "city_and_state_or_province")
 	private String cityAndStateOrProvince;
 
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-	private Set<FoneEntity> fones;
+//	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+//	private Set<FoneEntity> fones;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "PersonEntity_x_AdditionalAddressEntity", 

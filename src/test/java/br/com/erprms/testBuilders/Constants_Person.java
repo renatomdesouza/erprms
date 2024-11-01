@@ -56,7 +56,7 @@ public class Constants_Person {
 
 	public static PersonEntity NATURAL_PERSON = new PersonEntity(
 			1L,
-			null,
+//			null,
 			StatusPersonalUsedEnum.USED,
 			true,
 			"José da Silva",
@@ -77,13 +77,13 @@ public class Constants_Person {
 			"não há",
 			"01153-000",
 			"São Paulo/SP",
-			null,
+//			null,
 			null
 	);
 
 	public static PersonEntity LEGAL_PERSON = new PersonEntity(
 			2L,
-			null,
+//			null,
 			StatusPersonalUsedEnum.USED,
 			false,
 			"Empresa Jurídica SA",
@@ -104,13 +104,13 @@ public class Constants_Person {
 			"Não Possui",
 			"01153-000",
 			"São Paulo/SP",
-			null,
+//			null,
 			null
 	);
 	
 	public static PersonEntity NATURAL_PERSON_NOT_USED = new PersonEntity(
 			1L,
-			null,
+//			null,
 			StatusPersonalUsedEnum.NOT_USED,
 			true,
 			"José da Silva",
@@ -131,13 +131,13 @@ public class Constants_Person {
 			"não há",
 			"01153-000",
 			"São Paulo/SP",
-			null,
+//			null,
 			null
 	);
 
 	public static PersonEntity LEGAL_PERSON_NOT_USED = new PersonEntity(
 			2L,
-			null,
+//			null,
 			StatusPersonalUsedEnum.NOT_USED,
 			false,
 			"Empresa Jurídica SA",
@@ -158,7 +158,7 @@ public class Constants_Person {
 			"Não Possui",
 			"01153-000",
 			"São Paulo/SP",
-			null,
+//			null,
 			null
 	);
 	

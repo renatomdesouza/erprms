@@ -29,11 +29,19 @@ public class ManagerPersonQualification
 	@Enumerated(EnumType.STRING) 
 	private SectorEnum sector;
 	
-	private BigDecimal MonthlySalary;
+	private BigDecimal monthlySalary;
 
 	public ManagerPersonQualification (ManagerPersonQualification oldQualification) {
 		super(oldQualification);
 		this.sector = oldQualification.getSector();
-		this.MonthlySalary = oldQualification.getMonthlySalary();
+		this.monthlySalary = oldQualification.getMonthlySalary();
 	}
+	
+	public ManagerPersonQualification (PersonQualificationSuperclassEntity personQualificationSuperclassEntity, SectorEnum sector, BigDecimal monthlySalary ) {
+		super(personQualificationSuperclassEntity);
+		this.sector = sector;
+		this.monthlySalary = monthlySalary;
+	}
+	
+	
 }

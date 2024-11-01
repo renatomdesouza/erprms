@@ -2,14 +2,15 @@ package br.com.erprms.testBuilders;
 
 import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
 
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
-import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.InputDtoRecord_FullTimeEmployeeAndManager;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.internalDto_FullTimeAndManager.InputDtoClass_FullTimeEmployeeAndManager;
-
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.springframework.test.context.ActiveProfiles;
+
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
+import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
+import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
 
 @ActiveProfiles("test")
 public class Constants_PersonQualifications {
@@ -40,7 +41,11 @@ public class Constants_PersonQualifications {
                     "example registry",
                     NATURAL_PERSON);
     
-    
-    
+    public static ManagerPersonQualification MANAGER_PERSON_QUALIFICATION =
+			new ManagerPersonQualification(
+					PERSON_QUALIFICATION_SUPERCLASS,
+					SectorEnum.ADMINISTRATION,
+					BigDecimal.valueOf(10000l))
+			;
 
 }

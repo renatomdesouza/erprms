@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -51,7 +49,6 @@ import br.com.erprms.infrastructure.exceptionManager.responseStatusException.Per
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
-import br.com.erprms.serviceApplication.personService.StatusPerson_Setter;
 import jakarta.transaction.Transactional;
 
 @Service
