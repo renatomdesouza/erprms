@@ -25,4 +25,11 @@ public class AccountantPersonQualification extends PersonQualificationSuperclass
         super(oldQualification);
         this.monthlyCost = oldQualification.getMonthlyCost();
     }
+    
+    public AccountantPersonQualification (
+    		PersonQualificationSuperclassEntity personQualificationSuperclassEntity,
+    		BigDecimal monthlyCost) {
+    	super(personQualificationSuperclassEntity);
+    	this.monthlyCost = monthlyCost;
+    }
 }

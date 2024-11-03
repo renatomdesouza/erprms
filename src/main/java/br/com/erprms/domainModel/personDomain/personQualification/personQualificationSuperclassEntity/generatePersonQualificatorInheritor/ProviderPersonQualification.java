@@ -20,4 +20,10 @@ public class ProviderPersonQualification extends PersonQualificationSuperclassEn
     public ProviderPersonQualification (ProviderPersonQualification oldQualification) {
         super(oldQualification);
     }
+    
+    public ProviderPersonQualification (PersonQualificationSuperclassEntity personQualificationSuperclassEntity) {
+        super(personQualificationSuperclassEntity);
+    }
+    
+    
 }

@@ -37,4 +37,13 @@ public class PartTimeEmployeePersonQualification
 		this.sector = oldQualification.getSector();
 		this.hourlyRate = oldQualification.getHourlyRate();
 	}
+	
+	public PartTimeEmployeePersonQualification (
+			PersonQualificationSuperclassEntity personQualificationSuperclassEntity, 
+			SectorEnum sector, 
+			BigDecimal hourlyRate) {
+		super(personQualificationSuperclassEntity);
+		this.sector = sector;
+		this.hourlyRate = hourlyRate;
+	}
 }

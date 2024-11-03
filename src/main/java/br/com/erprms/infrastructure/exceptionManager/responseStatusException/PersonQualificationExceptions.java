@@ -66,8 +66,8 @@ public class PersonQualificationExceptions {
 		}
 	}
 
-	public void exceptionForPersonWhoDoesNotExist(@NonNull Long person_Id) {
-		if (!personRepository.existsById(person_Id))
+	public void exceptionForPersonWhoDoesNotExist(boolean existsPerson) {
+		if (existsPerson)
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 
 					"There is no \"Person\" registered with this \"Id\"");

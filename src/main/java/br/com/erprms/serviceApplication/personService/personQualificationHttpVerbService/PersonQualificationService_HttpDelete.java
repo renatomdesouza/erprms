@@ -106,7 +106,10 @@ public class PersonQualificationService_HttpDelete {
             String specifiedQualification)
             throws ResponseStatusException {
 
-        exceptionService.exceptionForPersonWhoDoesNotExist(person_Id);
+    	boolean existsPerson = personRepository.existsById(person_Id);
+        new PersonQualificationExceptions(personRepository, personQualificationRepository).exceptionForPersonWhoDoesNotExist(existsPerson);
+//  	exceptionService.exceptionForPersonWhoDoesNotExist(person_Id);
+        
         var person = personRepository.getReferenceById(person_Id);
         statusPersonOfQualification.setSatusOfNonUse(person);
 

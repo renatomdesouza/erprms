@@ -201,6 +201,7 @@ class PersonQualificationService_HttpPostTest {
 	
 	private static Stream<? extends Arguments> provideArguments_CorrectCreateToSave() throws ClassNotFoundException {
 	         return Stream.of(
+	        		// combinations of natural persons
 	                 Arguments.of(
 	                		 NATURAL_PERSON,
 	                		 MANAGER,
@@ -243,6 +244,7 @@ class PersonQualificationService_HttpPostTest {
 	                		 RESPONSIBLE_FOR_LEGAL_PERSON_DTO,
 	                		 Constants_QualificationClass.responsibleForLegalPerson() , 
 	                		 URI_COMPONENTS_BUILDER),
+	              // combinations of legal persons
 	                 Arguments.of(
 	                		 LEGAL_PERSON,
 	                		 MANAGER,

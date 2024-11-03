@@ -20,4 +20,8 @@ public class ResponsibleForLegalPersonQualification extends PersonQualificationS
     public ResponsibleForLegalPersonQualification (ResponsibleForLegalPersonQualification oldQualification) {
         super(oldQualification);
     }
+    
+    public ResponsibleForLegalPersonQualification (PersonQualificationSuperclassEntity personQualificationSuperclassEntity) {
+        super(personQualificationSuperclassEntity);
+    }
 }

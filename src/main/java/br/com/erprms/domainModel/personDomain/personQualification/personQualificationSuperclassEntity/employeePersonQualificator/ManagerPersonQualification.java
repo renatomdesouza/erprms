@@ -3,6 +3,7 @@ package br.com.erprms.domainModel.personDomain.personQualification.personQualifi
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.EmployeePersonQualificatorInterface;
@@ -25,7 +26,7 @@ import lombok.Setter;
 public class ManagerPersonQualification 
 					extends PersonQualificationSuperclassEntity 
 					implements FullTimeEmployeePersonQualificatorInterface, EmployeePersonQualificatorInterface {
-	
+
 	@Enumerated(EnumType.STRING) 
 	private SectorEnum sector;
 	
@@ -37,11 +38,30 @@ public class ManagerPersonQualification
 		this.monthlySalary = oldQualification.getMonthlySalary();
 	}
 	
-	public ManagerPersonQualification (PersonQualificationSuperclassEntity personQualificationSuperclassEntity, SectorEnum sector, BigDecimal monthlySalary ) {
+	public ManagerPersonQualification (
+			PersonQualificationSuperclassEntity personQualificationSuperclassEntity, 
+			SectorEnum sector, 
+			BigDecimal monthlySalary ) {
 		super(personQualificationSuperclassEntity);
 		this.sector = sector;
 		this.monthlySalary = monthlySalary;
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(monthlySalary, sector);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ManagerPersonQualification other = (ManagerPersonQualification) obj;
+		return Objects.equals(monthlySalary, other.monthlySalary) && sector == other.sector;
+	}
 	
 }

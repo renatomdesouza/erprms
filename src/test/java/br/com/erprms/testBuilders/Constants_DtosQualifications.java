@@ -25,7 +25,7 @@ public class Constants_DtosQualifications {
 	public static InputDtoClass_FullTimeEmployeeAndManager FULL_TIME_EMPLOYEE_AND_MANAGER_DTO =
             new InputDtoClass_FullTimeEmployeeAndManager (FULL_TIME_EMPLOYEE_AND_MANAGER_DTO_RECORD);
 
-
+	
 	private static InputDtoRecord_PartTimeEmployee PART_TIME_EMPLOYEE_DTO_RECORD =
 			new InputDtoRecord_PartTimeEmployee (
 					"1",
@@ -33,53 +33,49 @@ public class Constants_DtosQualifications {
 					"ADMINISTRATION",
 					"auxiliar administrativo",
 					"123456");
-
+	
 	public static InputDtoClass_PartTimeEmployee PART_TIME_EMPLOYEE_DTO =
 			new InputDtoClass_PartTimeEmployee (PART_TIME_EMPLOYEE_DTO_RECORD);
-
-
-	private static InputDtoRecord_Accountant ACCOUNTANT_DTO_RECORD =
-			new InputDtoRecord_Accountant (
-					"1",
-					"100",
-					"Profissional contratado",
-					"123456");
-
-	public static InputDtoClass_Accountant ACCOUNTANT_DTO =
-			new InputDtoClass_Accountant (ACCOUNTANT_DTO_RECORD);
-
-
+	
+	
 	private static InputDtoRecord_Client CLIENT_DTO_RECORD =
 			new InputDtoRecord_Client (
 					"1",
 					"Cliente fidelizado",
 					null,
 					"360");
-
+	
 	public static InputDtoClass_Client CLIENT_DTO =
 			new InputDtoClass_Client (CLIENT_DTO_RECORD);
-
-
+	
+	
 	private static InputDtoRecord_Provider PROVIDER_DTO_RECORD =
 			new InputDtoRecord_Provider (
 					"1",
 					"Cliente fidelizado",
 					null);
-
+	
 	public static InputDtoClass_Provider PROVIDER_DTO =
 			new InputDtoClass_Provider(PROVIDER_DTO_RECORD);
 
-
+	
 	private static InputDtoRecord_ResponsibleForLegalPerson RESPONSIBLE_FOR_LEGAL_PERSON_DTO_RECORD =
 			new InputDtoRecord_ResponsibleForLegalPerson (
 					"1",
 					"Cliente fidelizado",
 					null);
-
+	
 	public static InputDtoClass_ResponsibleForLegalPerson RESPONSIBLE_FOR_LEGAL_PERSON_DTO =
 			new InputDtoClass_ResponsibleForLegalPerson(RESPONSIBLE_FOR_LEGAL_PERSON_DTO_RECORD);
-
+	
+	
+	private static InputDtoRecord_Accountant ACCOUNTANT_DTO_RECORD =
+			new InputDtoRecord_Accountant (
+					"1",
+					"100",
+					"Profissional contratado",
+					"123456");
+	
+	public static InputDtoClass_Accountant ACCOUNTANT_DTO =
+			new InputDtoClass_Accountant (ACCOUNTANT_DTO_RECORD);
 }
-
-
-

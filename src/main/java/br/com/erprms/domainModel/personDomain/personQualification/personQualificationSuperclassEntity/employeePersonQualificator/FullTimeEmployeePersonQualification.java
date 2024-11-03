@@ -36,4 +36,15 @@ public class FullTimeEmployeePersonQualification
 		this.sector = oldQualification.getSector();
 		this.monthlySalary = oldQualification.getMonthlySalary();
 	}
+	
+	public FullTimeEmployeePersonQualification (
+			PersonQualificationSuperclassEntity personQualificationSuperclassEntity, 
+			SectorEnum sector, 
+			BigDecimal monthlySalary) {
+		super(personQualificationSuperclassEntity);
+		this.sector = sector;
+		this.monthlySalary = monthlySalary;
+	}
+	
+	
 }
