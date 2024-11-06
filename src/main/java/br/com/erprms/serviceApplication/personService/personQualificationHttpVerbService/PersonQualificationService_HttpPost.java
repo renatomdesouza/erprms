@@ -72,20 +72,19 @@ public class PersonQualificationService_HttpPost {
 	@Transactional
 	@SuppressWarnings({ "unchecked" })
 	public <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface> 
-	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> /*ResponseEntity<? extends PersonQualificationOutputDtoInterface>*/ 
+	DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> 
 	registerService(T personQualificationInputDto,
 					UriComponentsBuilder uriComponentsBuilder,
 					String specifiedQualification) 
 			throws ResponseStatusException {
-		boolean existsPerson = personRepository.existsById(personQualificationInputDto.getPerson_Id());
-		new PersonQualificationExceptions(personRepository, personQualificationRepository).exceptionForPersonWhoDoesNotExist_02(existsPerson);
+		PersonEntity person = null;
+		person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id() );
+		
+		boolean notExistsPerson =  (Optional.ofNullable(person)).isEmpty();
+        new PersonQualificationExceptions(personQualificationRepository).exceptionForPersonWhoDoesNotExist(notExistsPerson);
 		
 		boolean existsMismatch = mismatchBetweenQualifications(personQualificationInputDto.getPerson_Id(), specifiedQualification); 
-		new PersonQualificationExceptions(personRepository, personQualificationRepository).mismatchExceptionBetweenQualifications_02(existsMismatch);
-		
-//		exceptionService.mismatchExceptionBetweenQualifications(personQualificationInputDto.getPerson_Id(), specifiedQualification);
-
-		PersonEntity person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id() );
+		new PersonQualificationExceptions(personQualificationRepository).mismatchExceptionBetweenQualifications_02(existsMismatch);
 
 		PersonQualificationSuperclassEntity personQualification = null;
 		PersonQualificationOutputDtoInterface personQualificationOutputDto = null;
@@ -141,7 +140,6 @@ public class PersonQualificationService_HttpPost {
 		
 		person.setStatusPersonEnum(StatusPersonalUsedEnum.USED);
 		personRepository.save(person);
-//		statusPerson_Setter.setStatusOfUse(person);
 		
 		URI uri = new PersonQualification_CreateUri().uriCreator(	uriComponentsBuilder, 
 																	specifiedQualification, 

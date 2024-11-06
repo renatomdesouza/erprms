@@ -10,6 +10,8 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -80,8 +82,7 @@ public class PersonQualificationService_HttpPut {
             ProviderRepository providerRepository,
             ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
             AccountantRepository accountantRepository,
-            AuthenticatedUsername authenticationFacade
-            ) {
+            AuthenticatedUsername authenticationFacade) {
         this.mapper = mapper;
         this.personRepository = personRepository;
         this.personQualificationRepository = personQualificationRepository;
@@ -101,15 +102,16 @@ public class PersonQualificationService_HttpPut {
     update(	T personQualificationInputDto,
             UriComponentsBuilder uriComponentsBuilder,
             String specifiedQualification) throws ResponseStatusException {
-        var person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id());
+    	PersonEntity person = null;
+        person = personRepository.getReferenceById(personQualificationInputDto.getPerson_Id());
 
-        boolean existsPerson = personRepository.existsById(personQualificationInputDto.getPerson_Id());
-        new PersonQualificationExceptions(personRepository, personQualificationRepository).exceptionForPersonWhoDoesNotExist(existsPerson);
+        boolean notExistsPerson =  (Optional.ofNullable(person)).isEmpty(); 
+        new PersonQualificationExceptions(personQualificationRepository).exceptionForPersonWhoDoesNotExist(notExistsPerson);
         
         PersonQualificationSuperclassEntity oldPersonQualification = findOldPersonQuailfication(person, specifiedQualification);
         
-        boolean existsPersonQualification = (Optional.ofNullable(oldPersonQualification)).isPresent();
-		new PersonQualificationExceptions(personRepository, personQualificationRepository).exceptionForUnqualifiedPerson(existsPersonQualification);
+        boolean notExistsPersonQualification = (Optional.ofNullable(oldPersonQualification)).isEmpty();
+		new PersonQualificationExceptions(personQualificationRepository).exceptionForQualifiedPersonWhoDoesNotExist(notExistsPersonQualification);
         
         PersonQualificationOutputDtoInterface personQualificationOutputDto = updateSelected(	personQualificationInputDto,
 	        																					oldPersonQualification,
@@ -125,6 +127,7 @@ public class PersonQualificationService_HttpPut {
 
         return dtoRecord_ServicePersonQualification;
     }
+    
     
 	protected PersonQualificationSuperclassEntity findOldPersonQuailfication(PersonEntity person, String specifiedQualification) {
 		PersonQualificationSuperclassEntity oldPersonQualification = null;
@@ -174,28 +177,51 @@ public class PersonQualificationService_HttpPut {
 		return personQualificationOutputDto;
 	}
 
+	protected List<PersonQualificationSuperclassEntity> personsQualifications_ConfigureAndSave(
+			PersonQualificationSuperclassEntity oldPersonQualification, 
+			PersonQualificationSuperclassEntity newPersonQualification) {
+		oldPersonQualification.setIsActual(false);
+        newPersonQualification.setIsActual(true);
+        newPersonQualification.setInitialDate(nowSetter());
+        newPersonQualification.setHttpVerb(HttpVerbEnum.PUT);
+        newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
+       
+        List<PersonQualificationSuperclassEntity> qualifications = new ArrayList<>();
+        qualifications.add(oldPersonQualification);
+        qualifications.add(newPersonQualification);
+
+        personQualificationRepository.saveAll(qualifications);
+        
+        return qualifications;        
+    }
+
+	protected LocalDateTime nowSetter() {
+		return LocalDateTime.now();
+	}
+
     @SuppressWarnings("unchecked")
     private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
     PersonQualificationOutputDtoInterface
     manager_Case(	T personQualificationInputDto,
 		    		PersonQualificationSuperclassEntity oldPersonQuailfication,
 		            PersonEntity person,
-		            String specifiedQualification ) throws ResponseStatusException {
+		            String specifiedQualification ) throws ResponseStatusException{
+    	
     	ManagerPersonQualification oldManagerPersonQualification = (ManagerPersonQualification) oldPersonQuailfication;
-
+    	
         var newPersonQualification = new ManagerPersonQualification(oldManagerPersonQualification );
         mapper.map(personQualificationInputDto, newPersonQualification);
+      
         
-        entitiesEqualization(oldManagerPersonQualification, newPersonQualification);
-        entitiesSave(oldManagerPersonQualification, newPersonQualification);
+        
+        personsQualifications_ConfigureAndSave(oldManagerPersonQualification, newPersonQualification);
 
         return (U) new OutputDtoClass_FullTimeEmployeeAndManager(
                         person,
                         (InputDtoClass_FullTimeEmployeeAndManager) personQualificationInputDto,
                         specifiedQualification);
     }
-
-
+    
     @SuppressWarnings("unchecked")
 	private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
     PersonQualificationOutputDtoInterface
@@ -208,8 +234,7 @@ public class PersonQualificationService_HttpPut {
         var newPersonQualification = new FullTimeEmployeePersonQualification(oldFullTimeEmployeePersonQualification);
         mapper.map(personQualificationInputDto, newPersonQualification);
         
-        entitiesEqualization(oldFullTimeEmployeePersonQualification, newPersonQualification);
-        entitiesSave(oldFullTimeEmployeePersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldFullTimeEmployeePersonQualification, newPersonQualification);
 
         return (U) new OutputDtoClass_FullTimeEmployeeAndManager(
                 person,
@@ -229,8 +254,7 @@ public class PersonQualificationService_HttpPut {
         var newPersonQualification = new AccountantPersonQualification(oldAccountantPersonQualification);
         mapper.map(personQualificationInputDto, newPersonQualification);
         
-        entitiesEqualization(oldAccountantPersonQualification, newPersonQualification);
-        entitiesSave(oldAccountantPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldAccountantPersonQualification, newPersonQualification);
 
         return (U) new OutputDtoClass_Accountant(
                         person,
@@ -250,8 +274,7 @@ public class PersonQualificationService_HttpPut {
         var newPersonQualification = new PartTimeEmployeePersonQualification(oldPartTimeEmployeePersonQualification);
         mapper.map(personQualificationInputDto, newPersonQualification);
         
-        entitiesEqualization(oldPartTimeEmployeePersonQualification, newPersonQualification);
-        entitiesSave(oldPartTimeEmployeePersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldPartTimeEmployeePersonQualification, newPersonQualification);
 
         return (U) new OutputDtoClass_PartTimeEmployee(
                 person,
@@ -271,8 +294,7 @@ public class PersonQualificationService_HttpPut {
         var newPersonQualification = new ClientPersonQualification(oldClientPersonQualification);
         mapper.map(personQualificationInputDto, newPersonQualification);
         
-        entitiesEqualization(oldClientPersonQualification, newPersonQualification);
-        entitiesSave(oldClientPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldClientPersonQualification, newPersonQualification);
 
         return (U) new OutputDtoClass_Client(
                 person,
@@ -292,8 +314,7 @@ public class PersonQualificationService_HttpPut {
         var newPersonQualification = new ProviderPersonQualification(oldProviderPersonQualification);
         mapper.map(personQualificationInputDto, newPersonQualification);
         
-        entitiesEqualization(oldProviderPersonQualification, newPersonQualification);
-        entitiesSave(oldProviderPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldProviderPersonQualification, newPersonQualification);
 
         return (U) new OutputDtoClass_Provider(
                 person,
@@ -313,31 +334,12 @@ public class PersonQualificationService_HttpPut {
 	    var newPersonQualification = new ResponsibleForLegalPersonQualification(oldResponsibleForLegalPersonQualification);
 	    mapper.map(personQualificationInputDto, newPersonQualification);
 	    
-	    entitiesEqualization(oldResponsibleForLegalPersonQualification, newPersonQualification);
-	    entitiesSave(oldResponsibleForLegalPersonQualification, newPersonQualification);
+	    personsQualifications_ConfigureAndSave(oldResponsibleForLegalPersonQualification, newPersonQualification);
 	
 	    return (U) new OutputDtoClass_ResponsibleForLegalPerson(
 	            person,
 	            (InputDtoClass_ResponsibleForLegalPerson) personQualificationInputDto,
 	            specifiedQualification);
 	}
-
-	protected void exception_For_Non_Existent_OldPersonQualification(PersonQualificationSuperclassEntity oldPersonQualification) {
-		boolean existsPersonQualification = (Optional.ofNullable(oldPersonQualification)).isPresent();
-		new PersonQualificationExceptions(personRepository, personQualificationRepository).exceptionForUnqualifiedPerson(existsPersonQualification);
-	}
-
-	protected void entitiesEqualization(PersonQualificationSuperclassEntity oldPersonQualification, PersonQualificationSuperclassEntity newPersonQualification) {
-        oldPersonQualification.setIsActual(false);
-        newPersonQualification.setIsActual(true);
-        newPersonQualification.setInitialDate(LocalDateTime.now());
-        newPersonQualification.setHttpVerb(HttpVerbEnum.PUT);
-        newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
-    }
-
-	protected void entitiesSave(PersonQualificationSuperclassEntity oldPersonQualification, PersonQualificationSuperclassEntity newPersonQualification) {
-        personQualificationRepository.save(oldPersonQualification);
-        personQualificationRepository.save(newPersonQualification);
-    }
 }
 

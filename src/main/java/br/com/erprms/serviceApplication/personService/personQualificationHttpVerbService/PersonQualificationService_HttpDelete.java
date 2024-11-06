@@ -9,6 +9,8 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -98,20 +100,18 @@ public class PersonQualificationService_HttpDelete {
     }
 
     @Transactional
-    public 
-    DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> /*ResponseEntity<PersonQualificationOutputDtoInterface>*/ 
-    exclude(
+    public  DtoRecord_ServicePersonQualification<PersonQualificationOutputDtoInterface> exclude(
             @NonNull Long person_Id,
             UriComponentsBuilder uriComponentsBuilder,
-            String specifiedQualification)
-            throws ResponseStatusException {
-
-    	boolean existsPerson = personRepository.existsById(person_Id);
-        new PersonQualificationExceptions(personRepository, personQualificationRepository).exceptionForPersonWhoDoesNotExist(existsPerson);
-//  	exceptionService.exceptionForPersonWhoDoesNotExist(person_Id);
+            String specifiedQualification) throws ResponseStatusException {
+    	PersonEntity person = null;
+    	person = personRepository.getReferenceById(person_Id);
+    	
+    	boolean notExistsPerson = (Optional.ofNullable(person)).isEmpty();
+        new PersonQualificationExceptions(personQualificationRepository).exceptionForPersonWhoDoesNotExist(notExistsPerson);
         
-        var person = personRepository.getReferenceById(person_Id);
-        statusPersonOfQualification.setSatusOfNonUse(person);
+//        StatusPerson_Setter statusPersonOfQualification
+        new StatusPerson_Setter(personRepository, personQualificationRepository).setSatusOfNonUse(person);
 
         PersonQualificationOutputDtoInterface outPutExcludeDto = null;
         switch (specifiedQualification) {
@@ -124,29 +124,28 @@ public class PersonQualificationService_HttpDelete {
             case RESPONSIBLE_FOR_LEGAL_PERSON -> { outPutExcludeDto = responsibleForLegalPerson_Case(specifiedQualification, person); break; }
         }
 
-        var uri = createUri.uriCreator(	uriComponentsBuilder,
-                specifiedQualification,
-                person_Id);
+        var uri = new PersonQualification_CreateUri().uriCreator(	uriComponentsBuilder,
+													                specifiedQualification,
+													                person_Id);
 
         var dtoRecord_ServicePersonQualification =
                 new DtoRecord_ServicePersonQualification<>(uri, outPutExcludeDto);
 
-//        return ResponseEntity
-//                .created(dtoRecord_ServicePersonQualification.uri())
-//                .body(dtoRecord_ServicePersonQualification.dtoOfPerson());
-        
         return dtoRecord_ServicePersonQualification;
     }
 
     private PersonQualificationOutputDtoInterface manager_Case(String specifiedQualification, PersonEntity person) {
         var oldPersonQualification = managerRepository.findManagerPersonQualificationByIsActualIsTrueAndPerson(person);
         
+        
+//		boolean notExistsPersonQualification = (Optional.ofNullable(oldPersonQualification)).isEmpty();
+//		new PersonQualificationExceptions(personQualificationRepository).exceptionForQualifiedPersonWhoDoesNotExist(notExistsPersonQualification);
+
         exception_For_Non_Existent_OldPersonQualification(oldPersonQualification);
 
         var newPersonQualification = new ManagerPersonQualification(oldPersonQualification);
         mapper.map(oldPersonQualification, newPersonQualification);
-        entitiesEqualization(oldPersonQualification, newPersonQualification);
-        entitiesSave(oldPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
 
         return new OutPutExcludeDto_FullTimeEmployeeAndManager(newPersonQualification, specifiedQualification);
     }
@@ -158,8 +157,7 @@ public class PersonQualificationService_HttpDelete {
 
         var newPersonQualification = new FullTimeEmployeePersonQualification(oldPersonQualification);
         mapper.map(oldPersonQualification, newPersonQualification);
-        entitiesEqualization(oldPersonQualification, newPersonQualification);
-        entitiesSave(oldPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
 
         return new OutPutExcludeDto_FullTimeEmployeeAndManager(newPersonQualification, specifiedQualification);
     }
@@ -171,8 +169,7 @@ public class PersonQualificationService_HttpDelete {
 
         var newPersonQualification = new PartTimeEmployeePersonQualification(oldPersonQualification);
         mapper.map(oldPersonQualification, newPersonQualification);
-        entitiesEqualization(oldPersonQualification, newPersonQualification);
-        entitiesSave(oldPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
 
         return new OutputDtoClassExclude_PartTimeEmployee(newPersonQualification, specifiedQualification);
     }
@@ -184,8 +181,7 @@ public class PersonQualificationService_HttpDelete {
         
         var newPersonQualification = new AccountantPersonQualification(oldPersonQualification);
         mapper.map(oldPersonQualification, newPersonQualification);
-        entitiesEqualization(oldPersonQualification, newPersonQualification);
-        entitiesSave(oldPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
 
         return new OutputExcludeDto_Accountant(	newPersonQualification, specifiedQualification);
     }
@@ -197,8 +193,7 @@ public class PersonQualificationService_HttpDelete {
         
         var newPersonQualification = new ClientPersonQualification(oldPersonQualification);
         mapper.map(oldPersonQualification, newPersonQualification);
-        entitiesEqualization(oldPersonQualification, newPersonQualification);
-        entitiesSave(oldPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
 
         return new OutputExcludeDto_Client(	newPersonQualification, specifiedQualification);
     }
@@ -210,8 +205,7 @@ public class PersonQualificationService_HttpDelete {
 
         var newPersonQualification = new ProviderPersonQualification(oldPersonQualification);
         mapper.map(oldPersonQualification, newPersonQualification);
-        entitiesEqualization(oldPersonQualification, newPersonQualification);
-        entitiesSave(oldPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
 
         return new OutputExcludeDto_Provider(newPersonQualification, specifiedQualification);
     }
@@ -223,27 +217,31 @@ public class PersonQualificationService_HttpDelete {
 
         var newPersonQualification = new ResponsibleForLegalPersonQualification(oldPersonQualification);
         mapper.map(oldPersonQualification, newPersonQualification);
-        entitiesEqualization(oldPersonQualification, newPersonQualification);
-        entitiesSave(oldPersonQualification, newPersonQualification);
+        personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
 
         return new OutputExcludeDto_ResponsibleForLegalPerson(newPersonQualification, specifiedQualification);
     }
     
-	protected void exception_For_Non_Existent_OldPersonQualification(PersonQualificationSuperclassEntity oldPersonQualification) {
-		boolean existsPersonQualification = (Optional.ofNullable(oldPersonQualification)).isPresent();
-		new PersonQualificationExceptions(personRepository, personQualificationRepository).exceptionForUnqualifiedPerson(existsPersonQualification);
+	protected void exception_For_Non_Existent_OldPersonQualification(PersonQualificationSuperclassEntity oldPersonQualification) {		
+		boolean notExistsPersonQualification = (Optional.ofNullable(oldPersonQualification)).isEmpty();
+		new PersonQualificationExceptions(personQualificationRepository).exceptionForQualifiedPersonWhoDoesNotExist(notExistsPersonQualification);
 	}
 
-    private void entitiesEqualization(PersonQualificationSuperclassEntity oldPersonQualification, PersonQualificationSuperclassEntity newPersonQualification) {
+	protected List<PersonQualificationSuperclassEntity> personsQualifications_ConfigureAndSave(
+    		PersonQualificationSuperclassEntity oldPersonQualification, 
+    		PersonQualificationSuperclassEntity newPersonQualification) {
         oldPersonQualification.setIsActual(false);
         newPersonQualification.setIsActual(true);
         newPersonQualification.setFinalDate(LocalDateTime.now());
         newPersonQualification.setHttpVerb(HttpVerbEnum.DELETE);
         newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
-    }
+    
+        List<PersonQualificationSuperclassEntity> qualifications = new ArrayList<>();
+        qualifications.add(oldPersonQualification);
+        qualifications.add(newPersonQualification);
 
-    private void entitiesSave(PersonQualificationSuperclassEntity oldPersonQualification, PersonQualificationSuperclassEntity newPersonQualification) {
-        personQualificationRepository.save(oldPersonQualification);
-        personQualificationRepository.save(newPersonQualification);
+        personQualificationRepository.saveAll(qualifications);
+        
+        return qualifications;
     }
 }

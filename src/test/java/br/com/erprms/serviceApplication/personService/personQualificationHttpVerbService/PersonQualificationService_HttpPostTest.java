@@ -86,7 +86,6 @@ class PersonQualificationService_HttpPostTest {
 				personQualificationService_HttpPost
 							.registerService(dto, uriComponentsBuilder, qualification);
 	
-		verify(personRepository, times(1)).existsById(dto.getPerson_Id());
 		verify(personQualificationService_HttpPost, times(1)).mismatchBetweenQualifications(dto.getPerson_Id(), qualification);
 		
 		verify(personQualificationService_HttpPost, times(1)).personQualificationConfigure(any(), any());
@@ -111,8 +110,8 @@ class PersonQualificationService_HttpPostTest {
 				T dto, 
 				Class<PersonQualificationInputDtoInterface> qualificationClass, 
 				UriComponentsBuilder uriComponentsBuilder 
-		) throws ClassNotFoundException {		
-		when(personRepository.existsById(dto.getPerson_Id())).thenReturn(true);
+		) throws ClassNotFoundException {
+		when(personRepository.getReferenceById(anyLong())).thenReturn(null);// ==> This stub was only declared for readability - Mockito returns null automatically
 
 		try {
 			personQualificationService_HttpPost
@@ -126,7 +125,6 @@ class PersonQualificationService_HttpPostTest {
 		
 		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"There is no \"Person\" registered with this \"Id\"\"") );
 		
-		verify(personRepository, times(2)).existsById(dto.getPerson_Id());
 		verify(personQualificationService_HttpPost, never()).mismatchBetweenQualifications(dto.getPerson_Id(), qualification);
 		
 		verify(personQualificationService_HttpPost, never()).personQualificationConfigure(any(), any());
@@ -146,6 +144,7 @@ class PersonQualificationService_HttpPostTest {
 				Class<PersonQualificationInputDtoInterface> qualificationClass, 
 				UriComponentsBuilder uriComponentsBuilder 
 		) throws ClassNotFoundException {
+		when(personRepository.getReferenceById(anyLong())).thenReturn(person);
 		when(personQualificationService_HttpPost
 				.mismatchBetweenQualifications(dto.getPerson_Id(), qualification)).thenReturn(true);
 		
@@ -162,7 +161,6 @@ class PersonQualificationService_HttpPostTest {
 		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"A person can only be a Manager, a regular Employee or a Part-Time employee, "
 										+ "and still cannot have the same active qualification.\"") );
 		
-		verify(personRepository, times(2)).existsById(dto.getPerson_Id());
 		verify(personQualificationService_HttpPost, times(2)).mismatchBetweenQualifications(dto.getPerson_Id(), qualification);
 		
 		verify(personQualificationService_HttpPost, never()).personQualificationConfigure(any(), any());

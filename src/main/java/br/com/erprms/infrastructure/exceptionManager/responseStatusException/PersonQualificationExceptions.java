@@ -1,5 +1,13 @@
 package br.com.erprms.infrastructure.exceptionManager.responseStatusException;
 
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
+
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -9,26 +17,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
-import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
-
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 
 
 @Service
 public class PersonQualificationExceptions {
-	private PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	
-	public PersonQualificationExceptions(
-			PersonRepository personRepository, 
-			PersonQualificationRepository personQualificationRepository) {
-		this.personRepository = personRepository;
+	public PersonQualificationExceptions(PersonQualificationRepository personQualificationRepository) {
 		this.personQualificationRepository = personQualificationRepository;
 	}
 
@@ -66,22 +61,15 @@ public class PersonQualificationExceptions {
 		}
 	}
 
-	public void exceptionForPersonWhoDoesNotExist(boolean existsPerson) {
-		if (existsPerson)
+	public void exceptionForPersonWhoDoesNotExist(boolean notExistsPerson) {
+		if (notExistsPerson)
 			throw new ResponseStatusException(
 					HttpStatus.INSUFFICIENT_STORAGE, 
 					"There is no \"Person\" registered with this \"Id\"");
 	}
 	
-	public void exceptionForPersonWhoDoesNotExist_02(boolean existsPerson) {
-		if (existsPerson)
-			throw new ResponseStatusException(
-					HttpStatus.INSUFFICIENT_STORAGE, 
-					"There is no \"Person\" registered with this \"Id\"");
-	}
-	
-	public void exceptionForUnqualifiedPerson(boolean existsPersonQualification) {
-		if (!existsPersonQualification) 
+	public void exceptionForQualifiedPersonWhoDoesNotExist(boolean notExistsPersonQualification) {
+		if (notExistsPersonQualification) 
 			throw new ResponseStatusException(	HttpStatus.INSUFFICIENT_STORAGE, 
 												"This person does not have this qualification in the database");
 	}

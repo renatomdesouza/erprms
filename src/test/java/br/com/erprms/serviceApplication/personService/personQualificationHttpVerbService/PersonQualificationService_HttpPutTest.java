@@ -16,26 +16,37 @@ import static br.com.erprms.testBuilders.Constants_DtosQualifications.RESPONSIBL
 import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON;
 import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
 import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
-import static br.com.erprms.testBuilders.Constants_PersonQualifications.ACCOUNTANT_PERSON_QUALIFICATION;
-import static br.com.erprms.testBuilders.Constants_PersonQualifications.CLIENT_PERSON_QUALIFICATION;
-import static br.com.erprms.testBuilders.Constants_PersonQualifications.FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION;
-import static br.com.erprms.testBuilders.Constants_PersonQualifications.MANAGER_PERSON_QUALIFICATION;
-import static br.com.erprms.testBuilders.Constants_PersonQualifications.PART_TIME_EMPLOYEE_PERSON_QUALIFICATION;
-import static br.com.erprms.testBuilders.Constants_PersonQualifications.PROVIDER_PERSON_QUALIFICATION;
-import static br.com.erprms.testBuilders.Constants_PersonQualifications.RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_ACCOUNTANT_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_CLIENT_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_MANAGER_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_PROVIDER_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_ACCOUNTANT_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_CLIENT_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_MANAGER_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_PROVIDER_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,9 +58,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
@@ -61,7 +74,6 @@ import br.com.erprms.repositoryAdapter.personRepository.AccountantRepository;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
-import br.com.erprms.testBuilders.Constants_QualificationClass;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -92,22 +104,135 @@ class PersonQualificationService_HttpPutTest {
 				personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification);
 		
 		verify(personRepository, times(1)).getReferenceById(dto.getPerson_Id());
-		verify(personRepository, times(1)).existsById(dto.getPerson_Id());
 		
 		verify(personQualificationService_HttpPut, times(1)).findOldPersonQuailfication(person, qualification);
 		
 		verify(personQualificationService_HttpPut, times(1)).updateSelected(any(), any(), any(), any());
 		
-		verify(personQualificationRepository, times(2)).save(any());
+		verify(personQualificationRepository, times(1)).saveAll(any());
 		
 		assertThat(person.getStatusPersonEnum(), is(StatusPersonalUsedEnum.USED));
 		
 		assertThat(dtoRecord, instanceOf(DtoRecord_ServicePersonQualification.class));
 		assertThat(dtoRecord.dtoOfPerson(), instanceOf(PersonQualificationOutputDtoInterface.class));
 		assertThat(dtoRecord.uri() , instanceOf(URI.class));
+	}
+	
+	@ParameterizedTest
+	@MethodSource("updatesQualifications")
+	@DisplayName("Should update incorrectly of qualification person - without person")
+	<T extends PersonQualificationSuperclassEntity, U extends PersonQualificationInputDtoInterface>  
+	void unitTest_IncorrecttUpdateToSave_withoutPerson(
+			PersonEntity person,
+			String qualification,
+			U dto,
+			T personQualification,
+			UriComponentsBuilder uriComponentsBuilder) {
+		when(personRepository.getReferenceById(anyLong())).thenReturn(null);// ==> This stub was only declared for readability - Mockito returns null automatically
 		
+		try {
+				personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification);
+		} catch (ResponseStatusException ignored) { }
+		
+		ResponseStatusException ex = Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification));
+		
+		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"There is no \"Person\" registered with this \"Id\"\"") );
+		
+		verify(personRepository, times(2)).getReferenceById(dto.getPerson_Id());
+		
+		verify(personQualificationService_HttpPut, never()).findOldPersonQuailfication(person, qualification);
+		
+		verify(personQualificationService_HttpPut, never()).updateSelected(any(), any(), any(), any());
+		
+		verify(personQualificationRepository, never()).saveAll(any());
+	}
+	
+	@ParameterizedTest
+	@MethodSource("updatesQualifications")
+	@DisplayName("Should update incorrectly of qualification person - without qualification")
+	<T extends PersonQualificationSuperclassEntity, U extends PersonQualificationInputDtoInterface>  
+	void unitTest_IncorrecttUpdateToSave_WithoutQualification(
+			PersonEntity person,
+			String qualification,
+			U dto,
+			T personQualification,
+			UriComponentsBuilder uriComponentsBuilder) {
+		when(personRepository.getReferenceById(anyLong())).thenReturn(person);
+		when(personQualificationService_HttpPut.findOldPersonQuailfication(any(), anyString())).thenReturn(null);// ==> This stub was only declared for readability - Mockito returns null automatically
+		
+		try {
+				personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification);
+		} catch (ResponseStatusException ignored) { }
+		
+		ResponseStatusException ex = Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification));
+		
+		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"This person does not have this qualification in the database\"") );
+		
+		verify(personRepository, times(2)).getReferenceById(dto.getPerson_Id());
+		
+		verify(personQualificationService_HttpPut, times(2)).findOldPersonQuailfication(person, qualification);
+		
+		verify(personQualificationService_HttpPut, never()).updateSelected(any(), any(), any(), any());
+		
+		verify(personQualificationRepository, never()).saveAll(any());
 	}
 
+	@ParameterizedTest
+	@MethodSource("personsQualificationsOfRegistry")
+	@DisplayName("Should correct configure and save qualification person")
+	<T extends PersonQualificationSuperclassEntity> 
+	void unitTest_CorrectConfigureAndSave(
+			T oldPersonQualification,
+			T newPersonQualification) {
+		final var LOCAL_DATE_TIME_NOW = LocalDateTime.of(2024, 2, 3, 16, 30, 15);
+		final var USER_lOGGED = "any user";
+		
+		when(personQualificationService_HttpPut.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
+		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(USER_lOGGED);
+		
+		List<PersonQualificationSuperclassEntity> qualifications = 
+				personQualificationService_HttpPut
+					.personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
+
+		verify(personQualificationRepository, times(1)).saveAll(any());
+		
+		assertThat(qualifications.get(0).getIsActual() , is(false));
+		assertThat(qualifications.get(1).getIsActual() , is(true));
+
+		assertThat(qualifications.get(1).getInitialDate(), is(LOCAL_DATE_TIME_NOW));
+		assertThat(qualifications.get(1).getHttpVerb(), is(HttpVerbEnum.PUT));
+		assertThat(qualifications.get(1).getLoginUser(), is(USER_lOGGED));
+	}
+	
+	static Stream<? extends Arguments> personsQualificationsOfRegistry(){
+		return Stream.of(
+				Arguments.of(	
+						OLD_MANAGER_PERSON_QUALIFICATION, 
+						NEW_MANAGER_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
+						NEW_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
+						NEW_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_CLIENT_PERSON_QUALIFICATION, 
+						NEW_CLIENT_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_PROVIDER_PERSON_QUALIFICATION, 
+						NEW_PROVIDER_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION, 
+						NEW_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_ACCOUNTANT_PERSON_QUALIFICATION, 
+						NEW_ACCOUNTANT_PERSON_QUALIFICATION));
+	}
+	
 	static Stream<? extends Arguments> updatesQualifications() throws ClassNotFoundException{
 		return Stream.of(
 				// combinations of natural persons
@@ -115,86 +240,86 @@ class PersonQualificationService_HttpPutTest {
 						NATURAL_PERSON, 
 						MANAGER,
 						FULL_TIME_EMPLOYEE_AND_MANAGER_DTO, 
-						MANAGER_PERSON_QUALIFICATION, 
+						OLD_MANAGER_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						NATURAL_PERSON, 
 						FULL_TIME_EMPLOYEE,
 						FULL_TIME_EMPLOYEE_AND_MANAGER_DTO, 
-						FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
+						OLD_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						NATURAL_PERSON, 
 						PART_TIME_EMPLOYEE,
 						PART_TIME_EMPLOYEE_DTO, 
-						PART_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
+						OLD_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						NATURAL_PERSON, 
 						CLIENT,
 						CLIENT_DTO, 
-						CLIENT_PERSON_QUALIFICATION, 
+						OLD_CLIENT_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						NATURAL_PERSON, 
 						PROVIDER,
 						PROVIDER_DTO, 
-						PROVIDER_PERSON_QUALIFICATION, 
+						OLD_PROVIDER_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						NATURAL_PERSON, 
 						RESPONSIBLE_FOR_LEGAL_PERSON,
 						RESPONSIBLE_FOR_LEGAL_PERSON_DTO, 
-						RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION, 
+						OLD_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						NATURAL_PERSON, 
 						ACCOUNTANT,
 						ACCOUNTANT_DTO, 
-						ACCOUNTANT_PERSON_QUALIFICATION, 
+						OLD_ACCOUNTANT_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				// combinations of legal persons
 				Arguments.of(
 						LEGAL_PERSON, 
 						MANAGER,
 						FULL_TIME_EMPLOYEE_AND_MANAGER_DTO, 
-						MANAGER_PERSON_QUALIFICATION, 
+						OLD_MANAGER_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						LEGAL_PERSON, 
 						FULL_TIME_EMPLOYEE,
 						FULL_TIME_EMPLOYEE_AND_MANAGER_DTO, 
-						FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
+						OLD_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						LEGAL_PERSON, 
 						PART_TIME_EMPLOYEE,
 						PART_TIME_EMPLOYEE_DTO, 
-						PART_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
+						OLD_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						LEGAL_PERSON, 
 						CLIENT,
 						CLIENT_DTO, 
-						CLIENT_PERSON_QUALIFICATION, 
+						OLD_CLIENT_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						LEGAL_PERSON, 
 						PROVIDER,
 						PROVIDER_DTO, 
-						PROVIDER_PERSON_QUALIFICATION, 
+						OLD_PROVIDER_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						LEGAL_PERSON, 
 						RESPONSIBLE_FOR_LEGAL_PERSON,
 						RESPONSIBLE_FOR_LEGAL_PERSON_DTO, 
-						RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION, 
+						OLD_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER),
 				Arguments.of(
 						LEGAL_PERSON, 
 						ACCOUNTANT,
 						ACCOUNTANT_DTO, 
-						ACCOUNTANT_PERSON_QUALIFICATION, 
+						OLD_ACCOUNTANT_PERSON_QUALIFICATION, 
 						URI_COMPONENTS_BUILDER)	
 					);
 	}
