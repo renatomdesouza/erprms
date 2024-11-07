@@ -52,6 +52,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -64,6 +65,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
@@ -110,7 +112,7 @@ class PersonQualificationService_HttpDeleteTest {
 	
 	@ParameterizedTest
 	@MethodSource("excludesQualifications")
-	@DisplayName("Should update correctly of qualification person")
+	@DisplayName("Should exclude correctly of qualification person")
 	<T extends PersonQualificationSuperclassEntity, U extends PersonQualificationInputDtoInterface> 
 	void unitTest_CorrectExcludeToSave(
 			Long person_Id,
@@ -155,6 +157,71 @@ class PersonQualificationService_HttpDeleteTest {
 		assertThat(dtoRecord, instanceOf(DtoRecord_ServicePersonQualification.class));
 		assertThat(dtoRecord.dtoOfPerson(), instanceOf(PersonQualificationOutputDtoInterface.class));
 		assertThat(dtoRecord.uri() , instanceOf(URI.class));
+	}
+	
+	@ParameterizedTest
+	@MethodSource("excludesQualifications")
+	@DisplayName("Should exclude incorrectly of qualification person - not exists person")
+	<T extends PersonQualificationSuperclassEntity, U extends PersonQualificationInputDtoInterface>  
+	void unitTest_IncorrecttUpdateToSave_withoutPerson(
+			Long person_Id,
+			PersonEntity person, // not used
+			String qualification,
+			T personQualification, // not used
+			UriComponentsBuilder uriComponentsBuilder) {
+		when(personRepository.getReferenceById(person_Id)).thenReturn(null);// ==> This stub was only declared for readability - Mockito returns null automatically
+		
+		try {
+			personQualificationService_HttpDelete.exclude(person_Id, uriComponentsBuilder, qualification);
+		} catch (ResponseStatusException ignored) { }
+		
+		ResponseStatusException ex = Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> personQualificationService_HttpDelete.exclude(person_Id, uriComponentsBuilder, qualification));
+		
+		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"There is no \"Person\" registered with this \"Id\"\"") );
+		
+		verify(personRepository, times(2)).getReferenceById(person_Id);
+		verify(personQualificationService_HttpDelete, never()).personsQualifications_ConfigureAndSave(any(), any());
+		verify(personQualificationRepository, never()).saveAll(any());
+	}
+	
+	@ParameterizedTest
+	@MethodSource("excludesQualifications")
+	@DisplayName("Should exclude incorrectly of qualification person - not exists person qualification")
+	<T extends PersonQualificationSuperclassEntity, U extends PersonQualificationInputDtoInterface>  
+	void unitTest_IncorrecttUpdateToSave_withoutQualification(
+			Long person_Id,
+			PersonEntity person,
+			String qualification,
+			T personQualification, // not used
+			UriComponentsBuilder uriComponentsBuilder) {
+		when(personRepository.getReferenceById(person_Id)).thenReturn(person);
+		
+		try {
+			personQualificationService_HttpDelete.exclude(person_Id, uriComponentsBuilder, qualification);
+		} catch (ResponseStatusException ignored) { }
+		
+		ResponseStatusException ex = Assertions.assertThrows(
+				ResponseStatusException.class,
+				() -> personQualificationService_HttpDelete.exclude(person_Id, uriComponentsBuilder, qualification));
+		
+		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"This person does not have this qualification in the database\"") );
+		assertThat(person.getStatusPersonEnum(), is(StatusPersonalUsedEnum.USED));
+
+		switch (qualification) {
+			case MANAGER -> { verify(managerRepository, times(2)).findManagerPersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case FULL_TIME_EMPLOYEE -> { verify(fullTimeEmployeeRepository, times(2)).findFullTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case PART_TIME_EMPLOYEE -> { verify(partTimeEmployeeRepository, times(2)).findPartTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case ACCOUNTANT -> { verify(accountantRepository, times(2)).findAccountantPersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case CLIENT -> { verify(clientRepository, times(2)).findClientPersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case PROVIDER -> { verify(providerRepository, times(2)).findProviderPersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case RESPONSIBLE_FOR_LEGAL_PERSON -> { verify(responsibleForLegalPersonRepository, times(2)).findResponsibleForLegalPersonQualificationByIsActualIsTrueAndPerson(person); break; }}
+		
+		verify(personRepository, times(2)).getReferenceById(person_Id);
+		
+		verify(personQualificationService_HttpDelete, never()).personsQualifications_ConfigureAndSave(any(), any());
+		verify(personQualificationRepository, never()).saveAll(any());
 	}
 	
 	static Stream<? extends Arguments> excludesQualifications() throws ClassNotFoundException{

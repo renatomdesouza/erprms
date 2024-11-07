@@ -101,8 +101,6 @@ public class PersonQualificationService_HttpDelete {
     	boolean notExistsPerson = (Optional.ofNullable(person)).isEmpty();
         new PersonQualificationExceptions(personQualificationRepository).exceptionForPersonWhoDoesNotExist(notExistsPerson);
         
-        new StatusPerson_Setter(personRepository, personQualificationRepository).setSatusOfNonUse(person);
-
         PersonQualificationOutputDtoInterface outPutExcludeDto = null;
         switch (specifiedQualification) {
             case FULL_TIME_EMPLOYEE -> { outPutExcludeDto = fullTimeEmployee_Case(specifiedQualification, person); break; }
@@ -113,6 +111,8 @@ public class PersonQualificationService_HttpDelete {
             case PROVIDER -> { outPutExcludeDto = provider_Case(specifiedQualification, person); break; }
             case RESPONSIBLE_FOR_LEGAL_PERSON -> { outPutExcludeDto = responsibleForLegalPerson_Case(specifiedQualification, person); break; }
         }
+        
+        new StatusPerson_Setter(personRepository, personQualificationRepository).setSatusOfNonUse(person);
 
         var uri = new PersonQualification_CreateUri().uriCreator(	uriComponentsBuilder,
 													                specifiedQualification,

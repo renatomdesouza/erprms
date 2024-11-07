@@ -157,7 +157,7 @@ class PersonQualificationService_HttpPutTest {
 			PersonEntity person,
 			String qualification,
 			U dto,
-			T personQualification,
+			T personQualification, // not used
 			UriComponentsBuilder uriComponentsBuilder) {
 		when(personRepository.getReferenceById(anyLong())).thenReturn(person);
 		when(personQualificationService_HttpPut.findOldPersonQuailfication(any(), anyString())).thenReturn(null);// ==> This stub was only declared for readability - Mockito returns null automatically
@@ -171,6 +171,8 @@ class PersonQualificationService_HttpPutTest {
 				() -> personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification));
 		
 		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"This person does not have this qualification in the database\"") );
+		
+		assertThat(person.getStatusPersonEnum(), is(StatusPersonalUsedEnum.USED));
 		
 		verify(personRepository, times(2)).getReferenceById(dto.getPerson_Id());
 		
