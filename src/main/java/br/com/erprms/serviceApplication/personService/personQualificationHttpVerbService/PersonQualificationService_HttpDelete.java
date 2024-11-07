@@ -63,9 +63,6 @@ public class PersonQualificationService_HttpDelete {
     private final ProviderRepository providerRepository;
     private final ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository;
     private final PersonQualificationRepository personQualificationRepository;
-    private final PersonQualificationExceptions exceptionService;
-    private final PersonQualification_CreateUri createUri;
-    private final StatusPerson_Setter statusPersonOfQualification;
     private final AuthenticatedUsername authenticationFacade;
 
     public PersonQualificationService_HttpDelete(
@@ -79,9 +76,6 @@ public class PersonQualificationService_HttpDelete {
             ProviderRepository providerRepository,
             ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
             AccountantRepository accountantRepository,
-            PersonQualificationExceptions exceptionService,
-            PersonQualification_CreateUri createUri,
-            StatusPerson_Setter statusPersonOfQualification,
             AuthenticatedUsername authenticationFacade) {
         this.mapper = mapper;
         this.personRepository = personRepository;
@@ -93,9 +87,6 @@ public class PersonQualificationService_HttpDelete {
         this.clientRepository = clientRepository;
         this.providerRepository = providerRepository;
         this.responsibleForLegalPersonRepository = responsibleForLegalPersonRepository;
-        this.exceptionService = exceptionService;
-        this.createUri = createUri;
-        this.statusPersonOfQualification = statusPersonOfQualification;
         this.authenticationFacade = authenticationFacade;
     }
 
@@ -110,7 +101,6 @@ public class PersonQualificationService_HttpDelete {
     	boolean notExistsPerson = (Optional.ofNullable(person)).isEmpty();
         new PersonQualificationExceptions(personQualificationRepository).exceptionForPersonWhoDoesNotExist(notExistsPerson);
         
-//        StatusPerson_Setter statusPersonOfQualification
         new StatusPerson_Setter(personRepository, personQualificationRepository).setSatusOfNonUse(person);
 
         PersonQualificationOutputDtoInterface outPutExcludeDto = null;
@@ -133,13 +123,27 @@ public class PersonQualificationService_HttpDelete {
 
         return dtoRecord_ServicePersonQualification;
     }
+    
+    protected List<PersonQualificationSuperclassEntity> personsQualifications_ConfigureAndSave(
+    		PersonQualificationSuperclassEntity oldPersonQualification, 
+    		PersonQualificationSuperclassEntity newPersonQualification) {
+        oldPersonQualification.setIsActual(false);
+        newPersonQualification.setIsActual(true);
+        newPersonQualification.setFinalDate(LocalDateTime.now());
+        newPersonQualification.setHttpVerb(HttpVerbEnum.DELETE);
+        newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
+    
+        List<PersonQualificationSuperclassEntity> qualifications = new ArrayList<>();
+        qualifications.add(oldPersonQualification);
+        qualifications.add(newPersonQualification);
+
+        personQualificationRepository.saveAll(qualifications);
+        
+        return qualifications;
+    }
 
     private PersonQualificationOutputDtoInterface manager_Case(String specifiedQualification, PersonEntity person) {
         var oldPersonQualification = managerRepository.findManagerPersonQualificationByIsActualIsTrueAndPerson(person);
-        
-        
-//		boolean notExistsPersonQualification = (Optional.ofNullable(oldPersonQualification)).isEmpty();
-//		new PersonQualificationExceptions(personQualificationRepository).exceptionForQualifiedPersonWhoDoesNotExist(notExistsPersonQualification);
 
         exception_For_Non_Existent_OldPersonQualification(oldPersonQualification);
 
@@ -222,26 +226,8 @@ public class PersonQualificationService_HttpDelete {
         return new OutputExcludeDto_ResponsibleForLegalPerson(newPersonQualification, specifiedQualification);
     }
     
-	protected void exception_For_Non_Existent_OldPersonQualification(PersonQualificationSuperclassEntity oldPersonQualification) {		
+    private void exception_For_Non_Existent_OldPersonQualification(PersonQualificationSuperclassEntity oldPersonQualification) {		
 		boolean notExistsPersonQualification = (Optional.ofNullable(oldPersonQualification)).isEmpty();
 		new PersonQualificationExceptions(personQualificationRepository).exceptionForQualifiedPersonWhoDoesNotExist(notExistsPersonQualification);
 	}
-
-	protected List<PersonQualificationSuperclassEntity> personsQualifications_ConfigureAndSave(
-    		PersonQualificationSuperclassEntity oldPersonQualification, 
-    		PersonQualificationSuperclassEntity newPersonQualification) {
-        oldPersonQualification.setIsActual(false);
-        newPersonQualification.setIsActual(true);
-        newPersonQualification.setFinalDate(LocalDateTime.now());
-        newPersonQualification.setHttpVerb(HttpVerbEnum.DELETE);
-        newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
-    
-        List<PersonQualificationSuperclassEntity> qualifications = new ArrayList<>();
-        qualifications.add(oldPersonQualification);
-        qualifications.add(newPersonQualification);
-
-        personQualificationRepository.saveAll(qualifications);
-        
-        return qualifications;
-    }
 }
