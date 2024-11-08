@@ -7,15 +7,9 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.ACCOUNTANT_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.CLIENT_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.FULL_TIME_EMPLOYEE_AND_MANAGER_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.PART_TIME_EMPLOYEE_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.PROVIDER_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.RESPONSIBLE_FOR_LEGAL_PERSON_DTO;
 import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON;
 import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
+import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_ACCOUNTANT_PERSON_QUALIFICATION;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_CLIENT_PERSON_QUALIFICATION;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.NEW_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION;
@@ -30,31 +24,23 @@ import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_MANA
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_PROVIDER_PERSON_QUALIFICATION;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.net.URI;
-import java.util.stream.Stream;
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -69,6 +55,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.FullTimeEmployeePersonQualification;
@@ -222,6 +209,58 @@ class PersonQualificationService_HttpDeleteTest {
 		
 		verify(personQualificationService_HttpDelete, never()).personsQualifications_ConfigureAndSave(any(), any());
 		verify(personQualificationRepository, never()).saveAll(any());
+	}
+	
+	@ParameterizedTest
+	@MethodSource("personsQualificationsOfRegistry")
+	@DisplayName("Should correct configure and save qualification person")
+	<T extends PersonQualificationSuperclassEntity> 
+	void unitTest_CorrectConfigureAndSave(
+			T oldPersonQualification,
+			T newPersonQualification) {
+		final var LOCAL_DATE_TIME_NOW = LocalDateTime.of(2024, 2, 3, 16, 30, 15);
+		final var USER_lOGGED = "any user";
+		
+		when(personQualificationService_HttpDelete.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
+		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(USER_lOGGED);
+		
+		List<PersonQualificationSuperclassEntity> qualifications = 
+				personQualificationService_HttpDelete
+					.personsQualifications_ConfigureAndSave(oldPersonQualification, newPersonQualification);
+
+		verify(personQualificationRepository, times(1)).saveAll(any());
+		
+		assertThat(qualifications.get(0).getIsActual() , is(false));
+		assertThat(qualifications.get(1).getIsActual() , is(true));
+
+		assertThat(qualifications.get(1).getFinalDate(), is(LOCAL_DATE_TIME_NOW));
+		assertThat(qualifications.get(1).getHttpVerb(), is(HttpVerbEnum.DELETE));
+		assertThat(qualifications.get(1).getLoginUser(), is(USER_lOGGED));
+	}
+	
+	static Stream<? extends Arguments> personsQualificationsOfRegistry(){
+		return Stream.of(
+				Arguments.of(	
+						OLD_MANAGER_PERSON_QUALIFICATION, 
+						NEW_MANAGER_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
+						NEW_FULL_TIME_EMPLOYEE_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION, 
+						NEW_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_CLIENT_PERSON_QUALIFICATION, 
+						NEW_CLIENT_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_PROVIDER_PERSON_QUALIFICATION, 
+						NEW_PROVIDER_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION, 
+						NEW_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION),
+				Arguments.of(
+						OLD_ACCOUNTANT_PERSON_QUALIFICATION, 
+						NEW_ACCOUNTANT_PERSON_QUALIFICATION));
 	}
 	
 	static Stream<? extends Arguments> excludesQualifications() throws ClassNotFoundException{

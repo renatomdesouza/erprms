@@ -129,7 +129,7 @@ public class PersonQualificationService_HttpDelete {
     		PersonQualificationSuperclassEntity newPersonQualification) {
         oldPersonQualification.setIsActual(false);
         newPersonQualification.setIsActual(true);
-        newPersonQualification.setFinalDate(LocalDateTime.now());
+        newPersonQualification.setFinalDate(nowSetter());
         newPersonQualification.setHttpVerb(HttpVerbEnum.DELETE);
         newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
     
@@ -141,6 +141,10 @@ public class PersonQualificationService_HttpDelete {
         
         return qualifications;
     }
+    
+    protected LocalDateTime nowSetter() {
+		return LocalDateTime.now();
+	}
 
     private PersonQualificationOutputDtoInterface manager_Case(String specifiedQualification, PersonEntity person) {
         var oldPersonQualification = managerRepository.findManagerPersonQualificationByIsActualIsTrueAndPerson(person);
