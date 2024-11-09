@@ -41,7 +41,7 @@ public record DtoRecord_NaturalPersonOfRegistry(
 		String maritalStatus,
 
 		@NotBlank(message = "The city born of the natural person cannot be null")
-		@Pattern(	regexp = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$",
+		@Pattern(	regexp = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s\\/-]+$",
 					message = "The city born must be described with letters only")
 		@Size(min = 5, max = 100, message = "The field must have 5 to 100 characters")
 		String cityBorn,

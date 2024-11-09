@@ -108,13 +108,13 @@ class LegalPersonControllerTest {
 			"95345678901234",
 			"fulana5@mail.com",
 			"www.fulana10.com",
-			"2323232323",
-			"4545454545",
+			"232323232",
+			"45454545454545",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01010101-0101",
+			"01010-101",
 			"São Paulo/SP"
 			);
 
@@ -124,13 +124,13 @@ class LegalPersonControllerTest {
 			"85345678901237",
 			"fulana5@mail.com",
 			"www.fulana10.com",
-			"2323232323",
-			"4545454545",
+			"232323232",
+			"45454545454545",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01010101-0101",
+			"01010-101",
 			"São Paulo/SP"
 	);
 
@@ -140,13 +140,13 @@ class LegalPersonControllerTest {
 			"95345678901237",
 			"fulana5@mail.com",
 			"www.fulana11.com",
-			"2323232323",
-			"4545454545",
+			"232323232",
+			"45454545454545",
 			"rua Sem Nome",
 			"010101",
 			"Centro",
 			"Praça Central",
-			"01010101-0101",
+			"01010-101",
 			"São Paulo/SP"
 	);
 }
