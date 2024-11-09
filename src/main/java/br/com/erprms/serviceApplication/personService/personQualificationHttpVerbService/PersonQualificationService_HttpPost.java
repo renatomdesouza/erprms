@@ -47,6 +47,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLega
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.OutputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import jakarta.transaction.Transactional;
@@ -57,16 +58,19 @@ public class PersonQualificationService_HttpPost {
 	private final PersonRepository personRepository;
 	private final PersonQualificationRepository personQualificationRepository;
 	private final AuthenticatedUsername authenticationFacade;
+	private LocalDateTime_Setter localDateTime_Setter;
 	
 	public PersonQualificationService_HttpPost(
 			ModelMapper mapper, 
 			PersonRepository personRepository, 
 			PersonQualificationRepository personQualificationRepository,
-			AuthenticatedUsername authenticationFacade) {
+			AuthenticatedUsername authenticationFacade,
+			LocalDateTime_Setter localDateTime_Setter) {
 		this.mapper = mapper;
 		this.personRepository = personRepository;
 		this.personQualificationRepository = personQualificationRepository;
 		this.authenticationFacade = authenticationFacade;
+		this.localDateTime_Setter = localDateTime_Setter;
 	}
 	
 	@Transactional
@@ -156,16 +160,16 @@ public class PersonQualificationService_HttpPost {
 					PersonQualificationSuperclassEntity personQualification) {
 		personQualification.setIsActual(true);
 		personQualification.setPerson(person);
-		personQualification.setInitialDate(nowSetter());
+		personQualification.setInitialDate(localDateTime_Setter.nowSetter());
 		personQualification.setHttpVerb(HttpVerbEnum.POST);
 		personQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
 		
 		return personQualification;
 	}
 	
-	protected LocalDateTime nowSetter() {
-		return LocalDateTime.now();
-	}
+//	protected LocalDateTime nowSetter() {
+//		return LocalDateTime.now();
+//	}
 	
 	protected boolean mismatchBetweenQualifications(@NonNull Long id_Person, String specifiedQualification) {
 		String mismatchQualification = null;

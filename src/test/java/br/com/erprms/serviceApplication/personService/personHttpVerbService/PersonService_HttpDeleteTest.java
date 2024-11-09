@@ -5,6 +5,10 @@ import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON_NOT_USED;
 import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
 import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON_NOT_USED;
 import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
+import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
+import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,6 +43,7 @@ import br.com.erprms.dtoPort.personDto.legalPersonDto.internalDto_LegalPerson.Dt
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.internalDto_LegalPerson.DtoClass_NaturalPersonOfListing;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.IsEmailPresent_Service;
@@ -54,6 +59,7 @@ class PersonService_HttpDeleteTest {
 	@Mock private PersonEntity personEntity;
 	@Mock private IsEmailPresent_Service isEmailPresentService;
 	@Mock private AuthenticatedUsername authenticatedUsername;
+	@Mock private LocalDateTime_Setter localDateTime_Setter;
 	
 	@ParameterizedTest
 	@MethodSource("personsOfRegistry")
@@ -116,16 +122,16 @@ class PersonService_HttpDeleteTest {
 	@MethodSource("personsOfRegistry")
 	@DisplayName("Should save managements records properly")
 	<T> void unitTest_CorrectDeleteOfManagementPersons(PersonEntity personEntity) {
-		String anyAuthenticatedUser = "AnyUser";
-
-		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(anyAuthenticatedUser);
+		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(USER_lOGGED);
+		when(localDateTime_Setter.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
 
 		var personManagement = personService_HttpDelete.createManagement(personEntity);
 
 		assertThat(personManagement.getPerson(), instanceOf(PersonEntity.class));
 		assertThat(personManagement.getHttpVerb(), is(HttpVerbEnum.DELETE));
 		assertThat(personManagement.getInitialDate(), instanceOf(LocalDateTime.class));
-		assertThat(personManagement.getLoginUser(), is(anyAuthenticatedUser));
+		assertThat(personManagement.getInitialDate(), is(LOCAL_DATE_TIME_NOW));
+		assertThat(personManagement.getLoginUser(), is(USER_lOGGED));
 	}
 
 	

@@ -17,6 +17,10 @@ import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON;
 import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
 import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.PERSON_QUALIFICATION_SUPERCLASS;
+import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
+import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,6 +58,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificatio
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.testBuilders.Constants_QualificationClass;
@@ -67,6 +72,7 @@ class PersonQualificationService_HttpPostTest {
 	@Mock private PersonRepository personRepository;
 	@Mock private PersonQualificationRepository personQualificationRepository;
 	@Mock private AuthenticatedUsername authenticatedUsername;
+	@Mock private LocalDateTime_Setter localDateTime_Setter;
 
 	
 	@ParameterizedTest
@@ -173,11 +179,8 @@ class PersonQualificationService_HttpPostTest {
 	@MethodSource("personsOfRegistry")
 	@DisplayName("Should create incorrectly of qualification person")
 	void unitTest_IncorrectCreateToSave(PersonEntity person) {
-		final var LOCAL_DATE_TIME_NOW = LocalDateTime.of(2024, 2, 3, 16, 30, 15);
-		final var USER_lOGGED = "any user";
-		
-		when(personQualificationService_HttpPost.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
 		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(USER_lOGGED);
+		when(localDateTime_Setter.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
 		
 		var personQualification = 
 				personQualificationService_HttpPost

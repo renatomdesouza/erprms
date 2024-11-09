@@ -4,6 +4,10 @@ import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_LEGAL_PERSO
 import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_NATURAL_PERSON_OF_REGISTRY;
 import static br.com.erprms.testBuilders.Constants_Person.IS_EMAIL_TRUE;
 import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
+import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
+import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,6 +44,7 @@ import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfReg
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.IsEmailPresent_Service;
@@ -57,6 +62,8 @@ class PersonService_HttpPostTest {
 	@Mock private PersonManagement_Service createPersonManagement;
 	@Mock private AuthenticatedUsername authenticatedUsername;
 	@Mock private PersonEntity personEntity;
+	@Mock private LocalDateTime_Setter localDateTime_Setter;
+	
 
 	@ParameterizedTest
 	@MethodSource("dtoRecords_PersonsOfRegistry")
@@ -114,45 +121,12 @@ class PersonService_HttpPostTest {
 		assertNotNull(person);
 	}
 
-//	@ParameterizedTest
-//	@MethodSource("dtoRecords_PersonsOfRegistry")
-//	@DisplayName("Should save persons properly")
-//	<T> void unitTest_CorrectSaveOfPersons(T personDto) {
-//		personServiceHttpPost.registerService(personDto, URI_COMPONENTS_BUILDER);
-//
-//		verify(personRepository, times(1)).save(any());
-//		verify(personsManagementRepository, times(1)).save(any());
-//	}
-
-//	@ParameterizedTest
-//	@MethodSource("dtoRecords_PersonsOfRegistry")
-//	@DisplayName("Should save managements records properly")
-//	<T> void unitTest_CorrectSaveOfManagementPersons(T personDto) {
-//		String anyAuthenticatedUser = "AnyUser";
-//		LocalDateTime nowSimulator = LocalDateTime.of(2024, 12, 31, 4, 30, 15);
-//		
-//		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(anyAuthenticatedUser);
-//		when(personServiceHttpPost.clockForNow()).thenReturn(nowSimulator);
-//
-//		var person = personServiceHttpPost.getFromPerson(personDto);
-//		var personManagement = personServiceHttpPost.createPersonManagement(person);
-//
-//		assertThat(personManagement.getPerson(), instanceOf(PersonEntity.class));
-//		assertThat(personManagement.getHttpVerb(), is(HttpVerbEnum.POST));
-//		assertThat(personManagement.getInitialDate(), instanceOf(LocalDateTime.class));
-//		assertThat(personManagement.getInitialDate(), is(nowSimulator));
-//		assertThat(personManagement.getLoginUser(), is(anyAuthenticatedUser));
-//	}
-	
 	@ParameterizedTest
 	@MethodSource("dtoRecords_PersonsOfRegistry")
 	@DisplayName("Should save managements records properly")
 	<T> void unitTest_CorrectSaveOfManagementPersons(T personDto) {
-		String anyAuthenticatedUser = "AnyUser";
-//		LocalDateTime nowSimulator = LocalDateTime.of(2024, 12, 31, 4, 30, 15);
-		
-		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(anyAuthenticatedUser);
-//		when(createPersonManagement.clockForNow()).thenReturn(nowSimulator);
+		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(USER_lOGGED);
+		when(localDateTime_Setter.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
 
 		var person = personServiceHttpPost.getFromPerson(personDto);
 		var personManagement = personServiceHttpPost.createManagement(person);
@@ -160,8 +134,8 @@ class PersonService_HttpPostTest {
 		assertThat(personManagement.getPerson(), instanceOf(PersonEntity.class));
 		assertThat(personManagement.getHttpVerb(), is(HttpVerbEnum.POST));
 		assertThat(personManagement.getInitialDate(), instanceOf(LocalDateTime.class));
-//		assertThat(personManagement.getInitialDate(), is(nowSimulator));
-		assertThat(personManagement.getLoginUser(), is(anyAuthenticatedUser));
+		assertThat(personManagement.getInitialDate(), is(LOCAL_DATE_TIME_NOW));
+		assertThat(personManagement.getLoginUser(), is(USER_lOGGED));
 	}
 	
 	static Stream<? extends Arguments> dtoRecord_NaturalPersonOfRegistry(){

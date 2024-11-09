@@ -4,6 +4,7 @@ import br.com.erprms.domainModel.personDomain.PersonsManagementEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.PersonManagement_Service;
 
@@ -28,18 +29,21 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 	private ModelMapper mapper;
 	private final AuthenticatedUsername authenticationFacade;
 	private final PersonExceptions personException;
+	private LocalDateTime_Setter localDateTime_Setter;
 
 	public PersonService_HttpDelete(
 			PersonRepository personRepository,
 			PersonsManagementRepository personsManagementRepository,
 			ModelMapper mapper,
 			AuthenticatedUsername authenticationFacade,
-			PersonExceptions personException) {
+			PersonExceptions personException,
+			LocalDateTime_Setter localDateTime_Setter) {
 		this.personRepository = personRepository;
 		this.personsManagementRepository = personsManagementRepository;
 		this.mapper = mapper;
 		this.authenticationFacade = authenticationFacade;
 		this.personException = personException;
+		this.localDateTime_Setter = localDateTime_Setter;
 	}	
 
 	@Transactional
@@ -74,7 +78,7 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 	}
 
 	protected PersonsManagementEntity createManagement(PersonEntity person) {
-		return new PersonManagement_Service(this.authenticationFacade).create(person, HttpVerbEnum.DELETE);
+		return new PersonManagement_Service(this.authenticationFacade, this.localDateTime_Setter).create(person, HttpVerbEnum.DELETE);
 	}
 //
 //	protected PersonsManagementEntity createPersonsManagement(PersonEntity person) {

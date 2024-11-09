@@ -30,6 +30,10 @@ import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_MANA
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_PROVIDER_PERSON_QUALIFICATION;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION;
+import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
+import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -70,6 +74,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificatio
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.AccountantRepository;
 import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
@@ -86,6 +91,7 @@ class PersonQualificationService_HttpPutTest {
 	@Mock private ManagerRepository managerRepository;	
 	@Mock private AccountantRepository accountantRepository;
 	@Mock private AuthenticatedUsername authenticatedUsername;
+	@Mock private LocalDateTime_Setter localDateTime_Setter;
 
 	@ParameterizedTest
 	@MethodSource("updatesQualifications")
@@ -190,11 +196,8 @@ class PersonQualificationService_HttpPutTest {
 	void unitTest_CorrectConfigureAndSave(
 			T oldPersonQualification,
 			T newPersonQualification) {
-		final var LOCAL_DATE_TIME_NOW = LocalDateTime.of(2024, 2, 3, 16, 30, 15);
-		final var USER_lOGGED = "any user";
-		
-		when(personQualificationService_HttpPut.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
 		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(USER_lOGGED);
+		when(localDateTime_Setter.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
 		
 		List<PersonQualificationSuperclassEntity> qualifications = 
 				personQualificationService_HttpPut

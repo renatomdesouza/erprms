@@ -1,7 +1,5 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import java.time.LocalDateTime;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -12,6 +10,7 @@ import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVer
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.CreatePersonFromDto_Service;
@@ -27,6 +26,8 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 	private AuthenticatedUsername authenticatedUsername;
 	private PersonExceptions personException;
 	private IsEmailPresent_Service isEmailPresentService;
+	private LocalDateTime_Setter localDateTime_Setter;
+	
 	
 	public PersonService_HttpPost(
 			PersonRepository personRepository,
@@ -34,13 +35,15 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 			ModelMapper mapper,
 			AuthenticatedUsername authenticatedUsername,
 			PersonExceptions personException,
-			IsEmailPresent_Service isEmailPresentService) {
+			IsEmailPresent_Service isEmailPresentService,
+			LocalDateTime_Setter localDateTime_Setter) {
 		this.personRepository = personRepository;
 		this.personsManagementRepository = personsManagementRepository;
 		this.mapper = mapper;
 		this.authenticatedUsername = authenticatedUsername;
 		this.personException = personException;
 		this.isEmailPresentService = isEmailPresentService;
+		this.localDateTime_Setter = localDateTime_Setter;
 	}
 
 	@Transactional     
@@ -71,7 +74,7 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 	}
 
 	protected PersonsManagementEntity createManagement(PersonEntity person) {
-		return new PersonManagement_Service(this.authenticatedUsername).create(person, HttpVerbEnum.POST);
+		return new PersonManagement_Service(this.authenticatedUsername, this.localDateTime_Setter).create(person, HttpVerbEnum.POST);
 	}
 
 	@SuppressWarnings("hiding")

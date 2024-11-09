@@ -6,6 +6,9 @@ import static br.com.erprms.testBuilders.Constants_Person.IS_EMAIL_TRUE;
 import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON;
 import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
 import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
+import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
+import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,6 +47,7 @@ import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfReg
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.IsEmailPresent_Service;
@@ -59,6 +63,7 @@ class PersonService_HttpPutTest {
 	@Mock private PersonEntity personEntity;
 	@Mock private IsEmailPresent_Service isEmailPresentService;
 	@Mock private AuthenticatedUsername authenticatedUsername;
+	@Mock private LocalDateTime_Setter localDateTime_Setter;
 
 	@ParameterizedTest
 	@MethodSource("personsOfRegistry")
@@ -127,58 +132,21 @@ class PersonService_HttpPutTest {
 		assertThat(person, instanceOf(PersonEntity.class));
 		assertNotNull(person);
 	}
-
-//	@ParameterizedTest
-//	@MethodSource("personsOfRegistry")
-//	@DisplayName("Should save persons properly")
-//	<T> void unitTest_CorrectSaveOfPersons(PersonEntity personEntity) {
-//		when(personRepository.getReferenceById(anyLong())).thenReturn(personEntity);
-//		
-//		personService_HttpPut.updateService(	Object.class, 
-//												String.valueOf(personEntity.getId()), 
-//												personEntity.getEmail(),
-//												URI_COMPONENTS_BUILDER);
-//
-//		verify(personRepository, times(1)).save(any());
-//		verify(personsManagementRepository, times(1)).save(any());
-//	}
-	
-//	@ParameterizedTest
-//	@MethodSource("personsOfRegistry")
-//	@DisplayName("Should save managements records properly")
-//	<T> void unitTest_CorrectSaveOfManagementPersons(PersonEntity personEntity) {
-//		String anyAuthenticatedUser = "AnyUser";
-//		LocalDateTime nowSimulator = LocalDateTime.of(2024, 12, 31, 4, 30, 15);
-//		
-//		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(anyAuthenticatedUser);
-//		when(personService_HttpPut.clockForNow()).thenReturn(nowSimulator);
-//
-//		var personManagement = personService_HttpPut.createPersonManagement(personEntity);
-//
-//		assertThat(personManagement.getPerson(), instanceOf(PersonEntity.class));
-//		assertThat(personManagement.getHttpVerb(), is(HttpVerbEnum.PUT));
-//		assertThat(personManagement.getInitialDate(), instanceOf(LocalDateTime.class));
-//		assertThat(personManagement.getInitialDate(), is(nowSimulator));
-//		assertThat(personManagement.getLoginUser(), is(anyAuthenticatedUser));
-//	}
 	
 	@ParameterizedTest
 	@MethodSource("personsOfRegistry")
 	@DisplayName("Should save managements records properly")
-	<T> void unitTest_CorrectSaveOfManagementPersons2(PersonEntity personEntity) {
-		String anyAuthenticatedUser = "AnyUser";
-//		LocalDateTime nowSimulator = LocalDateTime.of(2024, 12, 31, 4, 30, 15);
-		
-		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(anyAuthenticatedUser);
-//		when(personService_HttpPut.clockForNow()).thenReturn(nowSimulator);
+	<T> void unitTest_CorrectSaveOfManagementPersons(PersonEntity personEntity) {
+		when(authenticatedUsername.getAuthenticatedUsername()).thenReturn(USER_lOGGED);
+		when(localDateTime_Setter.nowSetter()).thenReturn(LOCAL_DATE_TIME_NOW);
 
 		var personManagement = personService_HttpPut.createManagement(personEntity);
 
 		assertThat(personManagement.getPerson(), instanceOf(PersonEntity.class));
 		assertThat(personManagement.getHttpVerb(), is(HttpVerbEnum.PUT));
 		assertThat(personManagement.getInitialDate(), instanceOf(LocalDateTime.class));
-//		assertThat(personManagement.getInitialDate(), is(nowSimulator));
-		assertThat(personManagement.getLoginUser(), is(anyAuthenticatedUser));
+		assertThat(personManagement.getInitialDate(), is(LOCAL_DATE_TIME_NOW));
+		assertThat(personManagement.getLoginUser(), is(USER_lOGGED));
 	}
 	
 	static Stream<? extends Arguments> personsOfRegistry(){

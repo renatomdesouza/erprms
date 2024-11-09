@@ -13,6 +13,7 @@ import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVer
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
 import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.IsEmailPresent_Service;
@@ -28,6 +29,7 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 	private AuthenticatedUsername authenticationFacade;
 	private PersonExceptions personException;
 	private IsEmailPresent_Service isEmailPresentService;
+	private LocalDateTime_Setter localDateTime_Setter;
 
 	public PersonService_HttpPut(
 			PersonRepository personRepository,
@@ -35,13 +37,15 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 			PersonsManagementRepository personsManagementRepository,
 			AuthenticatedUsername authenticationFacade,
 			PersonExceptions personException,
-			IsEmailPresent_Service isEmailPresentService) {
+			IsEmailPresent_Service isEmailPresentService,
+			LocalDateTime_Setter localDateTime_Setter) {
 		this.personRepository = personRepository;
 		this.personsManagementRepository = personsManagementRepository;
 		this.mapper = mapper;
 		this.authenticationFacade = authenticationFacade;
 		this.personException = personException;
 		this.isEmailPresentService = isEmailPresentService;
+		this.localDateTime_Setter = localDateTime_Setter;
 	}
 	
 	@Transactional
@@ -60,7 +64,6 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 
 		PersonsManagementEntity personManagement = 
 				createManagement(person);
-//				createPersonManagement(person);
 
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
@@ -76,26 +79,12 @@ public class PersonService_HttpPut <T extends PersonListingDto> {
 	}
 
 	protected PersonsManagementEntity createManagement(PersonEntity person) {
-		return new PersonManagement_Service(this.authenticationFacade).create(person, HttpVerbEnum.PUT);
+		return new PersonManagement_Service(this.authenticationFacade, this.localDateTime_Setter)
+				.create(person, HttpVerbEnum.PUT);
 	}
 
 	@SuppressWarnings("hiding")
 	protected <T> PersonEntity updatePersonFromDto(T personDtoOfRecord, PersonEntity person) {
 		return new UpdatePersonFromDto_Service(this.mapper).update(personDtoOfRecord, person);
 	}
-	
-//	protected PersonsManagementEntity createPersonManagement(PersonEntity person) {
-//		var personManagement = new PersonsManagementEntity();
-//		personManagement.setPerson(person);
-//		personManagement.setHttpVerb(HttpVerbEnum.PUT);
-//		personManagement.setInitialDate(clockForNow());
-//		personManagement.setLoginUser(authenticationFacade.getAuthenticatedUsername());
-//
-//		return personManagement;
-//	}
-//	
-//	protected LocalDateTime clockForNow() {
-//		return LocalDateTime.now();
-//	}
-
 }

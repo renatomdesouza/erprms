@@ -46,6 +46,7 @@ import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLega
 import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.OutputDtoClass_ResponsibleForLegalPerson;
 import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonQualificationExceptions;
 import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.AccountantRepository;
 import br.com.erprms.repositoryAdapter.personRepository.ClientRepository;
 import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
@@ -70,6 +71,7 @@ public class PersonQualificationService_HttpPut {
     private final ProviderRepository providerRepository;
     private final ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository;
     private final AuthenticatedUsername authenticationFacade;
+    private LocalDateTime_Setter localDateTime_Setter;
 
     public PersonQualificationService_HttpPut(
             ModelMapper mapper,
@@ -82,7 +84,8 @@ public class PersonQualificationService_HttpPut {
             ProviderRepository providerRepository,
             ResponsibleForLegalPersonRepository responsibleForLegalPersonRepository,
             AccountantRepository accountantRepository,
-            AuthenticatedUsername authenticationFacade) {
+            AuthenticatedUsername authenticationFacade,
+            LocalDateTime_Setter localDateTime_Setter) {
         this.mapper = mapper;
         this.personRepository = personRepository;
         this.personQualificationRepository = personQualificationRepository;
@@ -94,6 +97,7 @@ public class PersonQualificationService_HttpPut {
         this.providerRepository = providerRepository;
         this.responsibleForLegalPersonRepository = responsibleForLegalPersonRepository;
         this.authenticationFacade = authenticationFacade;
+        this.localDateTime_Setter = localDateTime_Setter;
     }
 
     @Transactional
@@ -182,7 +186,7 @@ public class PersonQualificationService_HttpPut {
 			PersonQualificationSuperclassEntity newPersonQualification) {
 		oldPersonQualification.setIsActual(false);
         newPersonQualification.setIsActual(true);
-        newPersonQualification.setInitialDate(nowSetter());
+        newPersonQualification.setInitialDate(localDateTime_Setter.nowSetter());
         newPersonQualification.setHttpVerb(HttpVerbEnum.PUT);
         newPersonQualification.setLoginUser(authenticationFacade.getAuthenticatedUsername());
        
@@ -195,9 +199,9 @@ public class PersonQualificationService_HttpPut {
         return qualifications;        
     }
 
-	protected LocalDateTime nowSetter() {
-		return LocalDateTime.now();
-	}
+//	protected LocalDateTime nowSetter() {
+//		return LocalDateTime.now();
+//	}
 
     @SuppressWarnings("unchecked")
     private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>
