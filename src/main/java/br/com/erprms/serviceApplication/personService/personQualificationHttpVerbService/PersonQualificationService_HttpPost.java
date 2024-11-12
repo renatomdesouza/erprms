@@ -10,7 +10,6 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -166,10 +165,6 @@ public class PersonQualificationService_HttpPost {
 		
 		return personQualification;
 	}
-	
-//	protected LocalDateTime nowSetter() {
-//		return LocalDateTime.now();
-//	}
 	
 	protected boolean mismatchBetweenQualifications(@NonNull Long id_Person, String specifiedQualification) {
 		String mismatchQualification = null;

@@ -1,13 +1,11 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
+import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
 import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_LEGAL_PERSON_OF_REGISTRY;
 import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_NATURAL_PERSON_OF_REGISTRY;
 import static br.com.erprms.testBuilders.Constants_Person.IS_EMAIL_TRUE;
 import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
-import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
-import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
-
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,6 +27,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -38,6 +38,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.PersonsManagementEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
@@ -64,17 +65,31 @@ class PersonService_HttpPostTest {
 	@Mock private PersonEntity personEntity;
 	@Mock private LocalDateTime_Setter localDateTime_Setter;
 	
-
+	@Captor private ArgumentCaptor<PersonEntity> personCaptor;
+	@Captor private ArgumentCaptor<PersonsManagementEntity> personManagementCaptor;
+	
+	@ParameterizedTest
+	@MethodSource("dtoRecords_PersonsOfRegistry")
+	@DisplayName("Should save person, save management record and return output dto to user") 
+	<T> void unitTest_CorrectPostToSave(T personDto) {	
+		var dtoRecord = personServiceHttpPost.registerService(personDto, URI_COMPONENTS_BUILDER);
+		
+		verify(personRepository, times(1)).save(personCaptor.capture());
+		verify(personsManagementRepository, times(1)).save(personManagementCaptor.capture());
+		
+		verify(mapper, times(2)).map(any(), any());
+		
+		assertThat(dtoRecord, instanceOf(DtoRecord_ServicePerson.class));
+		assertThat(dtoRecord.dtoOfPerson(), instanceOf(PersonListingDto.class));
+		assertThat(dtoRecord.uri(), instanceOf(URI.class));	
+	}
+	
 	@ParameterizedTest
 	@MethodSource("dtoRecords_PersonsOfRegistry")
 	@DisplayName("Should throw exception and not save with already existing email")
 	<T> void unitTest_IncorrectPostToSave(T personDto) {
 		when(isEmailPresentService.isEmailPresent(anyString())).thenReturn(IS_EMAIL_TRUE);
-		
-		try {
-			personServiceHttpPost.registerService(personDto, URI_COMPONENTS_BUILDER);
-		} catch (ResponseStatusException ignored) { }
-		
+
 		ResponseStatusException ex =
 				Assertions.assertThrows(
 						ResponseStatusException.class,
@@ -84,26 +99,13 @@ class PersonService_HttpPostTest {
 		verify(personsManagementRepository, never()).save(any());
 		assertThat(ex.getMessage(), is("507 INSUFFICIENT_STORAGE \"The user's email is already registered in the system - They cannot be duplicated or altered\"") );
 	}
-	
-	@ParameterizedTest
-	@MethodSource("dtoRecords_PersonsOfRegistry")
-	@DisplayName("Should save person, save management record and return output dto to user") 
-	<T> void unitTest_CorrectPostToSave(T personDto) {	
-		var dtoRecord = personServiceHttpPost.registerService(personDto, URI_COMPONENTS_BUILDER);
-		
-		verify(personRepository, times(1)).save(any());
-		verify(personsManagementRepository, times(1)).save(any());
-		
-		assertThat(dtoRecord, instanceOf(DtoRecord_ServicePerson.class));
-		assertThat(dtoRecord.dtoOfPerson(), instanceOf(PersonListingDto.class));
-		assertThat(dtoRecord.uri(), instanceOf(URI.class));	
-	}
 
 	@ParameterizedTest
 	@MethodSource("dtoRecord_NaturalPersonOfRegistry")
 	@DisplayName("Should create a natural person from the natural person's Dto")
 	<T> void unitTest_CorrectCreateOfNaturalPerson(T personDto) {
-		var person = personServiceHttpPost.getFromPerson(personDto);
+		var person =
+				personServiceHttpPost.getFromPerson(personDto);
 
 		assertThat(personDto, instanceOf(DtoRecord_NaturalPersonOfRegistry.class));
 		assertThat(person, instanceOf(PersonEntity.class));
@@ -148,7 +150,7 @@ class PersonService_HttpPostTest {
 				Arguments.of(DTO_RECORD_LEGAL_PERSON_OF_REGISTRY));
 	}
 
-	static Stream<? extends Arguments> dtoRecords_PersonsOfRegistry(){
+	static Stream<? extends Arguments> dtoRecords_PersonsOfRegistry(){ 
 		return Stream.of(
 				Arguments.of(DTO_RECORD_NATURAL_PERSON_OF_REGISTRY),
 				Arguments.of(DTO_RECORD_LEGAL_PERSON_OF_REGISTRY));

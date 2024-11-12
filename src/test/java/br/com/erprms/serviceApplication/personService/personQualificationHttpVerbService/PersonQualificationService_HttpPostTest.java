@@ -20,7 +20,6 @@ import static br.com.erprms.testBuilders.Constants_PersonQualifications.PERSON_Q
 import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
 import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
 
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,7 +31,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
@@ -41,6 +39,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -51,8 +51,10 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.PersonsManagementEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
+import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
@@ -74,6 +76,8 @@ class PersonQualificationService_HttpPostTest {
 	@Mock private AuthenticatedUsername authenticatedUsername;
 	@Mock private LocalDateTime_Setter localDateTime_Setter;
 
+	@Captor private ArgumentCaptor<PersonQualificationSuperclassEntity> personQualificationSuperclassEntity_Captor;
+	@Captor private ArgumentCaptor<PersonsManagementEntity> personManagementCaptor;
 	
 	@ParameterizedTest
 	@MethodSource("provideArguments_CorrectCreateToSave")
@@ -93,11 +97,10 @@ class PersonQualificationService_HttpPostTest {
 							.registerService(dto, uriComponentsBuilder, qualification);
 	
 		verify(personQualificationService_HttpPost, times(1)).mismatchBetweenQualifications(dto.getPerson_Id(), qualification);
-		
 		verify(personQualificationService_HttpPost, times(1)).personQualificationConfigure(any(), any());
 		
 		verify(mapper, times(1)).map(dto, qualificationClass);
-		verify(personQualificationRepository, times(1)).save(any());
+		verify(personQualificationRepository, times(1)).save(personQualificationSuperclassEntity_Captor.capture());
 		
 		assertThat(person.getStatusPersonEnum(), is(StatusPersonalUsedEnum.USED));
 		

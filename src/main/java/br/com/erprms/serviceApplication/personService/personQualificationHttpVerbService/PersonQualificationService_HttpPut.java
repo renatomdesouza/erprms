@@ -9,7 +9,6 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -198,10 +197,6 @@ public class PersonQualificationService_HttpPut {
         
         return qualifications;        
     }
-
-//	protected LocalDateTime nowSetter() {
-//		return LocalDateTime.now();
-//	}
 
     @SuppressWarnings("unchecked")
     private <T extends PersonQualificationInputDtoInterface, U  extends PersonQualificationOutputDtoInterface>

@@ -27,7 +27,6 @@ import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_RESP
 import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
 import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
 
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,7 +38,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -164,17 +162,13 @@ class PersonQualificationService_HttpDeleteTest {
 			UriComponentsBuilder uriComponentsBuilder) {
 		when(personRepository.getReferenceById(person_Id)).thenReturn(null);// ==> This stub was only declared for readability - Mockito returns null automatically
 		
-		try {
-			personQualificationService_HttpDelete.exclude(person_Id, uriComponentsBuilder, qualification);
-		} catch (ResponseStatusException ignored) { }
-		
 		ResponseStatusException ex = Assertions.assertThrows(
 				ResponseStatusException.class,
 				() -> personQualificationService_HttpDelete.exclude(person_Id, uriComponentsBuilder, qualification));
 		
 		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"There is no \"Person\" registered with this \"Id\"\"") );
 		
-		verify(personRepository, times(2)).getReferenceById(person_Id);
+		verify(personRepository, times(1)).getReferenceById(person_Id);
 		verify(personQualificationService_HttpDelete, never()).personsQualifications_ConfigureAndSave(any(), any());
 		verify(personQualificationRepository, never()).saveAll(any());
 	}
@@ -191,10 +185,6 @@ class PersonQualificationService_HttpDeleteTest {
 			UriComponentsBuilder uriComponentsBuilder) {
 		when(personRepository.getReferenceById(person_Id)).thenReturn(person);
 		
-		try {
-			personQualificationService_HttpDelete.exclude(person_Id, uriComponentsBuilder, qualification);
-		} catch (ResponseStatusException ignored) { }
-		
 		ResponseStatusException ex = Assertions.assertThrows(
 				ResponseStatusException.class,
 				() -> personQualificationService_HttpDelete.exclude(person_Id, uriComponentsBuilder, qualification));
@@ -203,15 +193,15 @@ class PersonQualificationService_HttpDeleteTest {
 		assertThat(person.getStatusPersonEnum(), is(StatusPersonalUsedEnum.USED));
 
 		switch (qualification) {
-			case MANAGER -> { verify(managerRepository, times(2)).findManagerPersonQualificationByIsActualIsTrueAndPerson(person); break; }
-			case FULL_TIME_EMPLOYEE -> { verify(fullTimeEmployeeRepository, times(2)).findFullTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(person); break; }
-			case PART_TIME_EMPLOYEE -> { verify(partTimeEmployeeRepository, times(2)).findPartTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(person); break; }
-			case ACCOUNTANT -> { verify(accountantRepository, times(2)).findAccountantPersonQualificationByIsActualIsTrueAndPerson(person); break; }
-			case CLIENT -> { verify(clientRepository, times(2)).findClientPersonQualificationByIsActualIsTrueAndPerson(person); break; }
-			case PROVIDER -> { verify(providerRepository, times(2)).findProviderPersonQualificationByIsActualIsTrueAndPerson(person); break; }
-			case RESPONSIBLE_FOR_LEGAL_PERSON -> { verify(responsibleForLegalPersonRepository, times(2)).findResponsibleForLegalPersonQualificationByIsActualIsTrueAndPerson(person); break; }}
+			case MANAGER -> { verify(managerRepository, times(1)).findManagerPersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case FULL_TIME_EMPLOYEE -> { verify(fullTimeEmployeeRepository, times(1)).findFullTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case PART_TIME_EMPLOYEE -> { verify(partTimeEmployeeRepository, times(1)).findPartTimeEmployeePersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case ACCOUNTANT -> { verify(accountantRepository, times(1)).findAccountantPersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case CLIENT -> { verify(clientRepository, times(1)).findClientPersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case PROVIDER -> { verify(providerRepository, times(1)).findProviderPersonQualificationByIsActualIsTrueAndPerson(person); break; }
+			case RESPONSIBLE_FOR_LEGAL_PERSON -> { verify(responsibleForLegalPersonRepository, times(1)).findResponsibleForLegalPersonQualificationByIsActualIsTrueAndPerson(person); break; }}
 		
-		verify(personRepository, times(2)).getReferenceById(person_Id);
+		verify(personRepository, times(1)).getReferenceById(person_Id);
 		
 		verify(personQualificationService_HttpDelete, never()).personsQualifications_ConfigureAndSave(any(), any());
 		verify(personQualificationRepository, never()).saveAll(any());

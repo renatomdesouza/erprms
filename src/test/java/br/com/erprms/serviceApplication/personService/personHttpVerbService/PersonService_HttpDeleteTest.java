@@ -8,7 +8,6 @@ import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER
 import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
 import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
 
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -60,26 +59,6 @@ class PersonService_HttpDeleteTest {
 	@Mock private IsEmailPresent_Service isEmailPresentService;
 	@Mock private AuthenticatedUsername authenticatedUsername;
 	@Mock private LocalDateTime_Setter localDateTime_Setter;
-	
-	@ParameterizedTest
-	@MethodSource("personsOfRegistry")
-	@DisplayName("Should throw exception and not save with person in use")
-	void unitTest_IncorrectDeleteToSave(PersonEntity person) {
-		when(personRepository.getReferenceById(person.getId())).thenReturn(person);
-
-		try {
-			personService_HttpDelete.excludeService(person.getId(), URI_COMPONENTS_BUILDER);
-		} catch (ResponseStatusException ignored) { }
-
-		ResponseStatusException ex =
-				Assertions.assertThrows(
-						ResponseStatusException.class,
-						() -> personService_HttpDelete.excludeService(person.getId(), URI_COMPONENTS_BUILDER));
-
-		verify(personRepository, never()).save(any());
-		verify(personsManagementRepository, never()).save(any());
-		assertThat(ex.getMessage(), is("507 INSUFFICIENT_STORAGE \"This person cannot be deleted because there is a qualification registered for them\"") );
-	}
 
 	@ParameterizedTest
 	@MethodSource("personsOfRegistry_NotUsed")
@@ -91,9 +70,26 @@ class PersonService_HttpDeleteTest {
 
 		verify(personRepository, times(1)).save(any());
 		verify(personsManagementRepository, times(1)).save(any());
+		
 		assertThat(dtoRecord, instanceOf(DtoRecord_ServicePerson.class));
 		assertThat(dtoRecord.dtoOfPerson(), instanceOf(PersonListingDto.class));
 		assertThat(dtoRecord.uri(), instanceOf(URI.class));
+	}
+	
+	@ParameterizedTest
+	@MethodSource("personsOfRegistry")
+	@DisplayName("Should throw exception and not save with person in use")
+	void unitTest_IncorrectDeleteToSave(PersonEntity person) {
+		when(personRepository.getReferenceById(person.getId())).thenReturn(person);
+
+		ResponseStatusException ex =
+				Assertions.assertThrows(
+						ResponseStatusException.class,
+						() -> personService_HttpDelete.excludeService(person.getId(), URI_COMPONENTS_BUILDER));
+
+		verify(personRepository, never()).save(any());
+		verify(personsManagementRepository, never()).save(any());
+		assertThat(ex.getMessage(), is("507 INSUFFICIENT_STORAGE \"This person cannot be deleted because there is a qualification registered for them\"") );
 	}
 
 	@ParameterizedTest

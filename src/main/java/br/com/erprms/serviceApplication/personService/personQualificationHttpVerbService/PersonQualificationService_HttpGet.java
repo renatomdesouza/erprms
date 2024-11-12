@@ -1,31 +1,36 @@
 package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
 
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
-import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
+import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
 import java.net.URI;
 
-import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification_Page;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.internalDto_Accountant.OutputDtoClassPage_Accountant;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.internalDto_Client.OutputDtoClassPage_Client;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.internalDto_Provider.OutputDtoClassPage_Provider;
-import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.OutputDtoClassPage_ResponsibleForLegalPerson;
-import br.com.erprms.repositoryAdapter.personRepository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.erprms.dtoPort.personDto.personQualificationDto.DtoRecord_ServicePersonQualification_Page;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationOutputDtoInterface;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.internalDto_Accountant.OutputDtoClassPage_Accountant;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.clientDto.internalDto_Client.OutputDtoClassPage_Client;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.internalDto_FullTimeAndManager.OutputDtoClassPage_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto.internalDto_PartTimeEmployee.OutputDtoClassPage_PartTimeEmployee;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.providerDto.internalDto_Provider.OutputDtoClassPage_Provider;
+import br.com.erprms.dtoPort.personDto.personQualificationDto.responsibleForLegalPersonDto.internalDto_ResponsibleForLegalPerson.OutputDtoClassPage_ResponsibleForLegalPerson;
+import br.com.erprms.repositoryAdapter.personRepository.AccountantRepository;
+import br.com.erprms.repositoryAdapter.personRepository.ClientRepository;
+import br.com.erprms.repositoryAdapter.personRepository.FullTimeEmployeeRepository;
+import br.com.erprms.repositoryAdapter.personRepository.ManagerRepository;
+import br.com.erprms.repositoryAdapter.personRepository.PartTimeEmployeeRepository;
+import br.com.erprms.repositoryAdapter.personRepository.ProviderRepository;
+import br.com.erprms.repositoryAdapter.personRepository.ResponsibleForLegalPersonRepository;
 import jakarta.transaction.Transactional;
 
 @Service

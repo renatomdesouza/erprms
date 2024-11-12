@@ -7,6 +7,8 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
+import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
 import static br.com.erprms.testBuilders.Constants_DtosQualifications.ACCOUNTANT_DTO;
 import static br.com.erprms.testBuilders.Constants_DtosQualifications.CLIENT_DTO;
 import static br.com.erprms.testBuilders.Constants_DtosQualifications.FULL_TIME_EMPLOYEE_AND_MANAGER_DTO;
@@ -30,10 +32,6 @@ import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_MANA
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_PART_TIME_EMPLOYEE_PERSON_QUALIFICATION;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_PROVIDER_PERSON_QUALIFICATION;
 import static br.com.erprms.testBuilders.Constants_PersonQualifications.OLD_RESPONSIBLE_FOR_LEGAL_PERSON_QUALIFICATION;
-import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
-import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
-
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -46,7 +44,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -110,15 +107,11 @@ class PersonQualificationService_HttpPutTest {
 				personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification);
 		
 		verify(personRepository, times(1)).getReferenceById(dto.getPerson_Id());
-		
 		verify(personQualificationService_HttpPut, times(1)).findOldPersonQuailfication(person, qualification);
-		
 		verify(personQualificationService_HttpPut, times(1)).updateSelected(any(), any(), any(), any());
-		
 		verify(personQualificationRepository, times(1)).saveAll(any());
 		
 		assertThat(person.getStatusPersonEnum(), is(StatusPersonalUsedEnum.USED));
-		
 		assertThat(dtoRecord, instanceOf(DtoRecord_ServicePersonQualification.class));
 		assertThat(dtoRecord.dtoOfPerson(), instanceOf(PersonQualificationOutputDtoInterface.class));
 		assertThat(dtoRecord.uri() , instanceOf(URI.class));
@@ -136,22 +129,15 @@ class PersonQualificationService_HttpPutTest {
 			UriComponentsBuilder uriComponentsBuilder) {
 		when(personRepository.getReferenceById(anyLong())).thenReturn(null);// ==> This stub was only declared for readability - Mockito returns null automatically
 		
-		try {
-				personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification);
-		} catch (ResponseStatusException ignored) { }
-		
 		ResponseStatusException ex = Assertions.assertThrows(
 				ResponseStatusException.class,
 				() -> personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification));
 		
 		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"There is no \"Person\" registered with this \"Id\"\"") );
 		
-		verify(personRepository, times(2)).getReferenceById(dto.getPerson_Id());
-		
+		verify(personRepository, times(1)).getReferenceById(dto.getPerson_Id());
 		verify(personQualificationService_HttpPut, never()).findOldPersonQuailfication(person, qualification);
-		
 		verify(personQualificationService_HttpPut, never()).updateSelected(any(), any(), any(), any());
-		
 		verify(personQualificationRepository, never()).saveAll(any());
 	}
 	
@@ -168,24 +154,16 @@ class PersonQualificationService_HttpPutTest {
 		when(personRepository.getReferenceById(anyLong())).thenReturn(person);
 		when(personQualificationService_HttpPut.findOldPersonQuailfication(any(), anyString())).thenReturn(null);// ==> This stub was only declared for readability - Mockito returns null automatically
 		
-		try {
-				personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification);
-		} catch (ResponseStatusException ignored) { }
-		
 		ResponseStatusException ex = Assertions.assertThrows(
 				ResponseStatusException.class,
 				() -> personQualificationService_HttpPut.update(dto, uriComponentsBuilder, qualification));
 		
 		assertThat(ex.getMessage(), is(	"507 INSUFFICIENT_STORAGE \"This person does not have this qualification in the database\"") );
-		
 		assertThat(person.getStatusPersonEnum(), is(StatusPersonalUsedEnum.USED));
 		
-		verify(personRepository, times(2)).getReferenceById(dto.getPerson_Id());
-		
-		verify(personQualificationService_HttpPut, times(2)).findOldPersonQuailfication(person, qualification);
-		
+		verify(personRepository, times(1)).getReferenceById(dto.getPerson_Id());
+		verify(personQualificationService_HttpPut, times(1)).findOldPersonQuailfication(person, qualification);
 		verify(personQualificationService_HttpPut, never()).updateSelected(any(), any(), any(), any());
-		
 		verify(personQualificationRepository, never()).saveAll(any());
 	}
 

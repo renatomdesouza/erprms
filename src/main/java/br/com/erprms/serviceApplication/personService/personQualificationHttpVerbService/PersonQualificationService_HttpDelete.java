@@ -8,7 +8,6 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -145,11 +144,7 @@ public class PersonQualificationService_HttpDelete {
         
         return qualifications;
     }
-    
-//    protected LocalDateTime nowSetter() {
-//		return LocalDateTime.now();
-//	}
-//
+
     private PersonQualificationOutputDtoInterface manager_Case(String specifiedQualification, PersonEntity person) {
         var oldPersonQualification = managerRepository.findManagerPersonQualificationByIsActualIsTrueAndPerson(person);
 

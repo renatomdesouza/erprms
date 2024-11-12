@@ -56,9 +56,7 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 		boolean emailAlreadyRegistered = isEmailPresentService.isEmailPresent(person.getEmail());
 		personException.existingEmailException(emailAlreadyRegistered);
 
-		PersonsManagementEntity personManagement = 
-				createManagement(person);
-//				createPersonManagement(person);
+		PersonsManagementEntity personManagement = createManagement(person);
 
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
@@ -81,29 +79,5 @@ public class PersonService_HttpPost <T extends PersonListingDto> {
 	protected <T> PersonEntity getFromPerson(T personDto) {
 		return new CreatePersonFromDto_Service(this.mapper).create(personDto);
 	}
-
-//	protected boolean isEmailAlreadyRegistered(PersonEntity person) {
-//		String email = person.getEmail();
-//		var existingEmail = personRepository.findByEmail(email);
-//		boolean emailAlreadyRegistered = false;
-//		if(existingEmail != null)
-//			emailAlreadyRegistered = true;
-//		return emailAlreadyRegistered;
-//	}
-
-//	protected PersonsManagementEntity createPersonManagement(PersonEntity person) {
-//		var personManagement = new PersonsManagementEntity();
-//		personManagement.setPerson(person);
-//		personManagement.setHttpVerb(HttpVerbEnum.POST);
-//		personManagement.setInitialDate(clockForNow());
-//		personManagement.setLoginUser(authenticatedUsername.getAuthenticatedUsername());
-//
-//		return personManagement;
-//	}
-//
-//	protected LocalDateTime clockForNow() {
-//		return LocalDateTime.now();
-//	}
-	
 }
 

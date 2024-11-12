@@ -1,13 +1,5 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import br.com.erprms.domainModel.personDomain.PersonsManagementEntity;
-import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
-import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
-import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
-import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
-import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
-import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.PersonManagement_Service;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -15,12 +7,17 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.PersonsManagementEntity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.dtoPort.personDto.PersonListingDto;
+import br.com.erprms.infrastructure.exceptionManager.responseStatusException.PersonExceptions;
+import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
+import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
+import br.com.erprms.repositoryAdapter.personRepository.PersonsManagementRepository;
+import br.com.erprms.serviceApplication.personService.personHttpVerbService.internalServices.PersonManagement_Service;
 import jakarta.transaction.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 public class PersonService_HttpDelete <T extends PersonListingDto> {
@@ -59,9 +56,7 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 		personException.personWithStatusInUse(statusPerson);
 
 		person.setStatusPersonEnum(StatusPersonalUsedEnum.DELETED);
-		PersonsManagementEntity personManagement = 
-				createManagement(person);
-//				createPersonsManagement(person);
+		PersonsManagementEntity personManagement = createManagement(person);
 				
 		personRepository.save(person);
 		personsManagementRepository.save(personManagement);
@@ -80,14 +75,4 @@ public class PersonService_HttpDelete <T extends PersonListingDto> {
 	protected PersonsManagementEntity createManagement(PersonEntity person) {
 		return new PersonManagement_Service(this.authenticationFacade, this.localDateTime_Setter).create(person, HttpVerbEnum.DELETE);
 	}
-//
-//	protected PersonsManagementEntity createPersonsManagement(PersonEntity person) {
-//		var personManagement = new PersonsManagementEntity();
-//		personManagement.setPerson(person);
-//		personManagement.setHttpVerb(HttpVerbEnum.DELETE);
-//		personManagement.setInitialDate(LocalDateTime.now());
-//		personManagement.setLoginUser(authenticationFacade.getAuthenticatedUsername());
-//
-//		return personManagement;
-//	}
 }

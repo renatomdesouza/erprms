@@ -67,33 +67,6 @@ class PersonService_HttpPutTest {
 
 	@ParameterizedTest
 	@MethodSource("personsOfRegistry")
-	@DisplayName("Should throw exception and not save with already existing email") 
-	void unitTest_IncorrectPutToSave(PersonEntity person) {	
-		when(personRepository.getReferenceById(anyLong())).thenReturn(person);
-		when(isEmailPresentService.isEmailPresent(anyString(), anyString())).thenReturn(IS_EMAIL_TRUE);
-		
-		try {
-			personService_HttpPut.updateService(	Object.class, 
-													String.valueOf(person.getId()), 
-													person.getEmail(),
-													URI_COMPONENTS_BUILDER);
-		} catch (ResponseStatusException ignored) { }
-		
-		ResponseStatusException ex =
-				Assertions.assertThrows(
-						ResponseStatusException.class,
-						() -> personService_HttpPut.updateService(	Object.class, 
-																	String.valueOf(person.getId()), 
-																	person.getEmail(),
-																	URI_COMPONENTS_BUILDER));
-
-		verify(personRepository, never()).save(any());
-		verify(personsManagementRepository, never()).save(any());
-		assertThat(ex.getMessage(), is("507 INSUFFICIENT_STORAGE \"The user's email is already registered in the system - They cannot be duplicated or altered\"") );
-	}
-		
-	@ParameterizedTest
-	@MethodSource("personsOfRegistry")
 	@DisplayName("Should save person, save management record and return output dto to user") 
 	void unitTest_CorrectPutToSave(PersonEntity person) {	
 		when(personRepository.getReferenceById(anyLong())).thenReturn(person);
@@ -111,6 +84,28 @@ class PersonService_HttpPutTest {
 		assertThat(dtoRecord.uri(), instanceOf(URI.class));	
 	}
 	
+	@ParameterizedTest
+	@MethodSource("personsOfRegistry")
+	@DisplayName("Should throw exception and not save with already existing email") 
+	void unitTest_IncorrectPutToSave(PersonEntity person) {	
+		when(personRepository.getReferenceById(anyLong())).thenReturn(person);
+		when(isEmailPresentService.isEmailPresent(anyString(), anyString())).thenReturn(IS_EMAIL_TRUE);
+		
+		ResponseStatusException ex =
+				Assertions.assertThrows(
+						ResponseStatusException.class,
+						() -> personService_HttpPut.updateService(	Object.class, 
+																	String.valueOf(person.getId()), 
+																	person.getEmail(),
+																	URI_COMPONENTS_BUILDER));
+
+		assertThat(ex.getMessage(), is("507 INSUFFICIENT_STORAGE \"The user's email is already registered in the system - They cannot be duplicated or altered\"") );
+
+		verify(personRepository, times(1)).getReferenceById(anyLong());
+		verify(personRepository, never()).save(any());
+		verify(personsManagementRepository, never()).save(any());
+	}
+		
 	@ParameterizedTest
 	@MethodSource("naturalPerson_DtoAndPerson")
 	@DisplayName("Should create a natural person from the natural person's Dto")

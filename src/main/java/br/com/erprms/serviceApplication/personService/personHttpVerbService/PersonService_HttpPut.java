@@ -1,7 +1,5 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import java.time.LocalDateTime;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
