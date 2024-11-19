@@ -1,4 +1,4 @@
-package br.com.erprms.controllerAdapter;
+package br.com.erprms.integrationTests_ControllerAdapter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -64,7 +64,7 @@ class LoginControllerTest {
 
 	@Test
 	@DisplayName("Should return 200 for connecting with username and password")
-	void IntegrityTest_ConnectionOk() throws Exception {
+	void integrityTest_ConnectionOk() throws Exception {
 		var loginUserTestDto =
 				new LoginUserTestDto("testLoginUser@email.com", "123456");
 
@@ -81,7 +81,7 @@ class LoginControllerTest {
 
 	@Test
 	@DisplayName("Should return 401 for incorrect username and password")
-	void IntegrityTest_ConnectionFail() throws Exception {
+	void integrityTest_ConnectionFail() throws Exception {
 		var loginUserTestDto =
 				new LoginUserTestDto("xxxxx", "xxxxx");
 

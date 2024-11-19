@@ -1,8 +1,8 @@
-package br.com.erprms.testBuilders;
+package br.com.erprms.constantsAndBuilder;
 
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
 
-public class NaturalPersonTestBuilder {
+public class Builder_NaturalPersonTest {
     private String fullNameOrEntityName;
     private String nickname;
     private String cpf;
@@ -20,8 +20,8 @@ public class NaturalPersonTestBuilder {
     private String postalCode;
     private String cityAndStateOrProvince;
 
-    public static NaturalPersonTestBuilder naturalPersonTestBuilder(){
-        NaturalPersonTestBuilder builder = new NaturalPersonTestBuilder();
+    public static Builder_NaturalPersonTest naturalPersonTestBuilder(){
+        Builder_NaturalPersonTest builder = new Builder_NaturalPersonTest();
         getTestData(builder);
         return builder;
     }
@@ -45,87 +45,87 @@ public class NaturalPersonTestBuilder {
                                                         cityAndStateOrProvince);
     }
 
-    public NaturalPersonTestBuilder fullNameOrEntityName(String param){
+    public Builder_NaturalPersonTest fullNameOrEntityName(String param){
         this.fullNameOrEntityName = param;
         return this;
     }
 
-    public NaturalPersonTestBuilder nickname(String param){
+    public Builder_NaturalPersonTest nickname(String param){
             this.nickname = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder cpf(String param){
+    public Builder_NaturalPersonTest cpf(String param){
             this.cpf = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder email(String param){
+    public Builder_NaturalPersonTest email(String param){
             this.email = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder site(String param){
+    public Builder_NaturalPersonTest site(String param){
             this.site = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder dateBorn(String param){
+    public Builder_NaturalPersonTest dateBorn(String param){
             this.dateBorn = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder maritalStatus(String param){
+    public Builder_NaturalPersonTest maritalStatus(String param){
             this.maritalStatus = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder cityBorn(String param){
+    public Builder_NaturalPersonTest cityBorn(String param){
             this.cityBorn = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder countryBorn(String param){
+    public Builder_NaturalPersonTest countryBorn(String param){
             this.countryBorn = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder sex(String param){
+    public Builder_NaturalPersonTest sex(String param){
             this.sex = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder street(String param){
+    public Builder_NaturalPersonTest street(String param){
             this.street = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder number(String param){
+    public Builder_NaturalPersonTest number(String param){
             this.number = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder neighborhood(String param){
+    public Builder_NaturalPersonTest neighborhood(String param){
             this.neighborhood = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder complement(String param){
+    public Builder_NaturalPersonTest complement(String param){
             this.complement = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder postalCode(String param){
+    public Builder_NaturalPersonTest postalCode(String param){
             this.postalCode = param;
             return this;
         }
 
-    public NaturalPersonTestBuilder cityAndStateOrProvince(String param){
+    public Builder_NaturalPersonTest cityAndStateOrProvince(String param){
             this.cityAndStateOrProvince = param;
             return this;
         }
 
-    private static void getTestData(NaturalPersonTestBuilder builder) {
+    private static void getTestData(Builder_NaturalPersonTest builder) {
         builder.fullNameOrEntityName = "José da Silva";
         builder.nickname = "Silva";
         builder.cpf = "12345678912";

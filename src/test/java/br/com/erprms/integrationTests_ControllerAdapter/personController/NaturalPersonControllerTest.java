@@ -1,8 +1,12 @@
-package br.com.erprms.controllerAdapter.personController;
+package br.com.erprms.integrationTests_ControllerAdapter.personController;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -11,9 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -21,9 +29,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonOfRegistry;
+import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 
 @SpringBootTest
+//@DataJpaTest
 @ActiveProfiles("test")
 @WithMockUser
 @AutoConfigureMockMvc
@@ -31,23 +44,35 @@ import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonO
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class NaturalPersonControllerTest {
 	@Autowired private MockMvc mockMvc;
+	
+	@Autowired private PersonRepository personRepository;
+	
+//	@Autowired private TestEntityManager entityManager_Test;
 
-	@Autowired private JacksonTester<DtoRecord_NaturalPersonOfRegistry> jacksonTester_As_DtoRecord_NaturalPersonOfRegistry;
 
+	@Autowired private JacksonTester<DtoRecord_NaturalPersonOfRegistry> jacksonTester;
+	@Autowired private ObjectMapper objectMapper;	// alternative to JacksonTester
+
+	
 	@Test
 	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@DisplayName("Should return 201 for save the user")
 	void integrityTest_CorrectAccessToPost()  throws Exception {
-		MockHttpServletResponse response =
-				mockMvc.perform(
-						post("/naturalPerson")
-										.content(jacksonTester_As_DtoRecord_NaturalPersonOfRegistry
-												.write(dataFromNaturalPersonRegistry_Of_SaveOk).getJson())
-										.contentType(MediaType.APPLICATION_JSON) )
-						.andReturn()
-						.getResponse();
-
-		assertEquals(201, response.getStatus());
+		mockMvc.perform(
+					post("/naturalPerson")
+						.content(
+								objectMapper.writeValueAsString(dataFromNaturalPersonRegistry_Of_SaveOk))
+						.contentType(MediaType.APPLICATION_JSON) )
+				.andExpect(status().is(201));
+		
+//		var personRecorded = testEntityManager.find(PersonEntity.class, 1L);
+		PersonEntity personRecorded = personRepository.getReferenceById(1L);
+		Optional<PersonEntity> personRecorded02 = personRepository.findById(1L);
+		
+// to instance Comparator to  
+//		personRecorded; with
+//		dataFromNaturalPersonRegistry_Of_SaveOk
+		
 	}
 
 	@Test
@@ -56,10 +81,10 @@ class NaturalPersonControllerTest {
 	void integrityTest_IncorrectAccessToPost_WithEmail()  throws Exception {
 		MockHttpServletResponse response =
 				mockMvc.perform(
-								post("/naturalPerson")
-										.content(jacksonTester_As_DtoRecord_NaturalPersonOfRegistry
-												.write(dataFromNaturalPersonRegistry_Of_FailureForEmail).getJson())
-										.contentType(MediaType.APPLICATION_JSON) )
+							post("/naturalPerson")
+									.content(
+											jacksonTester.write(dataFromNaturalPersonRegistry_Of_FailureForEmail).getJson())
+									.contentType(MediaType.APPLICATION_JSON) )
 						.andReturn()
 						.getResponse();
 
@@ -72,10 +97,10 @@ class NaturalPersonControllerTest {
 	void integrityTest_IncorrectAccessToPost_WithCpf()  throws Exception {
 		MockHttpServletResponse response =
 				mockMvc.perform(
-								post("/naturalPerson")
-										.content(jacksonTester_As_DtoRecord_NaturalPersonOfRegistry
-												.write(dataFromNaturalPersonRegistry_Of_FailureForCpf).getJson())
-										.contentType(MediaType.APPLICATION_JSON) )
+							post("/naturalPerson")
+									.content(
+											jacksonTester.write(dataFromNaturalPersonRegistry_Of_FailureForCpf).getJson())
+									.contentType(MediaType.APPLICATION_JSON) )
 						.andReturn()
 						.getResponse();
 
@@ -84,7 +109,7 @@ class NaturalPersonControllerTest {
 
 	@Test
 	@DisplayName("Should return 201 when accessing the url correctly")
-	void unitTest_CorrectAccessToListing_WithUrl() throws Exception {
+	void integrityTest_CorrectAccessToListing_WithUrl() throws Exception {
 		MockHttpServletResponse response =
 				mockMvc	.perform(get("/naturalPerson"))
 						.andReturn()
@@ -94,7 +119,7 @@ class NaturalPersonControllerTest {
 
 	@Test
 	@DisplayName("Should return 404 when accessing URL incorrectly")
-	void unitTest_IncorrectAccessToListing_WithUrl() throws Exception {
+	void integrityTest_IncorrectAccessToListing_WithUrl() throws Exception {
 		MockHttpServletResponse response =
 				mockMvc	.perform(get("/xxxxx"))
 						.andReturn()
@@ -159,3 +184,14 @@ class NaturalPersonControllerTest {
 			"São Paulo-SP"
 	);
 }
+
+//@Configuration 
+//class TestEntityManagerConfig {
+//
+//	@Autowired private TestEntityManager entityManager_Test;
+//	
+//	@Bean
+//	public TestEntityManager testEntityManager() {
+//		return entityManager_Test;
+//	}
+//}

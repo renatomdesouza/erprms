@@ -1,8 +1,8 @@
-package br.com.erprms.testBuilders;
+package br.com.erprms.constantsAndBuilder;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.PersonQualificationInputDtoInterface;
 
-public class Constants_QualificationClass {
+public class Constants_QualificationsClasses {
 
 	public static Class<PersonQualificationInputDtoInterface> manager() throws ClassNotFoundException{
 		@SuppressWarnings("unchecked")

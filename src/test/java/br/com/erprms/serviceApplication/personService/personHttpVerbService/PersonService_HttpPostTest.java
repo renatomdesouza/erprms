@@ -1,11 +1,11 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
-import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
-import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_LEGAL_PERSON_OF_REGISTRY;
-import static br.com.erprms.testBuilders.Constants_Person.DTO_RECORD_NATURAL_PERSON_OF_REGISTRY;
-import static br.com.erprms.testBuilders.Constants_Person.IS_EMAIL_TRUE;
-import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
+import static br.com.erprms.constantsAndBuilder.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+import static br.com.erprms.constantsAndBuilder.Constant_UserLogged.USER_lOGGED;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.DTO_RECORD_LEGAL_PERSON_OF_REGISTRY;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.DTO_RECORD_NATURAL_PERSON_OF_REGISTRY;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.IS_EMAIL_TRUE;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.URI_COMPONENTS_BUILDER;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

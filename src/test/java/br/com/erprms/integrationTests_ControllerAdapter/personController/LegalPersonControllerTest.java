@@ -1,4 +1,4 @@
-package br.com.erprms.controllerAdapter.personController;
+package br.com.erprms.integrationTests_ControllerAdapter.personController;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -84,7 +84,7 @@ class LegalPersonControllerTest {
 
 	@Test
 	@DisplayName("Should return 201 when accessing the url correctly")
-	void unitTest_CorrectAccessToListing_WithUrl() throws Exception {
+	void integrityTest_CorrectAccessToListing_WithUrl() throws Exception {
 		MockHttpServletResponse response =
 				mockMvc	.perform(get("/legalPerson"))
 						.andReturn()
@@ -94,7 +94,7 @@ class LegalPersonControllerTest {
 
 	@Test
 	@DisplayName("Should return 404 when accessing URL incorrectly")
-	void unitTest_IncorrectAccessToListing_WithUrl() throws Exception {
+	void integrityTest_IncorrectAccessToListing_WithUrl() throws Exception {
 		MockHttpServletResponse response =
 				mockMvc	.perform(get("/legalPer_xxxxx"))
 						.andReturn()

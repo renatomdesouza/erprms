@@ -1,13 +1,12 @@
 package br.com.erprms.serviceApplication.personService.personHttpVerbService;
 
-import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON_NOT_USED;
-import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON_NOT_USED;
-import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
-import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
-import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
-
+import static br.com.erprms.constantsAndBuilder.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+import static br.com.erprms.constantsAndBuilder.Constant_UserLogged.USER_lOGGED;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.LEGAL_PERSON;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.LEGAL_PERSON_NOT_USED;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.NATURAL_PERSON;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.NATURAL_PERSON_NOT_USED;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.URI_COMPONENTS_BUILDER;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

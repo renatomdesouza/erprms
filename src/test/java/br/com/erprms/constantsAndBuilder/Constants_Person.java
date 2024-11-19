@@ -1,4 +1,4 @@
-package br.com.erprms.testBuilders;
+package br.com.erprms.constantsAndBuilder;
 
 import java.net.URI;
 

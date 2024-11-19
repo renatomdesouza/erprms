@@ -1,5 +1,17 @@
 package br.com.erprms.serviceApplication.personService.personQualificationHttpVerbService;
 
+import static br.com.erprms.constantsAndBuilder.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
+import static br.com.erprms.constantsAndBuilder.Constant_UserLogged.USER_lOGGED;
+import static br.com.erprms.constantsAndBuilder.Constants_DtosQualifications.ACCOUNTANT_DTO;
+import static br.com.erprms.constantsAndBuilder.Constants_DtosQualifications.CLIENT_DTO;
+import static br.com.erprms.constantsAndBuilder.Constants_DtosQualifications.FULL_TIME_EMPLOYEE_AND_MANAGER_DTO;
+import static br.com.erprms.constantsAndBuilder.Constants_DtosQualifications.PART_TIME_EMPLOYEE_DTO;
+import static br.com.erprms.constantsAndBuilder.Constants_DtosQualifications.PROVIDER_DTO;
+import static br.com.erprms.constantsAndBuilder.Constants_DtosQualifications.RESPONSIBLE_FOR_LEGAL_PERSON_DTO;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.LEGAL_PERSON;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.NATURAL_PERSON;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.URI_COMPONENTS_BUILDER;
+import static br.com.erprms.constantsAndBuilder.Constants_PersonQualifications.PERSON_QUALIFICATION_SUPERCLASS;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.ACCOUNTANT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.CLIENT;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.FULL_TIME_EMPLOYEE;
@@ -7,19 +19,6 @@ import static br.com.erprms.serviceApplication.personService.SpecifiedQualificat
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PART_TIME_EMPLOYEE;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.PROVIDER;
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.RESPONSIBLE_FOR_LEGAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.ACCOUNTANT_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.CLIENT_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.FULL_TIME_EMPLOYEE_AND_MANAGER_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.PART_TIME_EMPLOYEE_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.PROVIDER_DTO;
-import static br.com.erprms.testBuilders.Constants_DtosQualifications.RESPONSIBLE_FOR_LEGAL_PERSON_DTO;
-import static br.com.erprms.testBuilders.Constants_Person.LEGAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
-import static br.com.erprms.testBuilders.Constants_Person.URI_COMPONENTS_BUILDER;
-import static br.com.erprms.testBuilders.Constants_PersonQualifications.PERSON_QUALIFICATION_SUPERCLASS;
-import static br.com.erprms.testBuilders.Constant_UserLogged.USER_lOGGED;
-import static br.com.erprms.testBuilders.Constant_LocalDateTimeNow.LOCAL_DATE_TIME_NOW;
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,6 +49,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.erprms.constantsAndBuilder.Constants_QualificationsClasses;
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.PersonsManagementEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
@@ -63,7 +63,6 @@ import br.com.erprms.infrastructure.getAuthentication.AuthenticatedUsername;
 import br.com.erprms.infrastructure.localDateTime_Setter.LocalDateTime_Setter;
 import br.com.erprms.repositoryAdapter.personRepository.PersonQualificationRepository;
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
-import br.com.erprms.testBuilders.Constants_QualificationClass;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -210,86 +209,86 @@ class PersonQualificationService_HttpPostTest {
 	                		 NATURAL_PERSON,
 	                		 MANAGER,
 	                		 FULL_TIME_EMPLOYEE_AND_MANAGER_DTO,
-	                		 Constants_QualificationClass.manager(), 
+	                		 Constants_QualificationsClasses.manager(), 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 NATURAL_PERSON,
 	                		 FULL_TIME_EMPLOYEE,
 	                		 FULL_TIME_EMPLOYEE_AND_MANAGER_DTO,
-	                		 Constants_QualificationClass.fullTimeEmployee() , 
+	                		 Constants_QualificationsClasses.fullTimeEmployee() , 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 NATURAL_PERSON,
 	                		 PART_TIME_EMPLOYEE,
 	                		 PART_TIME_EMPLOYEE_DTO,
-	                		 Constants_QualificationClass.partTimeEmployee() , 
+	                		 Constants_QualificationsClasses.partTimeEmployee() , 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 NATURAL_PERSON,
 	                		 ACCOUNTANT, 
 	                		 ACCOUNTANT_DTO,
-	                		 Constants_QualificationClass.accountant(),
+	                		 Constants_QualificationsClasses.accountant(),
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 NATURAL_PERSON,
 	                		 CLIENT,
 	                		 CLIENT_DTO,
-	                		 Constants_QualificationClass.client(), 
+	                		 Constants_QualificationsClasses.client(), 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 NATURAL_PERSON,
 	                		 PROVIDER,
 	                		 PROVIDER_DTO,
-	                		 Constants_QualificationClass.provider(), 
+	                		 Constants_QualificationsClasses.provider(), 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 NATURAL_PERSON,
 	                		 RESPONSIBLE_FOR_LEGAL_PERSON,
 	                		 RESPONSIBLE_FOR_LEGAL_PERSON_DTO,
-	                		 Constants_QualificationClass.responsibleForLegalPerson() , 
+	                		 Constants_QualificationsClasses.responsibleForLegalPerson() , 
 	                		 URI_COMPONENTS_BUILDER),
 	              // combinations of legal persons
 	                 Arguments.of(
 	                		 LEGAL_PERSON,
 	                		 MANAGER,
 	                		 FULL_TIME_EMPLOYEE_AND_MANAGER_DTO,
-	                		 Constants_QualificationClass.manager(), 
+	                		 Constants_QualificationsClasses.manager(), 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 LEGAL_PERSON,
 	                		 FULL_TIME_EMPLOYEE,
 	                		 FULL_TIME_EMPLOYEE_AND_MANAGER_DTO,
-	                		 Constants_QualificationClass.fullTimeEmployee() , 
+	                		 Constants_QualificationsClasses.fullTimeEmployee() , 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 LEGAL_PERSON,
 	                		 PART_TIME_EMPLOYEE,
 	                		 PART_TIME_EMPLOYEE_DTO,
-	                		 Constants_QualificationClass.partTimeEmployee() , 
+	                		 Constants_QualificationsClasses.partTimeEmployee() , 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 LEGAL_PERSON,
 	                		 ACCOUNTANT, 
 	                		 ACCOUNTANT_DTO,
-	                		 Constants_QualificationClass.accountant(),
+	                		 Constants_QualificationsClasses.accountant(),
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 LEGAL_PERSON,
 	                		 CLIENT,
 	                		 CLIENT_DTO,
-	                		 Constants_QualificationClass.client(), 
+	                		 Constants_QualificationsClasses.client(), 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 LEGAL_PERSON,
 	                		 PROVIDER,
 	                		 PROVIDER_DTO,
-	                		 Constants_QualificationClass.provider(), 
+	                		 Constants_QualificationsClasses.provider(), 
 	                		 URI_COMPONENTS_BUILDER),
 	                 Arguments.of(
 	                		 LEGAL_PERSON,
 	                		 RESPONSIBLE_FOR_LEGAL_PERSON,
 	                		 RESPONSIBLE_FOR_LEGAL_PERSON_DTO,
-	                		 Constants_QualificationClass.responsibleForLegalPerson() , 
+	                		 Constants_QualificationsClasses.responsibleForLegalPerson() , 
 	                		 URI_COMPONENTS_BUILDER)
 	         );
 	     };

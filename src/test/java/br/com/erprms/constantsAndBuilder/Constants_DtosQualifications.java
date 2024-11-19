@@ -1,4 +1,4 @@
-package br.com.erprms.testBuilders;
+package br.com.erprms.constantsAndBuilder;
 
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.InputDtoRecord_Accountant;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.accountantDto.internalDto_Accountant.InputDtoClass_Accountant;

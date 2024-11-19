@@ -1,6 +1,6 @@
-package br.com.erprms.testBuilders;
+package br.com.erprms.constantsAndBuilder;
 
-import static br.com.erprms.testBuilders.Constants_Person.NATURAL_PERSON;
+import static br.com.erprms.constantsAndBuilder.Constants_Person.NATURAL_PERSON;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
