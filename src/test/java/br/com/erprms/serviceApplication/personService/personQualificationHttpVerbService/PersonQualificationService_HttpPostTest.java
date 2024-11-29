@@ -74,9 +74,7 @@ class PersonQualificationService_HttpPostTest {
 	@Mock private PersonQualificationRepository personQualificationRepository;
 	@Mock private AuthenticatedUsername authenticatedUsername;
 	@Mock private LocalDateTime_Setter localDateTime_Setter;
-
 	@Captor private ArgumentCaptor<PersonQualificationSuperclassEntity> personQualificationSuperclassEntity_Captor;
-	@Captor private ArgumentCaptor<PersonsManagementEntity> personManagementCaptor;
 	
 	@ParameterizedTest
 	@MethodSource("provideArguments_CorrectCreateToSave")

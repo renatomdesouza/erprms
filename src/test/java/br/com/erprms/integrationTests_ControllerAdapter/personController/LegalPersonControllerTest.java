@@ -1,8 +1,10 @@
 package br.com.erprms.integrationTests_ControllerAdapter.personController;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -21,7 +23,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.erprms.domainModel.personDomain.PersonEntity;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfRegistry;
+import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -31,23 +38,48 @@ import br.com.erprms.dtoPort.personDto.legalPersonDto.DtoRecord_LegalPersonOfReg
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LegalPersonControllerTest {
 	@Autowired private MockMvc mockMvc;
+	
+	@Autowired private PersonRepository personRepository;
 
 	@Autowired private JacksonTester<DtoRecord_LegalPersonOfRegistry> jacksonTester_As_DtoRecord_LegalPersonOfRegistry;
-
+	@Autowired private ObjectMapper objectMapper;	// alternative to JacksonTester
+	
 	@Test
 	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@DisplayName("Should return 201 for save the user")
 	void integrityTest_CorrectAccessToPost()  throws Exception {
-		MockHttpServletResponse response =
-				mockMvc.perform(
-								post("/legalPerson")
-										.content(jacksonTester_As_DtoRecord_LegalPersonOfRegistry
-												.write(dataFromLegalPersonRegistry_Of_SaveOk).getJson())
-										.contentType(MediaType.APPLICATION_JSON) )
-						.andReturn()
-						.getResponse();
+		mockMvc.perform(
+					post("/legalPerson")
+						.content(
+								objectMapper.writeValueAsString(dataFromLegalPersonRegistry_Of_FailureForEmail))
+						.contentType(MediaType.APPLICATION_JSON) )
+				.andExpect(status().is(201));
+		
+		PersonEntity recordedPerson = personRepository.getReferenceById(1L);
+		
+		assertEquals(1L, recordedPerson.getId());
+		assertEquals("Empresa Fulana SA", recordedPerson.getFullNameOrEntityName());
+		assertEquals("EmpFulana", recordedPerson.getNickname());
+		assertEquals(85345678901237L, recordedPerson.getCpfOrCnpj());
+		assertEquals("fulana5@mail.com", recordedPerson.getEmail());
+		assertEquals("www.fulana10.com", recordedPerson.getSite());
+		assertEquals("232323232", recordedPerson.getInscricEstad());
+		assertEquals("45454545454545", recordedPerson.getInscricMunicip());
+		assertEquals("rua Sem Nome", recordedPerson.getStreet());
+		assertEquals("010101", recordedPerson.getNumber());
+		assertEquals("Centro", recordedPerson.getNeighborhood());
+		assertEquals("Praça Central", recordedPerson.getComplement());
+		assertEquals("01010-101", recordedPerson.getPostalCode());
+		assertEquals("São Paulo/SP", recordedPerson.getCityAndStateOrProvince());
+		
+		assertEquals(false, recordedPerson.getIsNaturalPerson());
+		assertEquals(StatusPersonalUsedEnum.NOT_USED, recordedPerson.getStatusPersonEnum());
 
-		assertEquals(201, response.getStatus());
+		assertNull(recordedPerson.getDateBorn());
+        assertNull(recordedPerson.getMaritalStatus());
+        assertNull(recordedPerson.getCityBorn());
+        assertNull(recordedPerson.getSex());
+		assertNull(recordedPerson.getAdditionalAddressEntity());
 	}
 
 	@Test
@@ -116,7 +148,7 @@ class LegalPersonControllerTest {
 			"Praça Central",
 			"01010-101",
 			"São Paulo/SP"
-			);
+	);
 
 	DtoRecord_LegalPersonOfRegistry dataFromLegalPersonRegistry_Of_FailureForEmail = new DtoRecord_LegalPersonOfRegistry(
 			"Empresa Fulana SA",

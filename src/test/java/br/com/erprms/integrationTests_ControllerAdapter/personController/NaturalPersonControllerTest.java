@@ -1,13 +1,13 @@
 package br.com.erprms.integrationTests_ControllerAdapter.personController;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Optional;
-
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
+import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -15,17 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.test.context.support.WithMockUser;
+ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -36,7 +32,6 @@ import br.com.erprms.dtoPort.personDto.naturalPersonDto.DtoRecord_NaturalPersonO
 import br.com.erprms.repositoryAdapter.personRepository.PersonRepository;
 
 @SpringBootTest
-//@DataJpaTest
 @ActiveProfiles("test")
 @WithMockUser
 @AutoConfigureMockMvc
@@ -46,9 +41,6 @@ class NaturalPersonControllerTest {
 	@Autowired private MockMvc mockMvc;
 	
 	@Autowired private PersonRepository personRepository;
-	
-//	@Autowired private TestEntityManager entityManager_Test;
-
 
 	@Autowired private JacksonTester<DtoRecord_NaturalPersonOfRegistry> jacksonTester;
 	@Autowired private ObjectMapper objectMapper;	// alternative to JacksonTester
@@ -65,14 +57,31 @@ class NaturalPersonControllerTest {
 						.contentType(MediaType.APPLICATION_JSON) )
 				.andExpect(status().is(201));
 		
-//		var personRecorded = testEntityManager.find(PersonEntity.class, 1L);
-		PersonEntity personRecorded = personRepository.getReferenceById(1L);
-		Optional<PersonEntity> personRecorded02 = personRepository.findById(1L);
+		PersonEntity recordedPerson = personRepository.getReferenceById(1L);
 		
-// to instance Comparator to  
-//		personRecorded; with
-//		dataFromNaturalPersonRegistry_Of_SaveOk
+		assertEquals(1L, recordedPerson.getId());
+		assertEquals("Martim Afonso", recordedPerson.getFullNameOrEntityName());
+		assertEquals("Tibiriçá", recordedPerson.getNickname());
+		assertEquals(72145656812L, recordedPerson.getCpfOrCnpj());
+		assertEquals("caciquetibirica@email.com", recordedPerson.getEmail());
+		assertEquals("museudoipiranga.org.br", recordedPerson.getSite());
+		assertEquals("29/12/1520", recordedPerson.getDateBorn());
+		assertEquals("Solteiro", recordedPerson.getMaritalStatus());
+		assertEquals("São Paulo SP", recordedPerson.getCityBorn());
+		assertEquals("brasil eira", recordedPerson.getCountryBorn());
+		assertEquals(SexEnum.MASCULINE, recordedPerson.getSex());
+		assertEquals("Praça da Sé", recordedPerson.getStreet());
+		assertEquals("sem numero", recordedPerson.getNumber());
+		assertEquals("Catedral da Sé", recordedPerson.getNeighborhood());
+		assertEquals("não há", recordedPerson.getComplement());
+		assertEquals("01001-000", recordedPerson.getPostalCode());
+		assertEquals("São Paulo-SP", recordedPerson.getCityAndStateOrProvince());
 		
+		assertEquals(true, recordedPerson.getIsNaturalPerson());
+		assertEquals(StatusPersonalUsedEnum.NOT_USED, recordedPerson.getStatusPersonEnum());
+        assertNull(recordedPerson.getInscricEstad());
+        assertNull(recordedPerson.getInscricMunicip());
+		assertNull(recordedPerson.getAdditionalAddressEntity());
 	}
 
 	@Test
@@ -124,6 +133,7 @@ class NaturalPersonControllerTest {
 				mockMvc	.perform(get("/xxxxx"))
 						.andReturn()
 						.getResponse();
+		
 		assertEquals(404, response.getStatus());
 	}
 
@@ -184,14 +194,3 @@ class NaturalPersonControllerTest {
 			"São Paulo-SP"
 	);
 }
-
-//@Configuration 
-//class TestEntityManagerConfig {
-//
-//	@Autowired private TestEntityManager entityManager_Test;
-//	
-//	@Bean
-//	public TestEntityManager testEntityManager() {
-//		return entityManager_Test;
-//	}
-//}
