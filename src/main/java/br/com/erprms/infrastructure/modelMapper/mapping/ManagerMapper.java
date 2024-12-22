@@ -1,39 +1,27 @@
-package br.com.erprms.infrastructure.modelMapper.mapping.personMap;
+package br.com.erprms.infrastructure.modelMapper.mapping;
 
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.employeePersonQualificator.ManagerPersonQualification;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.internalDto_FullTimeAndManager.InputDtoClass_FullTimeEmployeeAndManager;
 import br.com.erprms.dtoPort.personDto.personQualificationDto.fullTimeAndManagerEmployeeDto.internalDto_FullTimeAndManager.OutputDtoClassPage_FullTimeEmployeeAndManager;
 
-@Configuration
-public class ManagerTypeMaps {
-	private final ModelMapper mapper; 
-		
-	public ManagerTypeMaps(ModelMapper mapper) {
-		this.mapper = mapper;
+public class ManagerMapper {
+	
+	public ManagerMapper(ModelMapper mapper) {
+		managerMapper(mapper);
 	}
 	
-	@Bean
-	public void callManagerEntityMaps() {
-		dtoClassToManagerRegistry_To_ManagerEmployeePersonQualificationSubclass(mapper);
-		managerPersonQualification_To_DtoClass_FullTimeEmployeeToListing(mapper);
-	}
-	
-	private void dtoClassToManagerRegistry_To_ManagerEmployeePersonQualificationSubclass(ModelMapper modelMapper) {   
-		modelMapper.createTypeMap(InputDtoClass_FullTimeEmployeeAndManager.class, ManagerPersonQualification.class)
+	private void managerMapper(ModelMapper mapper) {
+		mapper.createTypeMap(InputDtoClass_FullTimeEmployeeAndManager.class, ManagerPersonQualification.class)
 			.addMapping(InputDtoClass_FullTimeEmployeeAndManager::getMonthlySalary, ManagerPersonQualification::setMonthlySalary )
 			.addMapping(InputDtoClass_FullTimeEmployeeAndManager::getSector, ManagerPersonQualification::setSector)
 			.addMapping(InputDtoClass_FullTimeEmployeeAndManager::getObservation, ManagerPersonQualification::setObservation)
 			.addMapping(InputDtoClass_FullTimeEmployeeAndManager::getProfessionalRegistry, ManagerPersonQualification::setProfessionalRegistry);
-	}
-	
-	private void managerPersonQualification_To_DtoClass_FullTimeEmployeeToListing(ModelMapper modelMapper) {   
-		modelMapper.createTypeMap(ManagerPersonQualification.class, OutputDtoClassPage_FullTimeEmployeeAndManager.class)
+
+		mapper.createTypeMap(ManagerPersonQualification.class, OutputDtoClassPage_FullTimeEmployeeAndManager.class)
 			.addMapping((ori) -> ori.getId(), OutputDtoClassPage_FullTimeEmployeeAndManager::setId)
 			.addMapping((ori) -> ori.getPerson().getId(), OutputDtoClassPage_FullTimeEmployeeAndManager::setPersonId)
 			.addMapping((ori) -> ori.getPerson().getFullNameOrEntityName(), OutputDtoClassPage_FullTimeEmployeeAndManager::setPersonName)
@@ -46,4 +34,5 @@ public class ManagerTypeMaps {
 			.addMapping((ori) -> ori.getFinalDate(), OutputDtoClassPage_FullTimeEmployeeAndManager::setFinalDate)
 			.<String>addMapping(mappingByDefaultValueWithoutSourceClass -> (MANAGER), (dest, s) -> dest.setSpecifiedQualification(s));
 	}
+	
 }

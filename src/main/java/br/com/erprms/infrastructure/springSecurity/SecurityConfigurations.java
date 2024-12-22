@@ -44,4 +44,28 @@ public class SecurityConfigurations {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
+    
+    
+    
+//    public CompromisedPasswordChecker compromisedPasswordChecker() {
+//    	
+//    }
+    
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//    	UserDetails user = User.withUsername("user")
+//    			.password("$2y$10$OKiBDy3jVewHF2ZU8Y0FeeRbP0kBtckX0.zVLbREbnE6X4XC9wEVu")
+//    			.authorities("read")
+//    			.build();
+//    	
+////    	UserDetails admin = User.withUsername("admin")
+////    			.password("456")
+////    			.authorities("admin")
+////    			.build();
+//    	
+//    	return new InMemoryUserDetailsManager(user /*, admin*/);
+//    }
+    
+    
 }

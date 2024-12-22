@@ -1,30 +1,18 @@
-package br.com.erprms.infrastructure.modelMapper.mapping.personMap;
+package br.com.erprms.infrastructure.modelMapper.mapping;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.internalDto_LegalPerson.DtoClass_LegalPersonOfListing;
 import br.com.erprms.dtoPort.personDto.legalPersonDto.internalDto_LegalPerson.DtoClass_LegalPersonOfRegistry;
-import br.com.erprms.dtoPort.personDto.legalPersonDto.internalDto_LegalPerson.DtoClass_LegalPersonOfUpdate;
 
-@Configuration
-public class LegalPersonTypeMaps {
-	private final ModelMapper mapper;
-	
-	public LegalPersonTypeMaps(ModelMapper mapper) {
-		this.mapper = mapper;
+public class LegalPersonMapper {
+
+	public LegalPersonMapper(ModelMapper mapper) {
+		legalPersonMapper(mapper);
 	}
 
-	@Bean
-	public void callPessJuridicEntityMaps() {
-		dtoClassToLegalPersonOfRegistry_To_PersonEntity_TypeMap(mapper);
-		personEntity_To_dtoClassToLegalPersonOfListing_TypeMap(mapper);
-		dtoClassToLegalPersonOfUpdate_To_PersonEntity_TypeMap(mapper);
-	}
-	
-	public void dtoClassToLegalPersonOfRegistry_To_PersonEntity_TypeMap(ModelMapper mapper) {
+	private void legalPersonMapper(ModelMapper mapper) {
 		mapper.createTypeMap(DtoClass_LegalPersonOfRegistry.class, PersonEntity.class)
 			.addMapping(DtoClass_LegalPersonOfRegistry::getFullNameOrEntityName, PersonEntity::setFullNameOrEntityName)
 			.addMapping(DtoClass_LegalPersonOfRegistry::getNickname, PersonEntity::setNickname)
@@ -41,9 +29,7 @@ public class LegalPersonTypeMaps {
 			.addMapping(DtoClass_LegalPersonOfRegistry::getCityAndStateOrProvince, PersonEntity::setCityAndStateOrProvince)
 			.addMapping(DtoClass_LegalPersonOfRegistry::getStatusPersonEnum, PersonEntity::setStatusPersonEnum)
 			.addMapping(DtoClass_LegalPersonOfRegistry::getIsNaturalPerson, PersonEntity::setIsNaturalPerson);
-	}
-	
-	public void personEntity_To_dtoClassToLegalPersonOfListing_TypeMap(ModelMapper mapper) {
+
 		mapper.createTypeMap(PersonEntity.class, DtoClass_LegalPersonOfListing.class)
 			.addMapping(PersonEntity::getId, DtoClass_LegalPersonOfListing::setId)
 			.addMapping(PersonEntity::getFullNameOrEntityName, DtoClass_LegalPersonOfListing::setFullNameOrEntityName)
@@ -61,20 +47,5 @@ public class LegalPersonTypeMaps {
 			.addMapping(PersonEntity::getPostalCode, DtoClass_LegalPersonOfListing::setPostalCode)
 			.addMapping(PersonEntity::getCityAndStateOrProvince, DtoClass_LegalPersonOfListing::setCityAndStateOrProvince);
 	}
-
-	public void dtoClassToLegalPersonOfUpdate_To_PersonEntity_TypeMap(ModelMapper mapper) {
-		mapper.createTypeMap(DtoClass_LegalPersonOfUpdate.class, PersonEntity.class)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getId, PersonEntity::setId)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getFullNameOrEntityName, PersonEntity::setFullNameOrEntityName)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getNickname, PersonEntity::setNickname)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getCnpj, PersonEntity::setCpfOrCnpj)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getEmail, PersonEntity::setEmail)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getSite, PersonEntity::setSite)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getStreet, PersonEntity::setStreet)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getNumber, PersonEntity::setNumber)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getNeighborhood, PersonEntity::setNeighborhood)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getComplement, PersonEntity::setComplement)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getPostalCode, PersonEntity::setPostalCode)
-			.addMapping(DtoClass_LegalPersonOfUpdate::getCityStat, PersonEntity::setCityAndStateOrProvince);
-	}
+	
 }

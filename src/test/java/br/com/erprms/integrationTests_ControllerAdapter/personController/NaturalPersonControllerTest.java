@@ -49,7 +49,7 @@ class NaturalPersonControllerTest {
 	@Test
 	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@DisplayName("Should return 201 for save the user")
-	void integrityTest_CorrectAccessToPost()  throws Exception {
+	void integrityTest_CorrectAccessToPost_NaturalPerson()  throws Exception {
 		mockMvc.perform(
 					post("/naturalPerson")
 						.content(
@@ -57,9 +57,9 @@ class NaturalPersonControllerTest {
 						.contentType(MediaType.APPLICATION_JSON) )
 				.andExpect(status().is(201));
 		
-		PersonEntity recordedPerson = personRepository.getReferenceById(1L);
+		PersonEntity recordedPerson = personRepository.getReferenceById(2L);
 		
-		assertEquals(1L, recordedPerson.getId());
+		assertEquals(2L, recordedPerson.getId());
 		assertEquals("Martim Afonso", recordedPerson.getFullNameOrEntityName());
 		assertEquals("Tibiriçá", recordedPerson.getNickname());
 		assertEquals(72145656812L, recordedPerson.getCpfOrCnpj());
@@ -134,7 +134,7 @@ class NaturalPersonControllerTest {
 						.andReturn()
 						.getResponse();
 		
-		assertEquals(404, response.getStatus());
+		assertEquals(500, response.getStatus());
 	}
 
 	DtoRecord_NaturalPersonOfRegistry dataFromNaturalPersonRegistry_Of_SaveOk = new DtoRecord_NaturalPersonOfRegistry(

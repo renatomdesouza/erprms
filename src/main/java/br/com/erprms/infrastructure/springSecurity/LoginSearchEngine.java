@@ -17,6 +17,8 @@ public class LoginSearchEngine implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return loginRepository.findByLogin(username);
+		UserDetails userDetails = loginRepository.findByLogin(username);
+		
+		return userDetails;
 	}
 }

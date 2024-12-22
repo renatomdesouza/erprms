@@ -1,8 +1,5 @@
 package br.com.erprms.dtoPort.personDto.personQualificationDto.partTimeEmployeeDto;
 
-import java.math.BigDecimal;
-
-import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.personQualificationEnum.SectorEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

@@ -20,8 +20,8 @@ public class DtoClass_LegalPersonOfRegistry implements PersonRegistryAndUpdateDt
 	final	private	String	complement;
 	final	private	String	postalCode;
 	final	private	String	cityAndStateOrProvince;
+	final 	private Boolean isNaturalPerson;
 	private	StatusPersonalUsedEnum statusPersonEnum;
-	private Boolean isNaturalPerson;
 	
 	public DtoClass_LegalPersonOfRegistry(DtoRecord_LegalPersonOfRegistry legalPerson) {
 		this.fullNameOrEntityName = legalPerson.fullNameOrEntityName();

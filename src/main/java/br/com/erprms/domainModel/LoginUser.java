@@ -20,10 +20,6 @@ import lombok.Setter;
 
 @Table(name="login")
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class LoginUser implements UserDetails{
 	private static final long serialVersionUID = 9067513348485199847L;
 	
@@ -32,9 +28,12 @@ public class LoginUser implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Getter
+	@Setter
 	@Column(name = "login", unique=true)
 	private String login;
 
+	@Setter
 	@Column(name = "password")
 	private String password;
 

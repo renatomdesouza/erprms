@@ -1,8 +1,6 @@
-package br.com.erprms.infrastructure.modelMapper.mapping.personMap;
- 
+package br.com.erprms.infrastructure.modelMapper.mapping;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import br.com.erprms.domainModel.personDomain.PersonEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.SexEnum;
@@ -11,22 +9,13 @@ import br.com.erprms.dtoPort.personDto.naturalPersonDto.internalDto_LegalPerson.
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.internalDto_LegalPerson.DtoClass_NaturalPersonOfRegistry;
 import br.com.erprms.dtoPort.personDto.naturalPersonDto.internalDto_LegalPerson.DtoClass_NaturalPersonOfUpdate;
 
-@Configuration
-public class NaturalPersonTypeMaps {
-	private final ModelMapper mapper;
+public class NaturalPersonMapper {
 	
-	public NaturalPersonTypeMaps(ModelMapper mapper) {
-		this.mapper = mapper;
+	public NaturalPersonMapper(ModelMapper mapper) {
+		naturalPersonMapper(mapper);
 	}
 
-	@Bean
-	public void callTypeMapsOfNaturalPerson() {
-		dtoClassToNaturalPersonOfRegistry_To_PersonEntity_TypeMap(mapper);
-		personEntity_To_DtoClassToNaturalPersonOfListing_TypeMap(mapper);
-		dtoClassToNaturalPersonOfUpdate_To_PersonEntity_TypeMap(mapper);  
-	}
-	
-	public void dtoClassToNaturalPersonOfRegistry_To_PersonEntity_TypeMap(ModelMapper mapper) {
+	private void naturalPersonMapper(ModelMapper mapper) {
 		mapper.createTypeMap(DtoClass_NaturalPersonOfRegistry.class, PersonEntity.class)
 			.addMapping(DtoClass_NaturalPersonOfRegistry::getFullNameOrEntityName, PersonEntity::setFullNameOrEntityName)
 			.addMapping(DtoClass_NaturalPersonOfRegistry::getNickname, PersonEntity::setNickname)
@@ -43,13 +32,11 @@ public class NaturalPersonTypeMaps {
 			.addMapping(DtoClass_NaturalPersonOfRegistry::getMaritalStatus, PersonEntity::setMaritalStatus)
 			.addMapping(DtoClass_NaturalPersonOfRegistry::getCityBorn, PersonEntity::setCityBorn)
 			.addMapping(DtoClass_NaturalPersonOfRegistry::getCountryBorn, PersonEntity::setCountryBorn)
+			.addMapping(DtoClass_NaturalPersonOfRegistry::getIsNaturalPerson, PersonEntity::setIsNaturalPerson)
 			// alternative use with Lambda Expression
 			.<SexEnum>addMapping((ori) -> ori.getSex(), (dest, v) -> dest.setSex(v))
-			.<StatusPersonalUsedEnum>addMapping((ori) -> ori.getStatusPersonEnum(), (dest, v) -> dest.setStatusPersonEnum(v))
-			.<Boolean>addMapping((ori) -> ori.getIsNaturalPerson() , (dest, v) -> dest.setIsNaturalPerson(v));
-	}
-	
-	public void personEntity_To_DtoClassToNaturalPersonOfListing_TypeMap(ModelMapper mapper) {   
+			.<StatusPersonalUsedEnum>addMapping((ori) -> ori.getStatusPersonEnum(), (dest, v) -> dest.setStatusPersonEnum(v));
+
 		mapper.createTypeMap(PersonEntity.class, DtoClass_NaturalPersonOfListing.class)
 			.addMapping(PersonEntity::getId, DtoClass_NaturalPersonOfListing::setId)
 			.addMapping(PersonEntity::getFullNameOrEntityName, DtoClass_NaturalPersonOfListing::setFullNameOrEntityName)
@@ -70,9 +57,7 @@ public class NaturalPersonTypeMaps {
 			.<String>addMapping((ori) -> ori.getComplement(), (dest, v) -> dest.setComplement(v))
 			.<String>addMapping((ori) -> ori.getPostalCode(), (dest, v) -> dest.setPostalCode(v))
 			.<String>addMapping((ori) -> ori.getCityAndStateOrProvince(), (dest, v) -> dest.setCityAndStateOrProvince(v));
-	}
-	
-	public void dtoClassToNaturalPersonOfUpdate_To_PersonEntity_TypeMap(ModelMapper mapper) {
+		
 		mapper.createTypeMap(DtoClass_NaturalPersonOfUpdate.class, PersonEntity.class)
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getId, PersonEntity::setId)
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getFullNameOrEntityName, PersonEntity::setFullNameOrEntityName)
@@ -92,4 +77,5 @@ public class NaturalPersonTypeMaps {
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getPostalCode, PersonEntity::setPostalCode)
 			.addMapping(DtoClass_NaturalPersonOfUpdate::getCityAndStateOrProvince, PersonEntity::setCityAndStateOrProvince);
 	}
+	
 }

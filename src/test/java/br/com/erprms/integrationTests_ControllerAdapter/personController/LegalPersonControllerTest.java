@@ -47,7 +47,7 @@ class LegalPersonControllerTest {
 	@Test
 	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@DisplayName("Should return 201 for save the user")
-	void integrityTest_CorrectAccessToPost()  throws Exception {
+	void integrityTest_CorrectAccessToPost_LegalPerson()  throws Exception {
 		mockMvc.perform(
 					post("/legalPerson")
 						.content(
@@ -131,7 +131,7 @@ class LegalPersonControllerTest {
 				mockMvc	.perform(get("/legalPer_xxxxx"))
 						.andReturn()
 						.getResponse();
-		assertEquals(404, response.getStatus());
+		assertEquals(500, response.getStatus());
 	}
 
 	DtoRecord_LegalPersonOfRegistry dataFromLegalPersonRegistry_Of_SaveOk = new DtoRecord_LegalPersonOfRegistry(

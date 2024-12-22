@@ -71,5 +71,6 @@ public record DtoRecord_LegalPersonOfRegistry(
 					message = "The city and state or province must be described with letters only")
 		@Size(min = 5, max = 100, message = "The field must have 5 to 100 characters")
 		String cityAndStateOrProvince
+		
 		) {
 }
