@@ -50,7 +50,6 @@ public class LegalPersonController {
 	
 	@PostMapping
 	@Transactional
-	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> register(
 			@RequestBody @Valid DtoRecord_LegalPersonOfRegistry legalPersonOfRecord,
 			UriComponentsBuilder uriComponentsBuilder) { 
@@ -64,7 +63,6 @@ public class LegalPersonController {
 	
 	@GetMapping
 	@Transactional
-	@SuppressWarnings("null")
 	public ResponseEntity<Page<? extends PersonListingDto>> legalPersonListing(
 			@PageableDefault(size = 10, sort = "fullNameOrEntityName") Pageable naturalPersonPageable,
 			UriComponentsBuilder uriComponentsBuilder) {
@@ -80,7 +78,6 @@ public class LegalPersonController {
 	
 	@PutMapping
 	@Transactional
-	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> update(
 			@RequestBody @Valid DtoRecord_LegalPersonOfUpdate personUpdateRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) {
@@ -97,7 +94,6 @@ public class LegalPersonController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> exclude(
 			@PathVariable @NonNull Long id,
 			UriComponentsBuilder uriComponentsBuilder) throws ResponseStatusException{

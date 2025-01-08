@@ -51,7 +51,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.erprms.constantsAndBuilder.Constants_QualificationsClasses;
 import br.com.erprms.domainModel.personDomain.PersonEntity;
-import br.com.erprms.domainModel.personDomain.PersonsManagementEntity;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.HttpVerbEnum;
 import br.com.erprms.domainModel.personDomain.personComponent.personEnum.StatusPersonalUsedEnum;
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;

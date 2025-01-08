@@ -3,7 +3,6 @@ package br.com.erprms.domainModel.personDomain.personQualification.personQualifi
 import static br.com.erprms.serviceApplication.personService.SpecifiedQualificationConstants.MANAGER;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 import br.com.erprms.domainModel.personDomain.personQualification.PersonQualificationSuperclassEntity;
 import br.com.erprms.domainModel.personDomain.personQualification.personQualificationSuperclassEntity.EmployeePersonQualificatorInterface;

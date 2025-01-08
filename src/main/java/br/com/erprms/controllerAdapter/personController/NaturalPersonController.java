@@ -49,7 +49,6 @@ public class NaturalPersonController {
 
 	@PostMapping
 	@Transactional
-	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> register(
 			@RequestBody @Valid DtoRecord_NaturalPersonOfRegistry naturalPersonOfRecord,
 			UriComponentsBuilder uriComponentsBuilder) {
@@ -63,7 +62,6 @@ public class NaturalPersonController {
 
 	@GetMapping
 	@Transactional
-	@SuppressWarnings("null")
 	public ResponseEntity<Page<? extends PersonListingDto>> naturalPersonListing(
 			@PageableDefault(size = 10, sort = "fullNameOrEntityName") Pageable naturalPersonPageable,
 			UriComponentsBuilder uriComponentsBuilder){
@@ -79,7 +77,6 @@ public class NaturalPersonController {
 	
 	@PutMapping
 	@Transactional
-	@SuppressWarnings("null")
 	public ResponseEntity<? extends PersonListingDto> update(
 			@RequestBody DtoRecord_NaturalPersonOfUpdate personUpdateRecordDto,
 			UriComponentsBuilder uriComponentsBuilder) {
@@ -97,8 +94,7 @@ public class NaturalPersonController {
 		
 	@DeleteMapping("/{id}")
 	@Transactional
-	@SuppressWarnings("null")
-    public ResponseEntity<? extends PersonListingDto> exclude(
+	public ResponseEntity<? extends PersonListingDto> exclude(
     		@PathVariable Long id, 
     		UriComponentsBuilder uriComponentsBuilder) 
     		throws ResponseStatusException {

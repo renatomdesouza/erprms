@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.password.CompromisedPasswordException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -71,6 +72,13 @@ public class Exception_Handler {
     public ResponseEntity<String> exception_500(Exception ex) {
         return ResponseEntity
         			.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        			.body("Error: " + ex.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(CompromisedPasswordException.class)
+    public ResponseEntity<String> compromisedPasswordChecker_401(Exception ex) {
+        return ResponseEntity
+        			.status(HttpStatus.UNAUTHORIZED)
         			.body("Error: " + ex.getLocalizedMessage());
     }
     

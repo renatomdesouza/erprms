@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.erprms.dtoPort.LoginDto;
 import br.com.erprms.dtoPort.TokenDto;
+import br.com.erprms.dtoPort.loginDto.LoginDto_Access;
 import br.com.erprms.serviceApplication.LoginService;
 
 @RestController
@@ -20,8 +20,8 @@ public class LoginController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<TokenDto> efetuarLogin(@RequestBody LoginDto loginDto) {   
+	public ResponseEntity<TokenDto> efetuarLogin(@RequestBody LoginDto_Access loginDto) {   
 	    	return ResponseEntity.ok(
-	        		loginService.autentication(loginDto));
+	        		loginService.authentication(loginDto));
 	}
 }
